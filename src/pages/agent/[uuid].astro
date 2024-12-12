@@ -2,7 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import background from '../../assets/background.svg';
 const { uuid } = Astro.params;
-const res = await fetch(`https://valorant-api.com/v1/agents/${uuid}`);
+const res = await fetch(`https://valorant-api.com/v1/agents/${uuid}?language=es-ES`);
 const agent = await res.json();
 export const prerender = false;
 ---
