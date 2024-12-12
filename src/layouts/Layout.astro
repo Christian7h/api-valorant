@@ -1,6 +1,8 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import background from "../assets/background.svg";
+import bannerValo from "../assets/VALORANT_logo4.jpg"
+
 ---
 
 <!doctype html>
@@ -9,8 +11,48 @@ import background from "../assets/background.svg";
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Metadata for SEO -->
+    <meta
+      name="description"
+      content="Explora las APIs de videojuegos como Valorant y ZZZ, con datos actualizados sobre personajes, estadísticas, mapas y más. Aprende a integrarlas y mejorar tu experiencia de desarrollo."
+    />
+    <meta
+      name="keywords"
+      content="API, Valorant, ZZZ, videojuegos, desarrollo, estadísticas, datos, integración, programación"
+    />
+    <meta name="author" content="Cristian Villalobos" />
+
+    <!-- Open Graph tags for social media -->
+    <meta
+      property="og:title"
+      content="Cristian Villalobos - APIs de Valorant y ZZZ"
+    />
+    <meta
+      property="og:description"
+      content="Explora las APIs de Valorant y ZZZ, con información detallada sobre personajes, mapas y más. Aprende cómo utilizarlas para enriquecer tus proyectos."
+    />
+    <meta property="og:image" content={bannerValo.src} />
+    <!-- Optional image for sharing -->
+    <meta property="og:url" content="https://tusitio.com" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Cristian Villalobos - APIs de Valorant y ZZZ"
+    />
+    <meta
+      name="twitter:description"
+      content="Descubre las mejores APIs de videojuegos, como Valorant y ZZZ, con detalles sobre personajes, mapas y más para tus proyectos de desarrollo."
+    />
+    <meta name="twitter:image" content={bannerValo.src} />
+    <!-- Optional image for sharing -->
+    <meta name="twitter:site" content="@tuusuario" />
+    <!-- Charset & Meta Tags -->
     <meta name="generator" content={Astro.generator} />
-    <title>Cristian Villalobos</title>
+    <meta name="robots" content="index, follow" />
+    <title>Cristian Villalobos - APIs de Valorant y ZZZ</title>
     <ClientRouter />
   </head>
   <body class="bg-valorant-dark text-valorant-light">
