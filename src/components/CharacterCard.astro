@@ -1,6 +1,4 @@
 ---
-import background from '../assets/background.svg';
-
 interface Props {
   name: string;
   age: number;
@@ -12,11 +10,9 @@ interface Props {
 }
 
 const { name, age, description, height, image, rank, type } = Astro.props;
-
 // Cortar la URL de la imagen en caso de que tenga parámetros adicionales
 const imageUrl = image.split('/revision')[0];
 ---
-
 <a href={`/zzz/${name}`} class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
   <div class="h-48 flex items-center justify-center mb-4">
     <img src={imageUrl} alt={name} class="max-h-full max-w-full object-contain rounded-lg" />
