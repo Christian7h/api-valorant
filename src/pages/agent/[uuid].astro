@@ -1,18 +1,59 @@
 ---
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
-import ValorantAgent from './ValorantAgent.astro';
+import Layout from "../../layouts/Layout.astro";
+import background from '../../assets/background.svg';
+const { uuid } = Astro.params;
+const res = await fetch(`https://valorant-api.com/v1/agents/${uuid}`);
+const agent = await res.json();
+export const prerender = false;
 ---
 
-<div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<ValorantAgent />
-
-	</main>
+<Layout>
+  <div id="container">
+    <img id="background" src={background.src} alt="" fetchpriority="high" />
+    <main>
+  <div class="container mx-auto p-8">
+    <div
+      class="bg-valorant-pattern bg-cover bg-center min-h-screen p-8 rounded-lg shadow-lg flex flex-col md:flex-row items-center"
+    >
+      <div class="md:w-1/2">
+        <h1 class="text-4xl font-bold text-valorant">
+          {agent.data.displayName}
+        </h1>
+        <p class="text-lg mb-4">{agent.data.description}</p>
+        <h2 class="text-2xl font-semibold mb-4">Habilidades</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {
+            agent.data.abilities.map((ability) => (
+              <div
+                key={ability.slot}
+                class="bg-valorant-dark p-4 rounded-lg shadow-2xl"
+              >
+                <h3 class="text-xl font-bold">{ability.displayName}</h3>
+                <p>{ability.description}</p>
+                <img
+                  src={ability.displayIcon}
+                  alt={ability.displayName}
+                  class="w-12 h-12 mt-2"
+                />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+      <div class="md:w-1/2 flex justify-center">
+        <img
+          src={agent.data.fullPortrait}
+          alt={agent.data.displayName}
+          class="w-full max-w-lg"
+        />
+      </div>
+    </div>
+  </div>
+</main>
 
 </div>
 
+</Layout>
 <style>
 	#background {
 		position: fixed;
@@ -43,10 +84,6 @@ import ValorantAgent from './ValorantAgent.astro';
 		padding: 16px;
 	}
 
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
-	}
 
 	#links {
 		display: flex;
@@ -96,20 +133,7 @@ import ValorantAgent from './ValorantAgent.astro';
 		margin: 0;
 	}
 
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
 
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
 
 	code {
 		display: inline-block;
@@ -172,10 +196,6 @@ import ValorantAgent from './ValorantAgent.astro';
 			left: 16px;
 			bottom: 2.5rem;
 			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
 		}
 	}
 </style>
