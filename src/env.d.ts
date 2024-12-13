@@ -12,4 +12,5 @@ declare namespace App {
       description: string;
     };
   }
+
 }
