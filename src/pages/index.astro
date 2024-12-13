@@ -4,10 +4,14 @@ import { Image } from 'astro:assets';
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
 
-const {
-  geo: { city },
-} = Astro.locals.netlify.context;
+// Desestructurar los datos de localización de Astro.locals
+const { city, country, weather } = Astro.locals;
 
+// Si no se encuentra algún dato, asignar un valor predeterminado
+const cityName = city ;
+const countryName = country;
+const weatherDescription = weather?.description ;
+const temperature = weather?.temp ? `${weather.temp}°C` : "Temperatura no disponible";
 ---
 
 <Layout>
@@ -15,15 +19,14 @@ const {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     
       <!-- Mostrar la bienvenida con ciudad, país y clima -->
-<h1>Netlify Edge Functions with Astro</h1>
-<h1>Hola, amable visitante de {city}!</h1>
-
-<main>
-  <h1>Netlify Edge Functions with Astro</h1>
-
-  Welcome, visitor from COUNTRYNAME!
-
-</main>      
+      <h1 class="text-4xl font-bold text-valorant mb-8">
+        ¡Bienvenido a {cityName}, {countryName}!
+        <span class="text-xl text-gray-500">{new Date().toLocaleDateString()}</span>
+      </h1>
+      <p class="text-lg text-gray-700">
+        Clima: {weatherDescription}, {temperature}.
+      </p>
+      
       <!-- Enlaces a otras páginas -->
       <a href="/valorant-agents" class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
         <Image src={bannerValo} alt="Valorant Banner api" class="w-full object-cover mb-4 rounded-lg" />
