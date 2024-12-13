@@ -15,6 +15,7 @@ const {
 // Asignando valores predeterminados si alguno de los datos no está disponible
 const cityName = city || "Ciudad desconocida";
 const countryName = country?.name || "País desconocido";
+const countryCode = country?.code || "";  // Asegúrate de extraer el código del país
 const postalCodeInfo = postalCode || "Código postal no disponible";
 const subdivisionInfo = subdivision?.name || "Subdivisión no disponible";
 const userIP = ip || "IP desconocida";
@@ -33,6 +34,13 @@ const longitudeInfo = longitude || "Longitud desconocida";
       <h1 class="text-4xl font-bold text-valorant mb-8">
         ¡Bienvenido a {cityName}, {countryName}!
         <span class="text-xl text-gray-500">{new Date().toLocaleDateString()}</span>
+        {countryCode && (
+          <img 
+            src={`https://flagcdn.com/96x72/${countryCode.toLowerCase()}.png`} 
+            alt={`Bandera de ${countryName}`} 
+            style="height:2em;"
+          />
+        )}
       </h1>
 
       <!-- Mostrar detalles adicionales del contexto -->
