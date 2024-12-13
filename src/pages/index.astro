@@ -4,12 +4,13 @@ import { Image } from 'astro:assets';
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
 const {
-  geo: { city },
+  geo: { city ,country},
 } = Astro.locals.netlify.context;
 // Desestructurar los datos de localización de Astro.locals
 
 // Si no se encuentra algún dato, asignar un valor predeterminado
 const cityName = city ;
+const countryName = country;
 // const countryName = country;
 // const weatherDescription = weather?.description ;
 // const temperature = weather?.temp ? `${weather.temp}°C` : "Temperatura no disponible";
@@ -21,7 +22,7 @@ const cityName = city ;
     
       <!-- Mostrar la bienvenida con ciudad, país y clima -->
       <h1 class="text-4xl font-bold text-valorant mb-8">
-        ¡Bienvenido a {cityName}, A!
+        ¡Bienvenido a {cityName}, {countryName}!
         <!-- <span class="text-xl text-gray-500">{new Date().toLocaleDateString()}</span>
       </h1>
       <p class="text-lg text-gray-700">
