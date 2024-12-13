@@ -3,6 +3,13 @@ import { ClientRouter } from "astro:transitions";
 import background from "../assets/background.svg";
 import bannerValo from "../assets/VALORANT_logo4.jpg"
 
+Astro.response.headers.set("Cache-Control", "public, max-age=300, s-maxage=3000");
+Astro.response.headers.set("X-Frame-Options", "DENY");
+Astro.response.headers.set("Feature-Policy", "geolocation 'self'; microphone 'none'");
+// Astro.response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+// Astro.response.headers.set("X-Content-Type-Options", "nosniff");
+// Astro.response.headers.set("X-XSS-Protection", "1; mode=block");
+// Astro.response.headers.set("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none';");
 ---
 
 <!doctype html>
