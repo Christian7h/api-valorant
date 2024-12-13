@@ -1,0 +1,44 @@
+---
+//src/components/valorant/BuddiesValo.astro
+const apiUrl = "https://valorant-api.com/v1/buddies";
+
+// Realiza la solicitud a la API
+const res = await fetch(apiUrl);
+const data = await res.json();
+const buddies = data.data;
+
+interface Buddy {
+  uuid: string;
+  displayName: string;
+  displayIcon: string;
+  levels: { displayName: string }[];
+}
+---
+
+<div class="container mx-auto p-8">
+  <h1 class="text-4xl font-bold text-valorant mb-8">Valorant Buddies</h1>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {
+      buddies.map((buddy: Buddy) => (
+        <Fragment key={buddy.uuid}>
+          <a
+            href={`/buddy/${buddy.uuid}`}
+            class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300"
+          >
+            <h2 class="text-2xl font-semibold text-valorant hover:underline">
+              {buddy.displayName}
+            </h2>
+            <img
+              src={buddy.displayIcon}
+              alt={buddy.displayName}
+              class="w-full h-48 object-contain mb-4 rounded-lg"
+            />
+            <p class="text-lg">
+              Level: {buddy.levels.map((level) => level.displayName).join(", ")}
+            </p>
+          </a>
+        </Fragment>
+      ))
+    }
+  </div>
+</div>

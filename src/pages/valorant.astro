@@ -1,0 +1,27 @@
+---
+import CardApis from "../components/CardApis.astro";
+import bannerValo from "../assets/VALORANT_logo4.jpg";
+import bannerZzz from "../assets/zzz.jpeg";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <div class="container mx-auto p-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <CardApis
+        href="/valorant-agents"
+        imageSrc={bannerValo}
+        imageAlt="Valorant Banner api"
+        title="Valorant Agents"
+        description="Explora la lista de personajes de Valorant."
+      />
+      <CardApis
+        href="/buddies"
+        imageSrc={bannerValo}
+        imageAlt="buddies valorant"
+        title="Valorant Buddies"
+        description="Explora la lista de Buddies de Valorant."
+      />
+    </div>
+  </div>
+</Layout>

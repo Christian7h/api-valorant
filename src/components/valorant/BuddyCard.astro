@@ -1,0 +1,27 @@
+---
+interface Props {
+  uuid: string;
+  displayName: string;
+  displayIcon: string;
+  levels: { displayName: string }[];
+}
+
+const { uuid, displayName, displayIcon, levels } = Astro.props;
+---
+
+<a
+  href={`/buddy/${uuid}`}
+  class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300"
+>
+  <h2 class="text-2xl font-semibold text-valorant hover:underline">
+    {displayName}
+  </h2>
+  <img
+    src={displayIcon}
+    alt={displayName}
+    class="w-full h-48 object-contain mb-4 rounded-lg"
+  />
+  <p class="text-lg">
+    Level: {levels.map((level) => level.displayName).join(", ")}
+  </p>
+</a>
