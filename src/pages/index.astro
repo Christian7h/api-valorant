@@ -1,12 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
+import CardApis from "../components/CardApis.astro";
 
 // Desestructurando el contexto de Netlify desde Astro.locals
 const {
-  geo: { city, country, postalCode, subdivision, latitude, longitude, timezone },
+  geo: {
+    city,
+    country,
+    postalCode,
+    subdivision,
+    latitude,
+    longitude,
+    timezone,
+  },
   ip,
   requestId,
   deploy,
@@ -15,7 +24,7 @@ const {
 // Asignando valores predeterminados si alguno de los datos no está disponible
 const cityName = city || "Ciudad desconocida";
 const countryName = country?.name || "País desconocido";
-const countryCode = country?.code || "";  // Asegúrate de extraer el código del país
+const countryCode = country?.code || ""; // Asegúrate de extraer el código del país
 const postalCodeInfo = postalCode || "Código postal no disponible";
 const subdivisionInfo = subdivision?.name || "Subdivisión no disponible";
 const userIP = ip || "IP desconocida";
@@ -33,14 +42,18 @@ const longitudeInfo = longitude || "Longitud desconocida";
       <!-- Mostrar la bienvenida con ciudad, país y clima -->
       <h1 class="text-4xl font-bold text-valorant mb-8">
         ¡Bienvenido a {cityName}, {countryName}!
-        <span class="text-xl text-gray-500">{new Date().toLocaleDateString()}</span>
-        {countryCode && (
-          <img 
-            src={`https://flagcdn.com/96x72/${countryCode.toLowerCase()}.png`} 
-            alt={`Bandera de ${countryName}`} 
-            style="height:2em;"
-          />
-        )}
+        <span class="text-xl text-gray-500"
+          >{new Date().toLocaleDateString()}</span
+        >
+        {
+          countryCode && (
+            <img
+              src={`https://flagcdn.com/96x72/${countryCode.toLowerCase()}.png`}
+              alt={`Bandera de ${countryName}`}
+              style="height:2em;"
+            />
+          )
+        }
       </h1>
 
       <!-- Mostrar detalles adicionales del contexto -->
@@ -59,20 +72,25 @@ const longitudeInfo = longitude || "Longitud desconocida";
 
       <!-- Mostrar información de despliegue -->
       <p class="text-lg text-gray-700">
-        <strong>Despliegue:</strong> {deployContext} ({deployPublished})
+        <strong>Despliegue:</strong>
+        {deployContext} ({deployPublished})
       </p>
 
-      <!-- Enlaces a otras páginas -->
-      <a href="/valorant-agents" class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
-        <Image src={bannerValo} alt="Valorant Banner api" class="w-full object-cover mb-4 rounded-lg" />
-        <h2 class="text-2xl font-semibold text-valorant hover:underline">Valorant Agents</h2>
-        <p>Explora la lista de personajes de Valorant.</p>
-      </a>
-      <a href="/zzz" class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
-        <Image src={bannerZzz} alt="ZZZ" class="w-full object-cover mb-4 rounded-lg" />
-        <h2 class="text-2xl font-semibold text-valorant hover:underline">ZZZ</h2>
-        <p>Explora el contenido de ZZZ.</p>
-      </a>
+      <!-- Enlaces a otras páginas componente CardApis.astro -->
+      <CardApis
+      href="/valorant-agents"
+      imageSrc={bannerValo}
+      imageAlt="Valorant Banner api"
+      title="Valorant Agents"
+      description="Explora la lista de personajes de Valorant."
+    />
+    <CardApis
+      href="/zzz"
+      imageSrc={bannerZzz}
+      imageAlt="ZZZ"
+      title="ZZZ"
+      description="Explora el contenido de ZZZ."
+    />
     </div>
   </div>
 </Layout>

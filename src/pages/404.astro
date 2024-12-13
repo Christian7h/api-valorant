@@ -1,13 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
-const {
-  geo: { city },
-} = Astro.locals.netlify.context;
 ---
 
 <Layout title="Página no encontrada">
-  <h1>Hola, amable visitante de {city}!</h1>
-  <p>Lo sentimos, la página que buscas no existe.</p>
   <div class="container mx-auto p-8 text-center">
     <h1 class="text-6xl font-bold text-valorant mb-8">404</h1>
     <p class="text-2xl mb-4">Lo sentimos, la página que buscas no existe.</p>
@@ -15,5 +10,4 @@ const {
       >Volver a la página principal</a
     >
   </div>
-  
 </Layout>
