@@ -1,5 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.astro";
 const { uuid } = Astro.params;
 const res = await fetch(
   `https://valorant-api.com/v1/agents/${uuid}?language=es-ES`
