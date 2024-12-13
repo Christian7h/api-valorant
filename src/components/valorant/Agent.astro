@@ -1,33 +1,55 @@
 ---
-//src/components/valorant/ValorantAgent.astro
+//src/components/valorant/Agent.astro
+
+import Pagination from "../Pagination.astro";
+
 const res = await fetch("https://valorant-api.com/v1/agents/?language=es-ES");
 const data = await res.json();
 const agents = data.data;
----
 
+// Configuración de la paginación
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
+const pageParam = Number(url.searchParams.get('page') ?? 1);
+const itemsPerPage = 6; // Número de agentes por página
+const totalPages = Math.ceil(agents.length / itemsPerPage);
+
+const currentPage = Math.max(
+    pageParam > totalPages ? totalPages : pageParam,
+    1
+);
+
+// Dividir los agentes en páginas
+const agentsOnPage = agents.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+);
+---
 <div class="container mx-auto p-8">
   <h1 class="text-4xl font-bold text-valorant mb-8">Valorant Agents 🚀</h1>
+
+  <!-- Grid de agentes -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     {
-      agents.map((agent: any) => (
-        <>
-          <a
-            href={`/valorant/agents/${agent.uuid}`}
-            class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300"
-          >
-            <h2 class="text-2xl font-semibold text-valorant hover:underline">
-              {agent.displayName}
-            </h2>
-            {agent.role && <h3 class="text-xl">{agent.role.displayName}</h3>}
-            <p>{agent.description}</p>
-            <img
-              src={agent.displayIcon}
-              alt={agent.displayName}
-              class="w-12 h-12 mt-2"
-            />
-          </a>
-        </>
+      agentsOnPage.map((agent: any) => (
+        <a
+          href={`/valorant/agents/${agent.uuid}`}
+          class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300"
+        >
+          <h2 class="text-2xl font-semibold text-valorant hover:underline">
+            {agent.displayName}
+          </h2>
+          {agent.role && <h3 class="text-xl">{agent.role.displayName}</h3>}
+          <p>{agent.description}</p>
+          <img
+            src={agent.displayIcon}
+            alt={agent.displayName}
+            class="w-12 h-12 mt-2"
+          />
+        </a>
       ))
     }
   </div>
+
+  <!-- Componente de paginación -->
+  <Pagination totalPages={totalPages} />
 </div>
