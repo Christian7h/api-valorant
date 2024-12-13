@@ -3,17 +3,15 @@ import Layout from "../layouts/Layout.astro";
 import { Image } from 'astro:assets';
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
-const {
-  geo: { city ,country},
-} = Astro.locals.netlify.context;
+
 // Desestructurar los datos de localización de Astro.locals
+const { city, country, weather } = Astro.locals;
 
 // Si no se encuentra algún dato, asignar un valor predeterminado
-const cityName = city ;
-const countryName = country?.name;
-// const countryName = country;
-// const weatherDescription = weather?.description ;
-// const temperature = weather?.temp ? `${weather.temp}°C` : "Temperatura no disponible";
+const cityName = city || "Ciudad desconocida";
+const countryName = country || "País desconocido";
+const weatherDescription = weather?.description || "Descripción del clima no disponible";
+const temperature = weather?.temp ? `${weather.temp}°C` : "Temperatura no disponible";
 ---
 
 <Layout>
@@ -23,11 +21,11 @@ const countryName = country?.name;
       <!-- Mostrar la bienvenida con ciudad, país y clima -->
       <h1 class="text-4xl font-bold text-valorant mb-8">
         ¡Bienvenido a {cityName}, {countryName}!
-        <!-- <span class="text-xl text-gray-500">{new Date().toLocaleDateString()}</span>
+        <span class="text-xl text-gray-500">{new Date().toLocaleDateString()}</span>
       </h1>
       <p class="text-lg text-gray-700">
         Clima: {weatherDescription}, {temperature}.
-      </p> -->
+      </p>
       
       <!-- Enlaces a otras páginas -->
       <a href="/valorant-agents" class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
