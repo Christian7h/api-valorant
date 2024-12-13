@@ -1,16 +1,29 @@
-/// <reference path="../.astro/types.d.ts" />
-/// <reference types="astro/client" />
-//src/env.d.ts
-type NetlifyLocals = import('@astrojs/netlify').NetlifyLocals
+type NetlifyLocals = import('@astrojs/netlify').NetlifyLocals;
 
 declare namespace App {
   interface Locals extends NetlifyLocals {
-    city: string;
-    country: string;
-    weather: {
-      temp: number;
-      description: string;
+    geo: {
+      city?: string;
+      country?: {
+        code?: string;
+        name?: string;
+      };
+      postalCode?: string;
+      subdivision?: {
+        code?: string;
+        name?: string;
+      };
+      latitude?: number;
+      longitude?: number;
+      timezone?: string;
+    };
+    ip: string;
+    requestId: string;
+    cookies: Record<string, string>;
+    deploy: {
+      context: string;
+      id: string;
+      published: boolean;
     };
   }
-
 }

@@ -4,29 +4,56 @@ import { Image } from 'astro:assets';
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
 
-// Desestructurar los datos de localización de Astro.locals
-const { city, country, weather } = Astro.locals;
+// Desestructurando el contexto de Netlify desde Astro.locals
+const {
+  geo: { city, country, postalCode, subdivision, latitude, longitude, timezone },
+  ip,
+  requestId,
+  deploy,
+} = Astro.locals.netlify.context;
 
-// Si no se encuentra algún dato, asignar un valor predeterminado
+// Asignando valores predeterminados si alguno de los datos no está disponible
 const cityName = city || "Ciudad desconocida";
-const countryName = country || "País desconocido";
-const weatherDescription = weather?.description || "Descripción del clima no disponible";
-const temperature = weather?.temp ? `${weather.temp}°C` : "Temperatura no disponible";
+const countryName = country?.name || "País desconocido";
+const postalCodeInfo = postalCode || "Código postal no disponible";
+const subdivisionInfo = subdivision?.name || "Subdivisión no disponible";
+const userIP = ip || "IP desconocida";
+const requestID = requestId || "ID de solicitud desconocido";
+const userTimezone = timezone || "Zona horaria desconocida";
+const deployContext = deploy?.context || "Despliegue desconocido";
+const deployPublished = deploy?.published ? "Publicado" : "No publicado";
+const latitudeInfo = latitude || "Latitud desconocida";
+const longitudeInfo = longitude || "Longitud desconocida";
 ---
 
 <Layout>
   <div class="container mx-auto p-8">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    
       <!-- Mostrar la bienvenida con ciudad, país y clima -->
       <h1 class="text-4xl font-bold text-valorant mb-8">
         ¡Bienvenido a {cityName}, {countryName}!
         <span class="text-xl text-gray-500">{new Date().toLocaleDateString()}</span>
       </h1>
+
+      <!-- Mostrar detalles adicionales del contexto -->
       <p class="text-lg text-gray-700">
-        Clima: {weatherDescription}, {temperature}.
+        Información adicional:
+        <ul>
+          <li><strong>IP del usuario:</strong> {userIP}</li>
+          <li><strong>ID de solicitud:</strong> {requestID}</li>
+          <li><strong>Zona horaria:</strong> {userTimezone}</li>
+          <li><strong>Latitud:</strong> {latitudeInfo}</li>
+          <li><strong>Longitud:</strong> {longitudeInfo}</li>
+          <li><strong>Código Postal:</strong> {postalCodeInfo}</li>
+          <li><strong>Subdivisión:</strong> {subdivisionInfo}</li>
+        </ul>
       </p>
-      
+
+      <!-- Mostrar información de despliegue -->
+      <p class="text-lg text-gray-700">
+        <strong>Despliegue:</strong> {deployContext} ({deployPublished})
+      </p>
+
       <!-- Enlaces a otras páginas -->
       <a href="/valorant-agents" class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
         <Image src={bannerValo} alt="Valorant Banner api" class="w-full object-cover mb-4 rounded-lg" />
