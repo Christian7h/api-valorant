@@ -1,0 +1,25 @@
+---
+interface Props {
+  tier: number;
+  tierName: string;
+  divisionName: string;
+  color: string;
+  backgroundColor: string;
+  smallIcon: string;
+  largeIcon: string;
+  rankTriangleDownIcon: string;
+  rankTriangleUpIcon: string;
+}
+
+const { tier, tierName, divisionName, color, backgroundColor, smallIcon, largeIcon, rankTriangleDownIcon, rankTriangleUpIcon } = Astro.props;
+---
+
+<div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
+  <h2 class="text-2xl font-semibold text-valorant hover:underline">{tierName}</h2>
+  <img src={largeIcon} alt={tierName} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
+  <p class="text-lg">Division: {divisionName}</p>
+  <div class="flex justify-between">
+    {rankTriangleDownIcon && <img src={rankTriangleDownIcon} alt="Rank Down" class="w-12 h-12 object-contain" loading="lazy" />}
+    {rankTriangleUpIcon && <img src={rankTriangleUpIcon} alt="Rank Up" class="w-12 h-12 object-contain" loading="lazy" />}
+  </div>
+</div>

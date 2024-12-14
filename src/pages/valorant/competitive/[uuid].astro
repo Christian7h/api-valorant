@@ -1,0 +1,72 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import CompetitiveTierCard from "../../../components/valorant/CompetitiveTierCard.astro";
+import Pagination from "../../../components/Pagination.astro";
+
+const { uuid } = Astro.params;
+const apiUrl = `https://valorant-api.com/v1/competitivetiers/${uuid}`;
+
+// Realiza la solicitud a la API
+const res = await fetch(apiUrl);
+const data = await res.json();
+const tiers = data.data.tiers;
+
+// Configuración de la paginación
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
+const pageParam = Number(url.searchParams.get('page') ?? 1);
+const itemsPerPage = 6; // Número de tiers por página
+const totalPages = Math.ceil(tiers.length / itemsPerPage);
+
+const currentPage = Math.max(
+    pageParam > totalPages ? totalPages : pageParam,
+    1
+);
+
+// Dividir los tiers en páginas
+const tiersOnPage = tiers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+);
+
+interface Tier {
+  tier: number;
+  tierName: string;
+  divisionName: string;
+  color: string;
+  backgroundColor: string;
+  smallIcon: string;
+  largeIcon: string;
+  rankTriangleDownIcon: string;
+  rankTriangleUpIcon: string;
+}
+---
+
+<Layout>
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-valorant mb-8">Competitive Tiers for {data.data.assetObjectName}</h1>
+
+    <!-- Lista de tiers para el episodio -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {
+        tiersOnPage.map((tier: Tier) => (
+          <Fragment key={tier.tier}>
+            <CompetitiveTierCard
+              tier={tier.tier}
+              tierName={tier.tierName}
+              divisionName={tier.divisionName}
+              color={tier.color}
+              backgroundColor={tier.backgroundColor}
+              smallIcon={tier.smallIcon}
+              largeIcon={tier.largeIcon}
+              rankTriangleDownIcon={tier.rankTriangleDownIcon}
+              rankTriangleUpIcon={tier.rankTriangleUpIcon}
+            />
+          </Fragment>
+        ))
+      }
+    </div>
+
+    <!-- Componente de paginación -->
+    <Pagination totalPages={totalPages} />
+  </div>
+</Layout>

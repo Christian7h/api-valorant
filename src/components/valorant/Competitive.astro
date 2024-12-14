@@ -1,0 +1,67 @@
+---
+import Pagination from '../Pagination.astro';
+import CompetitiveTierCard from './CompetitiveTierCard.astro';
+
+const apiUrl = "https://valorant-api.com/v1/competitivetiers";
+
+// Obtener parámetros de la URL
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
+const pageParam = Number(url.searchParams.get('page') ?? 1);
+const itemsPerPage = 6; // Número de tiers por página
+const currentPage = Math.max(pageParam, 1);
+
+// Realiza la solicitud a la API
+const res = await fetch(apiUrl);
+const data = await res.json();
+const tiers = data.data.flatMap((episode: { tiers: Tier[] }) => episode.tiers); // Combina todos los tiers de todos los episodios
+
+// Calcular los índices de los datos según la página actual
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = startIndex + itemsPerPage;
+
+// Obtener solo los tiers para la página actual
+const currentTiers = tiers.slice(startIndex, endIndex);
+
+// Calcular el número total de páginas
+const totalPages = Math.ceil(tiers.length / itemsPerPage);
+
+interface Tier {
+  tier: number;
+  tierName: string;
+  divisionName: string;
+  color: string;
+  backgroundColor: string;
+  smallIcon: string;
+  largeIcon: string;
+  rankTriangleDownIcon: string;
+  rankTriangleUpIcon: string;
+}
+---
+
+<div class="container mx-auto p-8">
+  <h1 class="text-4xl font-bold text-valorant mb-8">Valorant Competitive Tiers</h1>
+
+  <!-- Lista de tiers para la página actual -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {
+      currentTiers.map((tier: Tier) => (
+        <Fragment key={tier.tier}>
+          <CompetitiveTierCard
+            tier={tier.tier}
+            tierName={tier.tierName}
+            divisionName={tier.divisionName}
+            color={tier.color}
+            backgroundColor={tier.backgroundColor}
+            smallIcon={tier.smallIcon}
+            largeIcon={tier.largeIcon}
+            rankTriangleDownIcon={tier.rankTriangleDownIcon}
+            rankTriangleUpIcon={tier.rankTriangleUpIcon}
+          />
+        </Fragment>
+      ))
+    }
+  </div>
+
+  <!-- Componente de paginación -->
+  <Pagination totalPages={totalPages} />
+</div>
