@@ -2,23 +2,46 @@
 interface Props {
   uuid: string;
   displayName: string;
-  description: string;
   displayIcon: string;
-  displayIcon2: string;
-  verticalPromoImage: string;
 }
 
-const { uuid, displayName, description, displayIcon, displayIcon2, verticalPromoImage } = Astro.props;
+const { uuid, displayName, displayIcon } = Astro.props;
 ---
 
-<a href={`/bundle/${uuid}`} class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
+<a 
+  href={`/bundle/${uuid}`} 
+  class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300 hover:scale-105 transform"
+>
   <h2 class="text-2xl font-semibold text-valorant hover:underline">{displayName}</h2>
   <img 
     src={displayIcon} 
     alt={displayName} 
-    class="w-full h-48 object-contain mb-4 rounded-lg" 
-    width={500} 
-    height={500}
     loading="lazy"
+    class="bundle-image"
   />
 </a>
+
+<style>
+  img.bundle-image {
+    width: 100%;
+    max-width: 500px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+  }
+
+  a:hover img.bundle-image {
+    transform: scale(1.05); /* Slight zoom effect */
+    filter: brightness(1.1); /* Increase brightness on hover */
+  }
+
+  /* Optional: To handle the container size better for responsiveness */
+  .bg-valorant-dark {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+</style>

@@ -29,12 +29,8 @@ const totalPages = Math.ceil(bundles.length / itemsPerPage);
 interface Bundle {
   uuid: string;
   displayName: string;
-  description: string;
   displayIcon: string;
-  displayIcon2: string;
-  verticalPromoImage: string;
 }
-
 ---
 
 <div class="container mx-auto p-8">
@@ -48,10 +44,7 @@ interface Bundle {
           <BundleCard
             uuid={bundle.uuid}
             displayName={bundle.displayName}
-            description={bundle.description}
             displayIcon={bundle.displayIcon}
-            displayIcon2={bundle.displayIcon2}
-            verticalPromoImage={bundle.verticalPromoImage}
           />
         </Fragment>
       ))
