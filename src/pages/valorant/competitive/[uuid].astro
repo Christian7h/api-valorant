@@ -4,7 +4,7 @@ import CompetitiveTierCard from "../../../components/valorant/CompetitiveTierCar
 import Pagination from "../../../components/Pagination.astro";
 
 const { uuid } = Astro.params;
-const apiUrl = `https://valorant-api.com/v1/competitivetiers/${uuid}`;
+const apiUrl = `https://valorant-api.com/v1/competitivetiers/${uuid}/?language=es-ES`;
 
 // Realiza la solicitud a la API
 const res = await fetch(apiUrl);

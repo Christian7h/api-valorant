@@ -1,0 +1,61 @@
+---
+import Pagination from '../Pagination.astro';
+import CurrencyCard from './CurrencyCard.astro';
+
+const apiUrl = "https://valorant-api.com/v1/currencies/?language=es-ES";
+
+// Obtener parámetros de la URL
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
+const pageParam = Number(url.searchParams.get('page') ?? 1);
+const itemsPerPage = 6; // Número de monedas por página
+const currentPage = Math.max(pageParam, 1);
+
+// Realiza la solicitud a la API
+const res = await fetch(apiUrl);
+const data = await res.json();
+const currencies = data.data;
+
+// Calcular los índices de los datos según la página actual
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = startIndex + itemsPerPage;
+
+// Obtener solo las monedas para la página actual
+const currentCurrencies = currencies.slice(startIndex, endIndex);
+
+// Calcular el número total de páginas
+const totalPages = Math.ceil(currencies.length / itemsPerPage);
+
+interface Currency {
+  uuid: string;
+  displayName: string;
+  displayNameSingular: string;
+  displayIcon: string;
+  largeIcon: string;
+  rewardPreviewIcon: string;
+}
+---
+
+<div class="container mx-auto p-8">
+  <h1 class="text-4xl font-bold text-valorant mb-8">Valorant Currencies</h1>
+
+  <!-- Lista de monedas para la página actual -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {
+      currentCurrencies.map((currency: Currency) => (
+        <Fragment key={currency.uuid}>
+          <CurrencyCard
+            uuid={currency.uuid}
+            displayName={currency.displayName}
+            displayNameSingular={currency.displayNameSingular}
+            displayIcon={currency.displayIcon}
+            largeIcon={currency.largeIcon}
+            rewardPreviewIcon={currency.rewardPreviewIcon}
+          />
+        </Fragment>
+      ))
+    }
+  </div>
+
+  <!-- Componente de paginación -->
+  <Pagination totalPages={totalPages} />
+</div>

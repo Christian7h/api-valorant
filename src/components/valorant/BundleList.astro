@@ -3,7 +3,7 @@
 import Pagination from '../Pagination.astro';
 import BundleCard from './BundleCard.astro';
 
-const apiUrl = "https://valorant-api.com/v1/bundles";
+const apiUrl = "https://valorant-api.com/v1/bundles/?language=es-ES";
 
 // Obtener parámetros de la URL
 const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);

@@ -2,7 +2,7 @@
 import Pagination from '../Pagination.astro';
 import CompetitiveTierCard from './CompetitiveTierCard.astro';
 
-const apiUrl = "https://valorant-api.com/v1/competitivetiers";
+const apiUrl = "https://valorant-api.com/v1/competitivetiers/?language=es-ES";
 
 // Obtener parámetros de la URL
 const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);

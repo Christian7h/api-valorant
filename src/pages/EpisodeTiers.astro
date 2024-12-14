@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import CompetitiveTierCard from "../components/valorant/CompetitiveTierCard.astro";
 
 const { uuid } = Astro.params;
-const apiUrl = `https://valorant-api.com/v1/competitivetiers/${uuid}`;
+const apiUrl = `https://valorant-api.com/v1/competitivetiers/${uuid}/?language=es-ES`;
 
 // Realiza la solicitud a la API
 const res = await fetch(apiUrl);
