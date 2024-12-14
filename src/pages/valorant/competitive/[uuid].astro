@@ -39,12 +39,13 @@ interface Tier {
   rankTriangleDownIcon: string;
   rankTriangleUpIcon: string;
 }
+const shortAssetObjectName = data.data.assetObjectName.split('_')[0]; // Esto te da "Episode1"
+
 ---
 
 <Layout>
   <div class="container mx-auto p-8">
-    <h1 class="text-4xl font-bold text-valorant mb-8">Competitive Tiers for {data.data.assetObjectName}</h1>
-
+    <h1 class="text-4xl font-bold text-valorant mb-8">Competitive Tiers for {shortAssetObjectName}</h1>
     <!-- Lista de tiers para el episodio -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {
