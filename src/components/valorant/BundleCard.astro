@@ -9,9 +9,17 @@ interface Props {
 }
 
 const { uuid, displayName, description, displayIcon, displayIcon2, verticalPromoImage } = Astro.props;
+import { Picture } from 'astro:assets';  // Importando el componente Image
 ---
 
 <a href={`/bundle/${uuid}`} class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
   <h2 class="text-2xl font-semibold text-valorant hover:underline">{displayName}</h2>
-  <img src={displayIcon} alt={displayName} class="w-full h-48 object-contain mb-4 rounded-lg" />
+  <Picture 
+    src={displayIcon} 
+    alt={displayName} 
+    class="w-full h-48 object-contain mb-4 rounded-lg" 
+    width={500} 
+    height={500}
+    loading="lazy"
+  />
 </a>

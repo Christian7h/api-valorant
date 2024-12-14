@@ -1,5 +1,4 @@
 type NetlifyLocals = import('@astrojs/netlify').NetlifyLocals;
-declare module 'astro-imagetools/components';
 declare namespace App {
   interface Locals extends NetlifyLocals {
     geo: {
