@@ -47,11 +47,15 @@ interface Buddy {
             <h2 class="text-2xl font-semibold text-valorant hover:underline">
               {buddy.displayName}
             </h2>
+
+            <!-- Imagen optimizada con Lazy loading -->
             <img
               src={buddy.displayIcon}
               alt={buddy.displayName}
               class="w-full h-48 object-contain mb-4 rounded-lg"
+              loading="lazy"
             />
+
             <p class="text-lg">
               Level: {buddy.levels.map((level) => level.displayName).join(", ")}
             </p>
@@ -64,3 +68,17 @@ interface Buddy {
   <!-- Componente de paginación -->
   <Pagination totalPages={totalPages} />
 </div>
+
+<style>
+  /* Estilo para la imagen */
+  img {
+    object-fit: contain;
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+  }
+
+  /* Efecto hover para la imagen */
+  a:hover img {
+    transform: scale(1.05); /* Zoom sutil en hover */
+  }
+</style>
