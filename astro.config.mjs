@@ -1,9 +1,10 @@
-// @ts-check
+// @ts-nocheck
 import { defineConfig } from "astro/config";
 
 import netlify from '@astrojs/netlify/functions';
 
 import tailwind from "@astrojs/tailwind";
+import { astroImageTools } from "astro-imagetools";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,5 +13,5 @@ export default defineConfig({
     edgeMiddleware: true
   }),
   output: "server",
-  integrations: [tailwind()],
+  integrations: [tailwind(),astroImageTools],
 });
