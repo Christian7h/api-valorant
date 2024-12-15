@@ -1,0 +1,17 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PaymentSuccess from "../components/webpay/PaymentSuccess";
+
+const params = Astro.url.searchParams;
+const order = params.get('order');
+const amount = params.get('amount');
+const productId = params.get('productId'); // Suponiendo que el ID del producto se pasa como parámetro
+
+const success = params.get('success');
+---
+
+<Layout title="Gracias por tu compra">
+  <main class="container mx-auto p-8">
+    <PaymentSuccess client:load />
+  </main>
+</Layout>

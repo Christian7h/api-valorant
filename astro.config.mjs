@@ -5,6 +5,8 @@ import netlify from '@astrojs/netlify/functions';
 
 import tailwind from "@astrojs/tailwind";
 
+import react from "@astrojs/react";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://apis-cristian.netlify.app/",
@@ -12,5 +14,5 @@ export default defineConfig({
     edgeMiddleware: true
   }),
   output: "server",
-  integrations: [tailwind()],
+  integrations: [tailwind(), react()],
 });

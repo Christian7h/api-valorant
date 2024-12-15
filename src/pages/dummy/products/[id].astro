@@ -1,5 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import PayButton from "../../../components/webpay/PayButton.tsx";
+import { formatPriceToCLP } from '../../../utils/formatted.ts'; // Importar la función de formateo
 
 const { id } = Astro.params;
 const apiUrl = `https://dummyjson.com/products/${id}`;
@@ -7,6 +9,10 @@ const apiUrl = `https://dummyjson.com/products/${id}`;
 // Realiza la solicitud a la API
 const res = await fetch(apiUrl);
 const product = await res.json();
+
+// Formatear el precio en CLP
+const formattedPrice = formatPriceToCLP(product.price);
+const priceInCLP = Math.round(product.price * 970);
 
 interface Product {
   id: number;
@@ -27,11 +33,13 @@ interface Product {
     <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
       <img src={product.images[0]} alt={product.title} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
       <p class="text-lg">{product.description}</p>
-      <p class="text-lg font-bold">${product.price}</p>
+      <p class="text-lg font-bold text-valorant">{formattedPrice}</p>
+      <p class="text-xs font-bold text-gray-400">USD ${product.price}</p>
       <p class="text-lg">Categoría: {product.category}</p>
       <p class="text-lg">Marca: {product.brand}</p>
       <p class="text-lg">Existencias: {product.stock}</p>
       <p class="text-lg">Clasificación: {product.rating}</p>
     </div>
+    <PayButton amount={priceInCLP} productId={product.id} client:load />
   </div>
 </Layout>

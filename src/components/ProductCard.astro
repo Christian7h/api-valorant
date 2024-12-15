@@ -1,4 +1,6 @@
 ---
+import { formatPriceToCLP } from '../utils/formatted.ts'; // Importar la función de formateo
+
 interface Props {
   id: number;
   title: string;
@@ -8,11 +10,15 @@ interface Props {
 }
 
 const { id, title, description, price, thumbnail } = Astro.props;
+
+// Formatear el precio en CLP
+const formattedPrice = formatPriceToCLP(price);
 ---
 
 <a href={`/dummy/products/${id}`} class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
   <h2 class="text-2xl font-semibold text-valorant hover:underline">{title}</h2>
   <img src={thumbnail} alt={title} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
   <p class="text-lg">{description}</p>
-  <p class="text-lg font-bold">${price}</p>
+  <p class="text-lg font-bold text-valorant">{formattedPrice}</p>
+  <p class="text-xs font-bold text-gray-400">USD ${price}</p>
 </a>
