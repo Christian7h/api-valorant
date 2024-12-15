@@ -4,7 +4,8 @@ import Layout from "../layouts/Layout.astro";
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
 import CardApis from "../components/CardApis.astro";
-import bannerDummy from "../assets/dummy3.png";
+import bannerDummyw from "../assets/dummywebp.webp";
+
 // Desestructurando el contexto de Netlify desde Astro.locals
 const {
   geo: {
@@ -95,7 +96,7 @@ const longitudeInfo = longitude || "Longitud desconocida";
       />
       <CardApis
         href="/dummy"
-        imageSrc={bannerDummy}
+        imageSrc={bannerDummyw}
         imageAlt="DummyJSON"
         title="DummyJSON"
         description="Explora el contenido de DummyJSON."
