@@ -7,7 +7,6 @@ const apiUrl = `https://rickandmortyapi.com/api/character/${id}`;
 // Realiza la solicitud a la API para obtener los detalles del personaje
 const res = await fetch(apiUrl);
 const character = await res.json();
-import { Image } from "astro:assets";
 
 interface Character {
   id: number;
@@ -43,24 +42,13 @@ const episodeDetails = await Promise.all(
     return await res.json();
   })
 );
-const imageUrl = character.image;
-const imageWidth = 500; // Replace with the actual width of the image
-const imageHeight = 500; // Replace with the actual height of the image
 ---
 
 <Layout>
   <div class="container mx-auto p-8">
     <h1 class="text-4xl font-bold text-valorant mb-8">{character.name}</h1>
     <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
-      <Image 
-        src={imageUrl} 
-        alt={character.name} 
-        width={imageWidth}
-        height={imageHeight}
-        sizes="(max-width: 600px) 100vw, 50vw"
-        class="w-full h-48 object-contain mb-4 rounded-full"
-        loading="lazy" 
-      />    
+      <img src={character.image} alt={character.name} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
       <p class="text-lg"><strong>ID:</strong> {character.id}</p>
       <p class="text-lg"><strong>Status:</strong> {character.status}</p>
       <p class="text-lg"><strong>Species:</strong> {character.species}</p>
