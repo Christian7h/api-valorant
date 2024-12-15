@@ -13,7 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
     const tx = new WebpayPlus.WebpayPlus.Transaction(
       new Options(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY, Environment.Integration)
     );
-    
+
     const response = await tx.commit(token);
 
     if (response.response_code === 0 && response.status === 'AUTHORIZED') {

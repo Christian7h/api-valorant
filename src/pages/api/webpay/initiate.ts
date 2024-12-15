@@ -2,13 +2,10 @@
 
 import type { APIRoute } from 'astro';
 
-// const WebpayPlus = require("transbank-sdk").WebpayPlus; // CommonJS
-// import { Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes } from "transbank-sdk"; // CommonJS
-
 import WebpayPlus from 'transbank-sdk';
 import Transaction from 'transbank-sdk';
 
-const {Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes} = Transaction;
+const { Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes } = Transaction;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -17,7 +14,7 @@ export const POST: APIRoute = async ({ request }) => {
     const tx = new WebpayPlus.WebpayPlus.Transaction(
       new Options(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY, Environment.Integration)
     );
-    
+
     const response = await tx.create(buyOrder, sessionId, amount, returnUrl);
 
     return new Response(JSON.stringify({
