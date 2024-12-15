@@ -41,8 +41,17 @@ const longitudeInfo = longitude || "Longitud desconocida";
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Mostrar la bienvenida con ciudad, país y clima -->
       <h1 class="text-4xl font-bold text-valorant mb-8">
-        ¡Bienvenido visitante de {cityName}, {countryName}!
+        <a href="" title="contador de visitas gratis">
+          <img
+            src="https://counter6.optistats.ovh/private/contadorvisitasgratis.php?c=lbcpu9wu5enntlnjmgj444my2jxp55qt"
+            title="contador de visitas gratis"
+            alt="contador de visitas gratis"
+            width="100"   
+            height="20"
+          />
+        </a>        ¡Bienvenido visitante de {cityName}, {countryName}!
         <span class="text-xl text-gray-500"
+        
           >{new Date().toLocaleDateString()}</span
         >
         {
