@@ -1,0 +1,37 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+const { id } = Astro.params;
+const apiUrl = `https://dummyjson.com/products/${id}`;
+
+// Realiza la solicitud a la API
+const res = await fetch(apiUrl);
+const product = await res.json();
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  brand: string;
+  stock: number;
+  rating: number;
+  images: string[];
+}
+---
+
+<Layout>
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-valorant mb-8">{product.title}</h1>
+    <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
+      <img src={product.images[0]} alt={product.title} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
+      <p class="text-lg">{product.description}</p>
+      <p class="text-lg font-bold">${product.price}</p>
+      <p class="text-lg">Categoría: {product.category}</p>
+      <p class="text-lg">Marca: {product.brand}</p>
+      <p class="text-lg">Existencias: {product.stock}</p>
+      <p class="text-lg">Clasificación: {product.rating}</p>
+    </div>
+  </div>
+</Layout>

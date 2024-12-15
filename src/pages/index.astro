@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
 import CardApis from "../components/CardApis.astro";
-
+import bannerDummy from "../assets/dummy3.png";
 // Desestructurando el contexto de Netlify desde Astro.locals
 const {
   geo: {
@@ -85,7 +85,14 @@ const longitudeInfo = longitude || "Longitud desconocida";
         description="Explora todo lo relacionado a Valorant."
       />
       <CardApis
-        href="/zzz"
+        href="/dummy"
+        imageSrc={bannerDummy}
+        imageAlt="DummyJSON"
+        title="DummyJSON"
+        description="Explora el contenido de DummyJSON."
+      />
+      <CardApis
+        href="/"
         imageSrc={bannerZzz}
         imageAlt="ZZZ"
         title="ZZZ"

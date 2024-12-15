@@ -1,0 +1,63 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import ProductCard from "../../../../components/ProductCard.astro";
+import Pagination from "../../../../components/Pagination.astro";
+
+const { category } = Astro.params;
+const apiUrl = `https://dummyjson.com/products/category/${category}`;
+
+// Obtener parámetros de la URL
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
+const pageParam = Number(url.searchParams.get('page') ?? 1);
+const itemsPerPage = 6; // Número de productos por página
+const currentPage = Math.max(pageParam, 1);
+
+// Realiza la solicitud a la API
+const res = await fetch(apiUrl);
+const data = await res.json();
+const products = data.products;
+
+// Calcular los índices de los datos según la página actual
+const startIndex = (currentPage - 1) * itemsPerPage;
+const endIndex = startIndex + itemsPerPage;
+
+// Obtener solo los productos para la página actual
+const currentProducts = products.slice(startIndex, endIndex);
+
+// Calcular el número total de páginas
+const totalPages = Math.ceil(products.length / itemsPerPage);
+
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  thumbnail: string;
+}
+---
+
+<Layout>
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-valorant mb-8">Productos en {category}</h1>
+
+    <!-- Lista de productos para la página actual -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {
+        currentProducts.map((product: Product) => (
+          <Fragment key={product.id}>
+            <ProductCard
+              id={product.id}
+              title={product.title}
+              description={product.description}
+              price={product.price}
+              thumbnail={product.thumbnail}
+            />
+          </Fragment>
+        ))
+      }
+    </div>
+
+    <!-- Componente de paginación -->
+    <Pagination totalPages={totalPages} />
+  </div>
+</Layout>
