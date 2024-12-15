@@ -5,6 +5,7 @@ import bannerValo from "../assets/VALORANT_logo4.jpg";
 import bannerZzz from "../assets/zzz.jpeg";
 import CardApis from "../components/CardApis.astro";
 import bannerDummyw from "../assets/dummywebp.webp";
+import bannerRam from "../assets/ram.webp";
 
 // Desestructurando el contexto de Netlify desde Astro.locals
 const {
@@ -101,6 +102,13 @@ const longitudeInfo = longitude || "Longitud desconocida";
         title="DummyJSON"
         description="Explora el contenido de DummyJSON."
       />
+      <CardApis
+      href="/rickandmorty"
+      imageSrc={bannerRam}
+      imageAlt="The Rick and Morty API"
+      title="The Rick and Morty API"
+      description="Explora el contenido de The Rick and Morty API."
+    />
       <CardApis
         href="/"
         imageSrc={bannerZzz}

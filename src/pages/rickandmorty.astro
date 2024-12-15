@@ -1,0 +1,65 @@
+---
+//src/pages/valorant.astro
+import CardApis from "../components/CardApis.astro";
+import bannerRam from "../assets/ram.webp";
+import Layout from "../layouts/Layout.astro";
+import bannerLoc from "../assets/loc.webp";
+import bannerEpi from "../assets/epi.jpg";
+
+---
+
+<Layout>
+  <div class="container mx-auto p-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <CardApis
+        href="/rickandmorty/characters"
+        imageSrc={bannerRam}
+        imageAlt="Characters Rick and Morty"
+        title="Rick and Morty Characters"
+        description="Explora la lista de personajes de Rick and Morty."
+      />
+      <CardApis
+        href="/rickandmorty/locations"
+        imageSrc={bannerLoc}
+        imageAlt="Locations Rick and Morty"
+        title="Locations Rick and Morty"
+        description="Explora la lista de ubicaciones de Rick and Morty."
+      />
+      <CardApis
+      href="/rickandmorty/episodes"
+      imageSrc={bannerEpi}
+      imageAlt="Episodes Rick and Morty"
+      title="Episodes Rick and Morty"
+      description="Explora la lista de episodios de Rick and Morty."
+    />
+      <!-- <CardApis
+        href="/valorant/buddies"
+        imageSrc={bannerValo}
+        imageAlt="buddies valorant"
+        title="Valorant Buddies"
+        description="Explora la lista de Buddies de Valorant."
+      />
+      <CardApis
+        href="/valorant/bundle"
+        imageSrc={bannerValo}
+        imageAlt="bundle valorant"
+        title="Valorant Bundle"
+        description="Explora la lista de Bundles de Valorant."
+      />
+      <CardApis
+        href="/valorant/competitive"
+        imageSrc={bannerValo}
+        imageAlt="bundle valorant"
+        title="Valorant Competitive"
+        description="Explora la lista de Competitive Tier de Valorant."
+      />
+      <CardApis
+        href="/valorant/currency"
+        imageSrc={bannerValo}
+        imageAlt="currency valorant"
+        title="Valorant Currency"
+        description="Explora la lista de Currency de Valorant."
+      /> -->
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,24 @@
+---
+import LocationsDetail from "../../../components/rickandmorty/LocationsDetail.astro";
+import Layout from "../../../layouts/Layout.astro";
+
+const { id } = Astro.params;
+const apiUrl = `https://rickandmortyapi.com/api/location/${id}`;
+
+// Realiza la solicitud a la API para obtener los detalles de la ubicación
+const res = await fetch(apiUrl);
+const location = await res.json();
+
+interface Location {
+  id: number;
+  name: string;
+  type: string;
+  dimension: string;
+  residents: string[];
+  url: string;
+  created: string;
+}
+---
+<Layout>
+    <LocationsDetail/>
+</Layout>

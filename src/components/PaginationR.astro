@@ -1,0 +1,37 @@
+---
+interface Props {
+  totalPages: number;
+  currentPage: number;
+}
+
+const { totalPages, currentPage } = Astro.props;
+
+const createPageLink = (page: number) => {
+  const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
+  url.searchParams.set('page', page.toString());
+  return url.toString();
+};
+---
+
+<div class="flex justify-between my-24 items-center">
+  <!-- Botón para la página anterior -->
+  <a
+    href={createPageLink(Math.max(currentPage - 1, 1))}
+    class="bg-[#0f1923] hover:bg-[#ff4655] text-[#d5d6c3] hover:text-white font-bold py-1 px-3 border border-[#d5d6c3] transition duration-200 ease-in-out rounded-lg"
+  >
+    Anteriores
+  </a>
+
+  <!-- Indicador de página actual -->
+  <span class="text-[#ff4655] text-xl font-bold">
+    Página {currentPage} de {totalPages}
+  </span>
+
+  <!-- Botón para la página siguiente -->
+  <a
+    href={createPageLink(Math.min(currentPage + 1, totalPages))}
+    class="bg-[#0f1923] hover:bg-[#ff4655] text-[#d5d6c3] hover:text-white font-bold py-1 px-3 border border-[#d5d6c3] transition duration-200 ease-in-out rounded-lg"
+  >
+    Siguiente
+  </a>
+</div>

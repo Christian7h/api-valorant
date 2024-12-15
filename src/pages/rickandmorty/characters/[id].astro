@@ -1,0 +1,76 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+const { id } = Astro.params;
+const apiUrl = `https://rickandmortyapi.com/api/character/${id}`;
+
+// Realiza la solicitud a la API para obtener los detalles del personaje
+const res = await fetch(apiUrl);
+const character = await res.json();
+
+interface Character {
+  id: number;
+  name: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+  origin: {
+    name: string;
+    url: string;
+  };
+  location: {
+    name: string;
+    url: string;
+  };
+  image: string;
+  episode: string[];
+  url: string;
+  created: string;
+}
+
+// Función para obtener el ID de la URL
+const getIdFromUrl = (url: string) => {
+  const parts = url.split('/');
+  return parts[parts.length - 1];
+};
+
+// Obtener los nombres de los episodios
+const episodeDetails = await Promise.all(
+  character.episode.map(async (episodeUrl:string) => {
+    const res = await fetch(episodeUrl);
+    return await res.json();
+  })
+);
+---
+
+<Layout>
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-valorant mb-8">{character.name}</h1>
+    <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
+      <img src={character.image} alt={character.name} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
+      <p class="text-lg"><strong>ID:</strong> {character.id}</p>
+      <p class="text-lg"><strong>Status:</strong> {character.status}</p>
+      <p class="text-lg"><strong>Species:</strong> {character.species}</p>
+      <p class="text-lg"><strong>Type:</strong> {character.type || 'N/A'}</p>
+      <p class="text-lg"><strong>Gender:</strong> {character.gender}</p>
+      <p class="text-lg"><strong>Origin:</strong> <a href={`/rickandmorty/locations/${getIdFromUrl(character.origin.url)}`} class="text-valorant hover:underline">{character.origin.name}</a></p>
+      <p class="text-lg"><strong>Location:</strong> <a href={`/rickandmorty/locations/${getIdFromUrl(character.location.url)}`} class="text-valorant hover:underline">{character.location.name}</a></p>
+      <p class="text-lg"><strong>Episodes:</strong> {character.episode.length}</p>
+      <p class="text-lg"><strong>Created:</strong> {new Date(character.created).toLocaleDateString()}</p>
+    </div>
+
+    <h2 class="text-3xl font-bold text-valorant mt-8 mb-4">Episodes</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {
+        episodeDetails.map((episode) => (
+          <Fragment key={episode.id}>
+            <a href={`/rickandmorty/episodes/${episode.id}`} class="block bg-valorant-dark p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+              <p class="text-lg">Episode: {episode.name}</p>
+            </a>
+          </Fragment>
+        ))
+      }
+    </div>
+  </div>
+</Layout>

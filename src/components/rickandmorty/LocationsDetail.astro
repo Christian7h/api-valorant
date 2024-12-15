@@ -1,0 +1,72 @@
+---
+const { id } = Astro.params;
+const apiUrl = `https://rickandmortyapi.com/api/location/${id}`;
+
+// Realiza la solicitud a la API para obtener los detalles de la ubicación
+const res = await fetch(apiUrl);
+const location = await res.json();
+
+interface Location {
+  id: number;
+  name: string;
+  type: string;
+  dimension: string;
+  residents: string[];
+  url: string;
+  created: string;
+}
+
+interface Character {
+  id: number;
+  name: string;
+  status: string;
+  species: string;
+  gender: string;
+  origin: {
+    name: string;
+  };
+  location: {
+    name: string;
+  };
+  image: string;
+}
+
+// Obtener los detalles de los personajes residentes
+const residentDetails = await Promise.all(
+  location.residents.map(async (residentUrl:string) => {
+    const res = await fetch(residentUrl);
+    return await res.json();
+  })
+);
+---
+
+<div class="container mx-auto p-8">
+  <h1 class="text-4xl font-bold text-valorant mb-8">{location.name}</h1>
+  <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
+    <p class="text-lg"><strong>ID:</strong> {location.id}</p>
+    <p class="text-lg"><strong>Type:</strong> {location.type}</p>
+    <p class="text-lg"><strong>Dimension:</strong> {location.dimension}</p>
+    <p class="text-lg"><strong>Residents:</strong> {location.residents.length}</p>
+    <p class="text-lg"><strong>URL:</strong> <a href={location.url} class="text-valorant hover:underline">{location.url}</a></p>
+    <p class="text-lg"><strong>Created:</strong> {new Date(location.created).toLocaleDateString()}</p>
+  </div>
+
+  <h2 class="text-3xl font-bold text-valorant mt-8 mb-4">Residents</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {
+      residentDetails.map((character: Character) => (
+        <Fragment key={character.id}>
+          <a href={`/rickandmorty/characters/${character.id}`} class="block bg-valorant-dark p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <img src={character.image} alt={character.name} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
+            <h2 class="text-2xl font-semibold text-valorant mb-2">{character.name}</h2>
+            <p class="text-lg">Status: {character.status}</p>
+            <p class="text-lg">Species: {character.species}</p>
+            <p class="text-lg">Gender: {character.gender}</p>
+            <p class="text-lg">Origin: {character.origin.name}</p>
+            <p class="text-lg">Location: {character.location.name}</p>
+          </a>
+        </Fragment>
+      ))
+    }
+  </div>
+</div>

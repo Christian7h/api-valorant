@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PaginationR from '../PaginationR.astro';
+
+const apiUrl = 'https://rickandmortyapi.com/api/location';
+
+// Obtener parámetros de la URL
+const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
+const pageParam = Number(url.searchParams.get('page') ?? 1);
+const itemsPerPage = 20; // Número de ubicaciones por página (máximo permitido por la API)
+const currentPage = Math.max(pageParam, 1);
+
+// Realiza la solicitud a la API para la página actual
+const res = await fetch(`${apiUrl}?page=${currentPage}`);
+const data = await res.json();
+const locations = data.results;
+const totalPages = data.info.pages;
+
+interface Location {
+  id: number;
+  name: string;
+  type: string;
+  dimension: string;
+  residents: string[];
+  url: string;
+  created: string;
+}
+---
+<Layout>
+<div class="container mx-auto p-8">
+  <h1 class="text-4xl font-bold text-valorant mb-8">Rick and Morty Locations</h1>
+
+  <!-- Lista de ubicaciones para la página actual -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+    {
+      locations.map((location: Location) => (
+        <Fragment key={location.id}>
+          <a href={`/rickandmorty/locations/${location.id}`} class="block bg-valorant-dark p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+            <h2 class="text-2xl font-semibold text-valorant mb-2">{location.name}</h2>
+            <p class="text-lg">Type: {location.type}</p>
+            <p class="text-lg">Dimension: {location.dimension}</p>
+            <p class="text-lg">Residents: {location.residents.length}</p>
+            <p class="text-lg">Created: {new Date(location.created).toLocaleDateString()}</p>
+          </a>
+        </Fragment>
+      ))
+    }
+  </div>
+
+  <!-- Componente de paginación -->
+  <PaginationR totalPages={totalPages} currentPage={currentPage} />
+</div>
+</Layout>
