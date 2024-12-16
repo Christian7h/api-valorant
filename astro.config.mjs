@@ -11,7 +11,8 @@ import react from "@astrojs/react";
 export default defineConfig({
   site: "https://apis-cristian.netlify.app/",
   adapter: netlify({
-    edgeMiddleware: true
+    edgeMiddleware: true,
+    cacheOnDemandPages: true
   }),
   output: "server",
   integrations: [tailwind(), react()],
