@@ -6,6 +6,7 @@ import bannerZzz from "../assets/zzz.jpeg";
 import CardApis from "../components/CardApis.astro";
 import bannerDummyw from "../assets/dummywebp.webp";
 import bannerRam from "../assets/ram.webp";
+import bannerNode from "../assets/node.jpg";
 
 // Desestructurando el contexto de Netlify desde Astro.locals
 const {
@@ -108,6 +109,13 @@ const longitudeInfo = longitude || "Longitud desconocida";
         title="The Rick and Morty API"
         description="Explora el contenido de The Rick and Morty API."
       />
+      <CardApis
+      href="/node"
+      imageSrc={bannerNode}
+      imageAlt="Api Node"
+      title="Api conectada a Node+Express+MongoDB"
+      description="Explora el contenido de la Api conectada a Node+Express+MongoDB."
+    />
       <CardApis
         href="/"
         imageSrc={bannerZzz}
