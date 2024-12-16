@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Pagination from "./Pagination.astro";
 
-const res = await fetch("http://localhost:3000/api/movies");
+const res = await fetch("https://christian-api-node-movies.netlify.app/API/MOVIES");
 const data = await res.json();
 const movies = data;
 
