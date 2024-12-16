@@ -50,14 +50,14 @@ interface Character {
 
 <Layout>
   <div class="container mx-auto p-8">
-    <h1 class="text-4xl font-bold text-valorant mb-8">Rick and Morty Characters</h1>
+    <h1 class="text-4xl font-bold text-valorant mb-8">Personajes de Rick y Morty</h1>
 
     <!-- Formulario de filtros -->
     <form method="GET" action="/rickandmorty/characters" class="mb-8">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <input type="text" name="name" placeholder="Name" value={nameParam} class="p-2 bg-valorant-dark text-valorant rounded" />
         <select name="status" value={statusParam} class="p-2 bg-valorant-dark text-valorant rounded">
-          <option value="">Status</option>
+          <option value="">Estado</option>
           <option value="alive">Alive</option>
           <option value="dead">Dead</option>
           <option value="unknown">Unknown</option>
@@ -65,7 +65,7 @@ interface Character {
         <input type="text" name="species" placeholder="Species" value={speciesParam} class="p-2 bg-valorant-dark text-valorant rounded" />
         <input type="text" name="type" placeholder="Type" value={typeParam} class="p-2 bg-valorant-dark text-valorant rounded" />
         <select name="gender" value={genderParam} class="p-2 bg-valorant-dark text-valorant rounded">
-          <option value="">Gender</option>
+          <option value="">Género</option>
           <option value="female">Female</option>
           <option value="male">Male</option>
           <option value="genderless">Genderless</option>
@@ -73,8 +73,8 @@ interface Character {
         </select>
       </div>
       <div class="flex space-x-4 mt-4">
-        <button type="submit" class="bg-valorant text-valorant-dark p-2 rounded">Filter</button>
-        <a href="/rickandmorty/characters" class="bg-valorant text-valorant-dark p-2 rounded">Clear</a>
+        <button type="submit" class="bg-valorant text-valorant-dark p-2 rounded">Filtrar</button>
+        <a href="/rickandmorty/characters" class="bg-valorant text-valorant-dark p-2 rounded">Limpiar</a>
       </div>
     </form>
 
@@ -92,9 +92,9 @@ interface Character {
                 <p class={`text-lg status status--${character.status.toLowerCase()}`}>
                   <span class="status__icon"></span> <span class="text-lg text-gray-500"> {character.status}</span> - {character.species}
                 </p>
-                <p class="text-lg text-gray-500">Gender: <span class="font-medium text-valorant-light">{character.gender}</span></p>
-                <p class="text-lg text-gray-500">Origin: <span class="font-medium text-valorant-light">{character.origin.name}</span></p>
-                <p class="text-lg text-gray-500">Location: <span class="font-medium text-valorant-light">{character.location.name}</span></p>
+                <p class="text-lg text-gray-500">Género: <span class="font-medium text-valorant-light">{character.gender}</span></p>
+                <p class="text-lg text-gray-500">Origen: <span class="font-medium text-valorant-light">{character.origin.name}</span></p>
+                <p class="text-lg text-gray-500">Ubicación: <span class="font-medium text-valorant-light">{character.location.name}</span></p>
               </a>
               
             </Fragment>
