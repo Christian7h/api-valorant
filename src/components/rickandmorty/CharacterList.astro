@@ -7,14 +7,30 @@ const apiUrl = 'https://rickandmortyapi.com/api/character';
 // Obtener parámetros de la URL
 const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
 const pageParam = Number(url.searchParams.get('page') ?? 1);
+const nameParam = url.searchParams.get('name') ?? '';
+const statusParam = url.searchParams.get('status') ?? '';
+const speciesParam = url.searchParams.get('species') ?? '';
+const typeParam = url.searchParams.get('type') ?? '';
+const genderParam = url.searchParams.get('gender') ?? '';
 const itemsPerPage = 20; // Número de personajes por página (máximo permitido por la API)
 const currentPage = Math.max(pageParam, 1);
 
+// Construir la URL con los parámetros de filtro
+const filterUrl = `${apiUrl}?page=${currentPage}&name=${nameParam}&status=${statusParam}&species=${speciesParam}&type=${typeParam}&gender=${genderParam}`;
+
+let characters = [];
+let totalPages = 1;
+let error = null;
+
 // Realiza la solicitud a la API para la página actual
-const res = await fetch(`${apiUrl}?page=${currentPage}`);
-const data = await res.json();
-const characters = data.results;
-const totalPages = data.info.pages;
+try {
+  const res = await fetch(filterUrl);
+  const data = await res.json();
+  characters = data.results;
+  totalPages = data.info.pages;
+}catch (err) {
+  error = 'Error fetching characters. Please try again later.';
+}
 
 interface Character {
   id: number;
@@ -31,30 +47,85 @@ interface Character {
   image: string;
 }
 ---
+
 <Layout>
-<div class="container mx-auto p-8">
-  <h1 class="text-4xl font-bold text-valorant mb-8">Rick and Morty Characters</h1>
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-valorant mb-8">Rick and Morty Characters</h1>
 
-  <!-- Lista de personajes para la página actual -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-    {
-      characters.map((character: Character) => (
-        <Fragment key={character.id}>
-          <a href={`/rickandmorty/characters/${character.id}`} class="block bg-valorant-dark p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
-            <img src={character.image} alt={character.name} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
-            <h2 class="text-2xl font-semibold text-valorant mb-2">{character.name}</h2>
-            <p class="text-lg">Status: {character.status}</p>
-            <p class="text-lg">Species: {character.species}</p>
-            <p class="text-lg">Gender: {character.gender}</p>
-            <p class="text-lg">Origin: {character.origin.name}</p>
-            <p class="text-lg">Location: {character.location.name}</p>
-          </a>
-        </Fragment>
-      ))
-    }
+    <!-- Formulario de filtros -->
+    <form method="GET" action="/rickandmorty/characters" class="mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <input type="text" name="name" placeholder="Name" value={nameParam} class="p-2 bg-valorant-dark text-valorant rounded" />
+        <select name="status" value={statusParam} class="p-2 bg-valorant-dark text-valorant rounded">
+          <option value="">Status</option>
+          <option value="alive">Alive</option>
+          <option value="dead">Dead</option>
+          <option value="unknown">Unknown</option>
+        </select>
+        <input type="text" name="species" placeholder="Species" value={speciesParam} class="p-2 bg-valorant-dark text-valorant rounded" />
+        <input type="text" name="type" placeholder="Type" value={typeParam} class="p-2 bg-valorant-dark text-valorant rounded" />
+        <select name="gender" value={genderParam} class="p-2 bg-valorant-dark text-valorant rounded">
+          <option value="">Gender</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="genderless">Genderless</option>
+          <option value="unknown">Unknown</option>
+        </select>
+      </div>
+      <div class="flex space-x-4 mt-4">
+        <button type="submit" class="bg-valorant text-valorant-dark p-2 rounded">Filter</button>
+        <a href="/rickandmorty/characters" class="bg-valorant text-valorant-dark p-2 rounded">Clear</a>
+      </div>
+    </form>
+
+    <!-- Lista de personajes para la página actual -->
+    {error ? (
+      <p class="text-red-500">{error}</p>
+    ) : (
+      <div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          {characters.map((character: Character) => (
+            <Fragment key={character.id}>
+              <a href={`/rickandmorty/characters/${character.id}`} class="block bg-valorant-dark p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                <img src={character.image} alt={character.name} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
+                <h2 class="text-2xl font-semibold text-valorant mb-2">{character.name}</h2>
+                <p class={`text-lg status status--${character.status.toLowerCase()}`}>
+                  <span class="status__icon"></span> <span class="text-lg text-gray-500"> {character.status}</span> - {character.species}
+                </p>
+                <p class="text-lg text-gray-500">Gender: <span class="font-medium text-valorant-light">{character.gender}</span></p>
+                <p class="text-lg text-gray-500">Origin: <span class="font-medium text-valorant-light">{character.origin.name}</span></p>
+                <p class="text-lg text-gray-500">Location: <span class="font-medium text-valorant-light">{character.location.name}</span></p>
+              </a>
+              
+            </Fragment>
+          ))}
+        </div>
+
+        <PaginationR totalPages={totalPages} currentPage={currentPage} />
+      </div>
+    )}
   </div>
-
-  <!-- Componente de paginación -->
-  <PaginationR totalPages={totalPages} currentPage={currentPage} />
-</div>
 </Layout>
+
+
+<style>
+.status__icon {
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 50%;
+  display: inline-block;
+  background: #9E9E9E;
+}
+
+.status--alive .status__icon {
+  background: #4CAF50;  /* Verde para vivo */
+}
+
+.status--dead .status__icon {
+  background: #F44336;  /* Rojo para muerto */
+}
+
+.status--unknown .status__icon {
+  background: #9E9E9E;  /* Gris para desconocido */
+}
+</style>
