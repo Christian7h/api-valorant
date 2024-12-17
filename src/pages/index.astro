@@ -13,14 +13,7 @@ const {
   geo: {
     city,
     country,
-    postalCode,
-    subdivision,
-    latitude,
-    longitude,
-    timezone,
   },
-  ip,
-  requestId,
   deploy,
 } = Astro.locals.netlify.context;
 
@@ -28,15 +21,8 @@ const {
 const cityName = city || "Ciudad desconocida";
 const countryName = country?.name || "País desconocido";
 const countryCode = country?.code || ""; // Asegúrate de extraer el código del país
-const postalCodeInfo = postalCode || "Código postal no disponible";
-const subdivisionInfo = subdivision?.name || "Subdivisión no disponible";
-const userIP = ip || "IP desconocida";
-const requestID = requestId || "ID de solicitud desconocido";
-const userTimezone = timezone || "Zona horaria desconocida";
 const deployContext = deploy?.context || "Despliegue desconocido";
 const deployPublished = deploy?.published ? "Publicado" : "No publicado";
-const latitudeInfo = latitude || "Latitud desconocida";
-const longitudeInfo = longitude || "Longitud desconocida";
 ---
 
 <Layout>
@@ -58,21 +44,6 @@ const longitudeInfo = longitude || "Longitud desconocida";
           )
         }
       </h1>
-
-      <!-- Mostrar detalles adicionales del contexto -->
-      <p class="text-lg text-gray-700">
-        Información adicional:
-        <ul>
-          <li><strong>IP del usuario:</strong> {userIP}</li>
-          <li><strong>ID de solicitud:</strong> {requestID}</li>
-          <li><strong>Zona horaria:</strong> {userTimezone}</li>
-          <li><strong>Latitud:</strong> {latitudeInfo}</li>
-          <li><strong>Longitud:</strong> {longitudeInfo}</li>
-          <li><strong>Código Postal:</strong> {postalCodeInfo}</li>
-          <li><strong>Subdivisión:</strong> {subdivisionInfo}</li>
-        </ul>
-      </p>
-
       <!-- Mostrar información de despliegue -->
       <p class="text-lg text-gray-700">
         <strong>Despliegue:</strong>
