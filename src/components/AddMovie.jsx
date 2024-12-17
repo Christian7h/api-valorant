@@ -17,10 +17,22 @@ const AddMovie = () => {
       setError("Todos los campos son obligatorios.");
       return false;
     }
-    if (isNaN(year) || isNaN(rating) || isNaN(votes)) {
-      setError("El año, la calificación de IMDB y los votos de IMDB deben ser números.");
+
+    if (isNaN(year) || Number(year) < 1900 || Number(year) > new Date().getFullYear()) {
+      setError("El año debe estar entre 1900 y el año actual.");
       return false;
     }
+
+    if (isNaN(rating) || Number(rating) < 0 || Number(rating) > 10) {
+      setError("La calificación de IMDB debe estar entre 0 y 10.");
+      return false;
+    }
+
+    if (isNaN(votes) || Number(votes) < 0) {
+      setError("Los votos de IMDB deben ser números positivos.");
+      return false;
+    }
+
     setError("");
     return true;
   };
@@ -64,7 +76,7 @@ const AddMovie = () => {
         setRating("");
         setVotes("");
         setSuccess("¡Película añadida correctamente!");
-        window.location.reload(); // Recargar la página
+        window.location.reload();
       } else {
         setError("Error al añadir la película: " + res.statusText);
       }
@@ -78,14 +90,67 @@ const AddMovie = () => {
       {error && <p className="text-red-500">{error}</p>}
       {success && <p className="text-green-500">{success}</p>}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <input type="text" placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
-        <input type="number" placeholder="Año" value={year} onChange={(e) => setYear(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
-        <input type="text" placeholder="Director" value={director} onChange={(e) => setDirector(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
-        <input type="text" placeholder="Trama" value={plot} onChange={(e) => setPlot(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
-        <input type="text" placeholder="Géneros (separados por comas)" value={genres} onChange={(e) => setGenres(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
-        <input type="text" placeholder="URL del póster" value={poster} onChange={(e) => setPoster(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
-        <input type="number" placeholder="Calificación de IMDB" value={rating} onChange={(e) => setRating(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
-        <input type="number" placeholder="Votos de IMDB" value={votes} onChange={(e) => setVotes(e.target.value)} className="p-2 bg-valorant-dark text-valorant rounded" />
+        <input
+          type="text"
+          placeholder="Título"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
+        <input
+          type="number"
+          placeholder="Año"
+          min="1900"
+          max={new Date().getFullYear()}
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
+        <input
+          type="text"
+          placeholder="Director"
+          value={director}
+          onChange={(e) => setDirector(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
+        <input
+          type="text"
+          placeholder="Trama"
+          value={plot}
+          onChange={(e) => setPlot(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
+        <input
+          type="text"
+          placeholder="Géneros (separados por comas)"
+          value={genres}
+          onChange={(e) => setGenres(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
+        <input
+          type="text"
+          placeholder="URL del póster"
+          value={poster}
+          onChange={(e) => setPoster(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
+        <input
+          type="number"
+          placeholder="Calificación de IMDB"
+          min="0"
+          max="10"
+          value={rating}
+          onChange={(e) => setRating(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
+        <input
+          type="number"
+          placeholder="Votos de IMDB"
+          min="0"
+          value={votes}
+          onChange={(e) => setVotes(e.target.value)}
+          className="p-2 bg-valorant-dark text-valorant rounded"
+        />
       </div>
       <div className="flex space-x-4 mt-4">
         <button type="submit" className="bg-valorant text-valorant-dark p-2 rounded">Añadir Película</button>
