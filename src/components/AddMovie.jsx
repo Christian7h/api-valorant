@@ -64,6 +64,7 @@ const AddMovie = () => {
         setRating("");
         setVotes("");
         setSuccess("¡Película añadida correctamente!");
+        window.location.reload(); // Recargar la página
       } else {
         setError("Error al añadir la película: " + res.statusText);
       }
