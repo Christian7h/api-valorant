@@ -15,7 +15,4 @@ export default defineConfig({
   }),
   output: "server",
   integrations: [tailwind(), react(), db()],
-  buildOptions: {
-    platform: 'node', // Esto configura el entorno para usar dependencias de Node.js
-  },
 });
