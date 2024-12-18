@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import CompetitiveTierCard from "../../../components/valorant/CompetitiveTierCard.astro";
 import Pagination from "../../../components/Pagination.astro";
+import LayoutWithCache from "../../../layouts/LayoutWithCache.astro";
 
 const { uuid } = Astro.params;
 const apiUrl = `https://valorant-api.com/v1/competitivetiers/${uuid}/?language=es-ES`;
@@ -43,7 +44,7 @@ const shortAssetObjectName = data.data.assetObjectName.split('_')[0]; // Esto te
 
 ---
 
-<Layout>
+<LayoutWithCache>
   <div class="container mx-auto p-8">
     <h1 class="text-4xl font-bold text-valorant mb-8">Competitive Tiers for {shortAssetObjectName}</h1>
     <!-- Lista de tiers para el episodio -->
@@ -70,4 +71,4 @@ const shortAssetObjectName = data.data.assetObjectName.split('_')[0]; // Esto te
     <!-- Componente de paginación -->
     <Pagination totalPages={totalPages} />
   </div>
-</Layout>
+</LayoutWithCache>

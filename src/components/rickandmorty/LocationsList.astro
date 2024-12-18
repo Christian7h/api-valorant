@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import LayoutWithCache from '../../layouts/LayoutWithCache.astro';
 import PaginationR from '../PaginationR.astro';
 
 const apiUrl = 'https://rickandmortyapi.com/api/location';
@@ -41,7 +42,7 @@ interface Location {
 }
 ---
 
-<Layout>
+<LayoutWithCache>
   <div class="container mx-auto p-8">
     <h1 class="text-4xl font-bold text-valorant mb-8">Rick and Morty Locations</h1>
 
@@ -151,4 +152,4 @@ interface Location {
   </div>
   )}
     </div>
-</Layout>
+</LayoutWithCache>

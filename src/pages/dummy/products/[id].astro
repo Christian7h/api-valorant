@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import PayButton from "../../../components/webpay/PayButton.tsx";
 import { formatPriceToCLP } from '../../../utils/formatted.ts'; // Importar la función de formateo
+import LayoutWithCache from "../../../layouts/LayoutWithCache.astro";
 
 const { id } = Astro.params;
 const apiUrl = `https://dummyjson.com/products/${id}`;
@@ -27,7 +28,7 @@ interface Product {
 }
 ---
 
-<Layout>
+<LayoutWithCache>
   <div class="container mx-auto p-8">
     <h1 class="text-4xl font-bold text-valorant mb-8">{product.title}</h1>
     <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
@@ -42,4 +43,4 @@ interface Product {
     </div>
     <PayButton amount={priceInCLP} productId={product.id} client:load />
   </div>
-</Layout>
+</LayoutWithCache>

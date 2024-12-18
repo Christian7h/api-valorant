@@ -2,6 +2,7 @@
 import Layout from "../../../../layouts/Layout.astro";
 import ProductCard from "../../../../components/ProductCard.astro";
 import Pagination from "../../../../components/Pagination.astro";
+import LayoutWithCache from "../../../../layouts/LayoutWithCache.astro";
 
 const { category } = Astro.params;
 const apiUrl = `https://dummyjson.com/products/category/${category}`;
@@ -36,7 +37,7 @@ interface Product {
 }
 ---
 
-<Layout>
+<LayoutWithCache>
   <div class="container mx-auto p-8">
     <h1 class="text-4xl font-bold text-valorant mb-8">Productos en {category}</h1>
 
@@ -60,4 +61,4 @@ interface Product {
     <!-- Componente de paginación -->
     <Pagination totalPages={totalPages} />
   </div>
-</Layout>
+</LayoutWithCache>

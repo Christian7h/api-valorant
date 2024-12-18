@@ -1,6 +1,7 @@
 ---
 //src/pages/valorant/agents/[uuid].astro
 import Layout from "../../../layouts/Layout.astro";
+import LayoutWithCache from "../../../layouts/LayoutWithCache.astro";
 const { uuid } = Astro.params;
 const res = await fetch(
   `https://valorant-api.com/v1/agents/${uuid}?language=es-ES`
@@ -9,7 +10,7 @@ const agent = await res.json();
 export const prerender = false;
 ---
 
-<Layout>
+<LayoutWithCache>
   <div class="container mx-auto p-8">
     <div
       class="bg-valorant-pattern bg-cover bg-center min-h-screen p-8 rounded-lg shadow-lg flex flex-col md:flex-row items-center"
@@ -48,4 +49,4 @@ export const prerender = false;
       </div>
     </div>
   </div>
-</Layout>
+</LayoutWithCache>

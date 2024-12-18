@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import LayoutWithCache from "../../../layouts/LayoutWithCache.astro";
 
 const { id } = Astro.params;
 const apiUrl = `https://rickandmortyapi.com/api/character/${id}`;
@@ -23,7 +24,7 @@ const episodeDetails = await Promise.all(
 );
 ---
 
-<Layout>
+<LayoutWithCache>
   <div class="container mx-auto p-8">
     <h1 class="text-4xl font-bold text-valorant mb-8">{character.name}</h1>
     <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
@@ -52,4 +53,4 @@ const episodeDetails = await Promise.all(
       }
     </div>
   </div>
-</Layout>
+</LayoutWithCache>

@@ -3,9 +3,10 @@
 import CardApis from "../components/CardApis.astro";
 import Layout from "../layouts/Layout.astro";
 import bannerDummy from "../assets/productos.webp";
+import LayoutWithCache from "../layouts/LayoutWithCache.astro";
 ---
 
-<Layout>
+<LayoutWithCache>
   <div class="container mx-auto p-8">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <CardApis
@@ -17,4 +18,4 @@ import bannerDummy from "../assets/productos.webp";
       />
     </div>
   </div>
-</Layout>
+</LayoutWithCache>
