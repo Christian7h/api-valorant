@@ -10,7 +10,6 @@ import db from "@astrojs/db";
 export default defineConfig({
   site: "https://apis-cristian.netlify.app/",
   adapter: netlify({
-    edgeMiddleware: true,
     cacheOnDemandPages: true
   }),
   output: "server",
