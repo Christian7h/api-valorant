@@ -7,13 +7,11 @@ import CardApis from "../components/CardApis.astro";
 import bannerDummyw from "../assets/dummywebp.webp";
 import bannerRam from "../assets/ram.webp";
 import bannerNode from "../assets/node.jpg";
+const user = Astro.locals.user;
 
 // Desestructurando el contexto de Netlify desde Astro.locals
 const {
-  geo: {
-    city,
-    country,
-  },
+  geo: { city, country },
   deploy,
 } = Astro.locals.netlify.context;
 
@@ -30,10 +28,12 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Mostrar la bienvenida con ciudad, país y clima -->
       <h1 class="text-4xl font-bold text-valorant mb-8">
-        </a> ¡Bienvenido visitante de {cityName}, {countryName}!
-        <span class="text-xl text-gray-500"
-          >{new Date().toLocaleDateString()}</span
-        >
+        ¡Bienvenido {user ? user.username : "visitante"} de {cityName}, {
+          countryName
+        }!
+        <span class="text-xl text-gray-500">
+          {new Date().toLocaleDateString()}
+        </span>
         {
           countryCode && (
             <img
@@ -44,11 +44,36 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
           )
         }
       </h1>
-      <!-- Mostrar información de despliegue -->
-      <p class="text-lg text-gray-700">
-        <strong>Despliegue:</strong>
-        {deployContext} ({deployPublished})
-      </p>
+
+      <!-- Botones de registro, inicio de sesión y cierre de sesión -->
+      {user ? (
+        <div class="flex flex-col items-center gap-4 bg-gray-800 p-6 rounded-lg shadow-lg text-center mb-14">
+          <h1 class="text-2xl font-semibold text-white">
+            ¡Bienvenido, {user.username}!
+          </h1>
+          <form method="POST" action="/api/signout" class="w-full" id="logoutForm">
+            <button
+              class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-200"
+              type="submit"
+            >
+              Cerrar sesión
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div class="flex flex-col items-center gap-4 bg-gray-800 p-6 rounded-lg shadow-lg text-center mb-14">
+          <h1 class="text-2xl font-semibold text-white">¡Bienvenido a Valorant API!</h1>
+          <a href="/api/github" class="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-center">
+            Iniciar sesión con GitHub
+          </a>
+          <a href="/signup" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 text-center">
+            Registrarse
+          </a>
+          <a href="/signin" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-center">
+            Iniciar sesión
+          </a>
+        </div>
+      )}
 
       <!-- Enlaces a otras páginas componente CardApis.astro -->
       <CardApis
@@ -73,12 +98,12 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
         description="Explora el contenido de The Rick and Morty API."
       />
       <CardApis
-      href="/node"
-      imageSrc={bannerNode}
-      imageAlt="Api Node"
-      title="Api MongoDB, Express,Astro, NodeJS"
-      description="Explora el contenido de la Api conectada a MEAN CRUD"
-    />
+        href="/node"
+        imageSrc={bannerNode}
+        imageAlt="Api Node"
+        title="Api MongoDB, Express,Astro, NodeJS"
+        description="Explora el contenido de la Api conectada a MEAN CRUD"
+      />
       <CardApis
         href="/"
         imageSrc={bannerZzz}
@@ -88,4 +113,19 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
       />
     </div>
   </div>
+  <script is:inline>
+    // Verificar si la sesión ha cambiado
+    const logoutForm = document.getElementById('logoutForm');
+    
+    if (logoutForm) {
+      logoutForm.addEventListener('submit', () => {
+        // Forzar recarga de la página tras logout
+        setTimeout(() => {
+          window.location.reload();        // Forzar recarga de la página tras logout
+
+        }, 200);
+      });
+    }
+
+  </script>
 </Layout>
