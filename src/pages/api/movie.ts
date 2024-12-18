@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import fetch from 'node-fetch'; // Usamos node-fetch para hacer solicitudes a tu backend de Node.js
 
 export const GET: APIRoute = async () => {
   try {
