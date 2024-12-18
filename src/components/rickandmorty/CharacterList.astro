@@ -12,7 +12,6 @@ const statusParam = url.searchParams.get('status') ?? '';
 const speciesParam = url.searchParams.get('species') ?? '';
 const typeParam = url.searchParams.get('type') ?? '';
 const genderParam = url.searchParams.get('gender') ?? '';
-const itemsPerPage = 20; // Número de personajes por página (máximo permitido por la API)
 const currentPage = Math.max(pageParam, 1);
 
 // Construir la URL con los parámetros de filtro

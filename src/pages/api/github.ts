@@ -14,7 +14,7 @@ export async function GET(context: APIContext): Promise<Response> {
     maxAge: 60 * 10,
     sameSite: "lax",
   });
-
+  
   return context.redirect(url.toString());
 }
 

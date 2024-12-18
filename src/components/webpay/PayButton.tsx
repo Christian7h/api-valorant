@@ -1,5 +1,4 @@
 import React from 'react';
-import { formatPriceToCLP } from '../../utils/formatted'; // Importar la función de formateo
 import webpayLogo from '../../assets/webpaylogo1.png?url'; // Importar la imagen del logo de Webpay como URL
 interface PayButtonProps {
   amount: number;

@@ -9,7 +9,6 @@ const url = new URL(Astro.url.pathname + Astro.url.search, Astro.url.origin);
 const pageParam = Number(url.searchParams.get('page') ?? 1);
 const nameParam = url.searchParams.get('name') ?? '';
 const episodeParam = url.searchParams.get('episode') ?? '';
-const itemsPerPage = 20; // Número de episodios por página (máximo permitido por la API)
 const currentPage = Math.max(pageParam, 1);
 
 // Construir la URL con los parámetros de filtro

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+//src/components/AddMovie.jsx
+import { useState } from 'react';
 
 const AddMovie = () => {
   const [title, setTitle] = useState("");

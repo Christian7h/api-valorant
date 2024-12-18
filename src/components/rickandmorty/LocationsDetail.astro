@@ -6,15 +6,7 @@ const apiUrl = `https://rickandmortyapi.com/api/location/${id}`;
 const res = await fetch(apiUrl);
 const location = await res.json();
 
-interface Location {
-  id: number;
-  name: string;
-  type: string;
-  dimension: string;
-  residents: string[];
-  url: string;
-  created: string;
-}
+
 
 interface Character {
   id: number;

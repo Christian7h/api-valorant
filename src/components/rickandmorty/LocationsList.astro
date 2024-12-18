@@ -10,7 +10,6 @@ const pageParam = Number(url.searchParams.get('page') ?? 1);
 const nameParam = url.searchParams.get('locationName') ?? '';
 const typeParam = url.searchParams.get('type') ?? '';
 const dimensionParam = url.searchParams.get('dimension') ?? '';
-const itemsPerPage = 20; // Número de ubicaciones por página (máximo permitido por la API)
 const currentPage = Math.max(pageParam, 1);
 
 // Construir la URL con los parámetros de filtro

@@ -19,8 +19,6 @@ const {
 const cityName = city || "Ciudad desconocida";
 const countryName = country?.name || "País desconocido";
 const countryCode = country?.code || ""; // Asegúrate de extraer el código del país
-const deployContext = deploy?.context || "Despliegue desconocido";
-const deployPublished = deploy?.published ? "Publicado" : "No publicado";
 ---
 
 <Layout>
@@ -41,37 +39,10 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
           )
         }
       </h1> 
-
-      <!-- Botones de registro, inicio de sesión y cierre de sesión -->
-      {user ? (
-        <div class="flex flex-col items-center gap-4 bg-gray-800 p-6 rounded-lg shadow-lg text-center mb-14">
-          <h1 class="text-2xl font-semibold text-white">
-            ¡Bienvenido, {user.username}!
-          </h1>
-          <form method="POST" action="/api/signout" class="w-full" id="logoutForm">
-            <button
-              class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-200"
-              type="submit"
-            >
-              ¡Cerrar sesión!
-            </button>
-          </form>
-        </div>
-      ) : (
-        <div class="flex flex-col items-center gap-4 bg-gray-800 p-6 rounded-lg shadow-lg text-center mb-14">
-          <h1 class="text-2xl font-semibold text-white">¡Bienvenido a Valorant API!</h1>
-          <a href="/api/github" class="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-center">
-            Iniciar sesión con GitHub
-          </a>
-          <a href="/signup" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 text-center">
-            Registrarse
-          </a>
-          <a href="/signin" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-center">
-            Iniciar sesión
-          </a>
-        </div>
-      )}
-
+      <p class="text-lg text-gray-700">
+        <strong>Despliegue:</strong>
+        <a href="/login">Iniciar Sesion</a>
+      </p>
       <!-- Enlaces a otras páginas componente CardApis.astro -->
       <CardApis
         href="/valorant"
@@ -118,8 +89,8 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
       logoutForm.addEventListener('submit', () => {
         // Forzar recarga de la página tras logout
         setTimeout(() => {
+          window.location.href = '/'; // Redirigir a la página de inicio
           window.location.reload();        // Forzar recarga de la página tras logout
-
         }, 200);
       });
     }

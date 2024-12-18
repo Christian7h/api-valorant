@@ -1,16 +1,18 @@
 ---
+//src/pages/node/movies.astro
 import Layout from "../../layouts/Layout.astro";
 import AddMovie from "../../components/AddMovie.jsx";
 import ListMovies from "../../components/ListMovies.jsx";
+const user = Astro.locals.user;
 ---
 
 <Layout>
   <div class="container mx-auto p-8">
     <h1 class="text-4xl font-bold text-valorant mb-8">Movies 🎬</h1>
 
-    <!-- Componente para añadir una nueva película -->
-    <AddMovie client:load />
-
+<!-- Componente para añadir una nueva película --> 
+ {user ? ( <AddMovie client:load  /> 
+) : ( <p class="text-red-500">Debes iniciar sesión para añadir una película.</p> )}
     <!-- Componente para listar las películas -->
     <ListMovies client:load />
   </div>
