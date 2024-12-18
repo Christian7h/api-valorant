@@ -2,14 +2,9 @@
 import { defineConfig } from "astro/config";
 
 import netlify from '@astrojs/netlify/functions';
-
 import tailwind from "@astrojs/tailwind";
-
 import react from "@astrojs/react";
-
-
 import db from "@astrojs/db";
-
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,4 +15,7 @@ export default defineConfig({
   }),
   output: "server",
   integrations: [tailwind(), react(), db()],
+  buildOptions: {
+    platform: 'node', // Esto configura el entorno para usar dependencias de Node.js
+  },
 });
