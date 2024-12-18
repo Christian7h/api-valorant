@@ -1,8 +1,10 @@
 [build]
-command = "npm run build --remote"
-publish = "dist/"
-
+  command = "npm run build"
+  publish = "dist/"
 
 [[edge_functions]]
-path = "/"
-function = "geolocation"
+  path = "/"
+  function = "geolocation"
+
+  # Si necesitas usar Node.js en funciones serverless, puedes agregar algo como:
+  platform = "node"
