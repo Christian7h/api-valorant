@@ -6,5 +6,3 @@
   path = "/"
   function = "geolocation"
 
-  # Si necesitas usar Node.js en funciones serverless, puedes agregar algo como:
-  platform = "node"
