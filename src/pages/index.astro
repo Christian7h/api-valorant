@@ -31,9 +31,6 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
         ¡Bienvenido {user ? user.username : "visitante"} de {cityName}, {
           countryName
         }!
-        <span class="text-xl text-gray-500">
-          {new Date().toLocaleDateString()}
-        </span>
         {
           countryCode && (
             <img
@@ -43,7 +40,7 @@ const deployPublished = deploy?.published ? "Publicado" : "No publicado";
             />
           )
         }
-      </h1>
+      </h1> 
 
       <!-- Botones de registro, inicio de sesión y cierre de sesión -->
       {user ? (
