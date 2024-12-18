@@ -4,16 +4,6 @@ import { ClientRouter } from "astro:transitions";
 import background from "../assets/background.svg";
 import bannerValo from "../assets/VALORANT_logo4.jpg";
 import Navbar from "../components/Navbar.astro";
-
-Astro.response.headers.set(
-  "Cache-Control",
-  "public, max-age=300, s-maxage=3000"
-);
-Astro.response.headers.set("X-Frame-Options", "DENY");
-Astro.response.headers.set(
-  "Feature-Policy",
-  "geolocation 'self'; microphone 'none'"
-);
 ---
 
 <!doctype html>

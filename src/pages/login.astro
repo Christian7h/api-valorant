@@ -11,7 +11,7 @@ const user = Astro.locals.user;
           <h1 class="text-2xl font-semibold text-white">
             ¡Bienvenido, {user.username}!
           </h1>
-          <form method="POST" action="/api/signout" class="w-full" id="logoutForm">
+          <form method="POST" action="/api/signout" class="w-full" id="logoutForm" data-astro-reload>
             <button
               class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-200"
               type="submit"
@@ -23,31 +23,16 @@ const user = Astro.locals.user;
       ) : (
         <div class="flex flex-col items-center gap-4 bg-gray-800 p-6 rounded-lg shadow-lg text-center mb-14">
           <h1 class="text-2xl font-semibold text-white">¡Bienvenido a Valorant API!</h1>
-          <a href="/api/github" class="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-center">
+          <a href="/api/github" class="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-center" data-astro-reload>
             Iniciar sesión con GitHub
           </a>
-          <a href="/signup" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 text-center">
+          <a href="/signup" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-200 text-center" data-astro-reload>
             Registrarse
           </a>
-          <a href="/signin" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-center">
+          <a href="/signin" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200 text-center" data-astro-reload>
             Iniciar sesión
           </a>
         </div>
       )}
-	  <script is:inline>
-		// Verificar si la sesión ha cambiado
-		const logoutForm = document.getElementById('logoutForm');
-		
-		if (logoutForm) {
-		  logoutForm.addEventListener('submit', () => {
-			// Forzar recarga de la página tras logout
-			setTimeout(() => {
-			  window.location.href = '/'; // Redirigir a la página de inicio
-			  window.location.reload();        // Forzar recarga de la página tras logout
-			}, 200);
-		  });
-		}
-	
-	  </script>
 </Layout>
 

@@ -41,7 +41,7 @@ const countryCode = country?.code || ""; // Asegúrate de extraer el código del
       </h1> 
       <p class="text-lg text-gray-700">
         <strong>Despliegue:</strong>
-        <a href="/login">Iniciar Sesion</a>
+        <a href="/login" data-astro-reload>Iniciar Sesion</a>
       </p>
       <!-- Enlaces a otras páginas componente CardApis.astro -->
       <CardApis
@@ -81,19 +81,4 @@ const countryCode = country?.code || ""; // Asegúrate de extraer el código del
       />
     </div>
   </div>
-  <script is:inline>
-    // Verificar si la sesión ha cambiado
-    const logoutForm = document.getElementById('logoutForm');
-    
-    if (logoutForm) {
-      logoutForm.addEventListener('submit', () => {
-        // Forzar recarga de la página tras logout
-        setTimeout(() => {
-          window.location.href = '/'; // Redirigir a la página de inicio
-          window.location.reload();        // Forzar recarga de la página tras logout
-        }, 200);
-      });
-    }
-
-  </script>
 </Layout>

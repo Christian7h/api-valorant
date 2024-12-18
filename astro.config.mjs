@@ -9,9 +9,7 @@ import db from "@astrojs/db";
 // https://astro.build/config
 export default defineConfig({
   site: "https://apis-cristian.netlify.app/",
-  adapter: netlify({
-    cacheOnDemandPages: true
-  }),
+  adapter: netlify(),
   output: "server",
   integrations: [tailwind(), react(), db()],
 });

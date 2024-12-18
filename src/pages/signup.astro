@@ -31,6 +31,7 @@ import Layout from "../layouts/Layout.astro";
             class="space-y-4 md:space-y-6"
             method="POST"
             action="/api/signup"
+            data-astro-reload
           >
             <div>
               <label
@@ -71,6 +72,7 @@ import Layout from "../layouts/Layout.astro";
               already have an account? <a
                 href="/signin"
                 class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                data-astro-reload
                 >Sign In</a
               >
             </p>
