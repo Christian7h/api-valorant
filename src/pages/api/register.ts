@@ -16,7 +16,7 @@ export async function POST(context: APIContext): Promise<Response> {
     return new Response(null, {
       status: 302,
       headers: {
-        "Location": "/register?error=Datos inválidos",
+        "Location": "/node/register?error=Datos inválidos",
       },
     });
   }
@@ -42,13 +42,13 @@ export async function POST(context: APIContext): Promise<Response> {
 
   // Manejar la respuesta
   if (response.ok) {
-    return context.redirect("/register");
+    return context.redirect("/node/register");
   } else {
     const errorText = await response.text();
     return new Response(null, {
       status: 302,
       headers: {
-        "Location": `/register?error=${encodeURIComponent(errorText)}`,
+        "Location": `/node/register?error=${encodeURIComponent(errorText)}`,
       },
     });
   }
