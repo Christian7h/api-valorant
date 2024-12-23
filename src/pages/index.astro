@@ -24,7 +24,6 @@ const countryCode = country?.code || ""; // Asegúrate de extraer el código del
 <Layout>
   <div class="container mx-auto p-8">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- Mostrar la bienvenida con ciudad, país y clima -->
       <h1 class="text-4xl font-bold text-valorant mb-8">
         ¡Bienvenido {user ? user.username : "visitante"} de {cityName}, {
           countryName
@@ -39,10 +38,39 @@ const countryCode = country?.code || ""; // Asegúrate de extraer el código del
           )
         }
       </h1> 
-      <p class="text-lg text-gray-700">
-        <strong>Despliegue:</strong>
-        <a href="/login" data-astro-reload>Iniciar Sesion</a>
-      </p>
+        {user ? (
+          <div class="flex flex-col items-center gap-4 bg-gray-800 p-6 rounded-lg shadow-lg text-center mb-14" >
+            <h1 class="text-2xl font-semibold text-white">¡Bienvenido, {user.username} 🚗💨</h1>
+            <div class="flex flex-col gap-2 w-full">
+              <form method="POST" action="/api/signout" class="w-full">
+                <button class="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition duration-200">
+                  Cerrar sesión
+                </button>
+              </form>
+              <a class="w-full text-blue-400 hover:text-blue-500 text-center py-2" href="/admin">
+                Ir al panel de administración
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="flex flex-col items-center gap-4 bg-gray-800 p-6 rounded-lg shadow-lg text-center mb-14">
+            <h1 class="text-2xl font-semibold text-white">¡Bienvenido a JDM Social Network! 🚗💨</h1>
+            <div class="flex flex-col gap-2 w-full">
+              <a
+                href="/api/github"
+                class="w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-gray-700 transition duration-200 text-center"
+              >
+                Iniciar sesión con GitHub
+              </a>
+              <a
+                href="/signin"
+                class="w-full text-blue-400 hover:text-blue-500 text-center py-2"
+              >
+                Iniciar sesión con usuario/contraseña
+              </a>
+            </div>
+          </div>
+        )}      </p>
       <!-- Enlaces a otras páginas componente CardApis.astro -->
       <CardApis
         href="/valorant"
