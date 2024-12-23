@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Pagination from './Pagination';
 import { jwtDecode } from 'jwt-decode';
 
-const ListProducts = () => {
+const ListStore = ({ token }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,8 +16,10 @@ const ListProducts = () => {
   // Fetch products on initial load
   useEffect(() => {
     fetchProducts();
-    checkAdmin();
-  }, []);
+    if (token) {
+      checkAdmin(token); // Llamar a la función para verificar si es admin con el token
+    }
+  }, [token]);
 
   // Apply filters when products or filters change
   useEffect(() => {
@@ -35,35 +37,13 @@ const ListProducts = () => {
     }
   };
 
-  // Function to get the token from cookies
-  const getTokenFromCookies = () => {
-    const tokenName = "token=";
-    const decodedCookie = document.cookie;
-    const ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) === ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(tokenName) === 0) {
-        return c.substring(tokenName.length, c.length); // Devuelve el token
-      }
-    }
-    return "";
-  };
-
   // Check if the user is an admin based on the JWT token
-  const checkAdmin = () => {
-    const token = getTokenFromCookies(); // Obtener el token desde las cookies
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);  // Decodificando el token
-        console.log('Token Decoded:', decoded); // Verifica lo que contiene el token
-        console.log('isAdmin from token:', decoded.isAdmin); // Asegúrate que isAdmin sea true
-        setIsAdmin(decoded.isAdmin);  // Actualiza el estado isAdmin
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
+  const checkAdmin = (token) => {
+    try {
+      const decoded = jwtDecode(token);  // Decodificamos el token
+      setIsAdmin(decoded.isAdmin);  // Establecemos el estado isAdmin
+    } catch (error) {
+      console.error("Error decoding token:", error);
     }
   };
 
@@ -84,14 +64,13 @@ const ListProducts = () => {
     });
   };
 
-  // Handle product deletion (only for admin)
   const handleDelete = async (productId) => {
     if (!isAdmin) {
       alert('No tienes permisos para eliminar este producto.');
       return;
     }
 
-    const token = getTokenFromCookies(); // Obtener el token desde las cookies
+    const token = document.cookie.replace('token=', '');  // Obtener token desde las cookies
     try {
       const res = await fetch(`https://nodejs-eshop-api-course-2c70.onrender.com/api/v1/products/${productId}`, {
         method: 'DELETE',
@@ -152,13 +131,16 @@ const ListProducts = () => {
               <p className="text-lg">Stock: {product.countInStock}</p>
               <p className="text-lg">Descripción: {product.description}</p>
               <p className="text-lg">Categoría: {product.category.name}</p>
+              <p className='text-lg'>id:{product._id}</p>
 
+              {isAdmin && (
                 <button
                   onClick={() => handleDelete(product._id)}
                   className="bg-red-500 text-white py-1 px-4 rounded mt-4"
                 >
                   Eliminar
                 </button>
+              )}
             </div>
           ))
         )}
@@ -168,5 +150,4 @@ const ListProducts = () => {
     </div>
   );
 };
-
-export default ListProducts;
+export default ListStore;
