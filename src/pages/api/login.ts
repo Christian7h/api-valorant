@@ -11,7 +11,7 @@ export async function POST(context: APIContext): Promise<Response> {
     return new Response(null, {
       status: 302,
       headers: {
-        "Location": "src/pages/node/login?error=Datos inválidos",
+        "Location": "/node/login?error=Datos inválidos",
       },
     });
   }

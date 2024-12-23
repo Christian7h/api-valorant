@@ -42,7 +42,7 @@ export async function POST(context: APIContext): Promise<Response> {
 
   // Manejar la respuesta
   if (response.ok) {
-    return context.redirect("/node/register");
+    return context.redirect("/node/login");              
   } else {
     const errorText = await response.text();
     return new Response(null, {
@@ -52,4 +52,4 @@ export async function POST(context: APIContext): Promise<Response> {
       },
     });
   }
-}
+} 
