@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const AddProduct = ({ token }) => {
@@ -9,10 +9,6 @@ const AddProduct = ({ token }) => {
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState('');
   const [image, setImage] = useState(null);
-  const [brand, setBrand] = useState('');
-  const [rating, setRating] = useState(0);
-  const [numReviews, setNumReviews] = useState(0);
-  const [isFeatured, setIsFeatured] = useState(false); // Para saber si el producto es destacado
   const [isAdmin, setIsAdmin] = useState(false); // Para verificar si el usuario es admin
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -28,7 +24,7 @@ const AddProduct = ({ token }) => {
   };
 
   // Verificamos si hay un token y si el usuario es admin al cargar el componente
-  useEffect(() => {
+  useState(() => {
     if (token) {
       checkAdmin(token); // Verificamos si es admin
     }
@@ -55,10 +51,6 @@ const AddProduct = ({ token }) => {
     formData.append('price', price);
     formData.append('category', category);
     formData.append('countInStock', countInStock);
-    formData.append('brand', brand);
-    formData.append('rating', rating);
-    formData.append('numReviews', numReviews);
-    formData.append('isFeatured', isFeatured);
     if (image) {
       formData.append('image', image); // Añadimos la imagen
     }
@@ -80,10 +72,6 @@ const AddProduct = ({ token }) => {
         setPrice('');
         setCategory('');
         setCountInStock('');
-        setBrand('');
-        setRating(0);
-        setNumReviews(0);
-        setIsFeatured(false);
         setImage(null); // Limpiamos el formulario después de la subida
       } else {
         const data = await res.json();
@@ -95,149 +83,98 @@ const AddProduct = ({ token }) => {
   };
 
   return (
-<div>
-      {isAdmin ? (
-        <div>
-          <h1 className="text-3xl font-bold mb-6">Añadir Producto</h1>
+    <div>
+      <h1 className="text-3xl font-bold mb-6">Añadir Producto</h1>
 
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">{success}</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      {success && <p className="text-green-500">{success}</p>}
 
-          <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-xl">Nombre del Producto</label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="p-2 w-full border rounded"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="description" className="block text-xl">Descripción</label>
-              <input
-                type="text"
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="p-2 w-full border rounded"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="richDescription" className="block text-xl">Descripción Larga</label>
-              <textarea
-                id="richDescription"
-                value={richDescription}
-                onChange={(e) => setRichDescription(e.target.value)}
-                className="p-2 w-full border rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="price" className="block text-xl">Precio</label>
-              <input
-                type="number"
-                id="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="p-2 w-full border rounded"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="category" className="block text-xl">Categoría</label>
-              <input
-                type="text"
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="p-2 w-full border rounded"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="countInStock" className="block text-xl">Cantidad en Stock</label>
-              <input
-                type="number"
-                id="countInStock"
-                value={countInStock}
-                onChange={(e) => setCountInStock(e.target.value)}
-                className="p-2 w-full border rounded"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="brand" className="block text-xl">Marca</label>
-              <input
-                type="text"
-                id="brand"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
-                className="p-2 w-full border rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="rating" className="block text-xl">Calificación</label>
-              <input
-                type="number"
-                id="rating"
-                value={rating}
-                onChange={(e) => setRating(e.target.value)}
-                className="p-2 w-full border rounded"
-                min="0"
-                max="5"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="numReviews" className="block text-xl">Número de Reseñas</label>
-              <input
-                type="number"
-                id="numReviews"
-                value={numReviews}
-                onChange={(e) => setNumReviews(e.target.value)}
-                className="p-2 w-full border rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="isFeatured" className="block text-xl">Destacado</label>
-              <input
-                type="checkbox"
-                id="isFeatured"
-                checked={isFeatured}
-                onChange={() => setIsFeatured(!isFeatured)}
-                className="p-2"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="image" className="block text-xl">Imagen</label>
-              <input
-                type="file"
-                id="image"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="p-2 w-full border rounded"
-                required
-              />
-            </div>
-
-            <button type="submit" className="bg-green-500 text-white py-2 px-6 rounded">Añadir Producto</button>
-          </form>
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-xl">Nombre del Producto</label>
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="p-2 w-full border rounded"
+            required
+          />
         </div>
-      ) : (
-        <p className="text-red-500">No tienes permisos para acceder a esta página.</p>
-      )}
+
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-xl">Descripción</label>
+          <input
+            type="text"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="p-2 w-full border rounded"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="richDescription" className="block text-xl">Descripción Larga</label>
+          <textarea
+            id="richDescription"
+            value={richDescription}
+            onChange={(e) => setRichDescription(e.target.value)}
+            className="p-2 w-full border rounded"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="price" className="block text-xl">Precio</label>
+          <input
+            type="number"
+            id="price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            className="p-2 w-full border rounded"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="category" className="block text-xl">Categoría</label>
+          <input
+            type="text"
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="p-2 w-full border rounded"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="countInStock" className="block text-xl">Cantidad en Stock</label>
+          <input
+            type="number"
+            id="countInStock"
+            value={countInStock}
+            onChange={(e) => setCountInStock(e.target.value)}
+            className="p-2 w-full border rounded"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="image" className="block text-xl">Imagen</label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="p-2 w-full border rounded"
+            required
+          />
+        </div>
+
+        <button type="submit" className="bg-green-500 text-white py-2 px-6 rounded">Añadir Producto</button>
+      </form>
     </div>
   );
 };
