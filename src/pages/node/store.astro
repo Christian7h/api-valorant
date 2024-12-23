@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import ListStore from "../../components/ListStore.jsx";
+import AddProduct from "../../components/AddProduct";
 
 // Obtener el token desde las cookies de Astro
 const token = Astro.cookies.get("token");
@@ -23,6 +24,9 @@ console.log('Token recuperado desde las cookies:', tokenValue);  // Verificar el
         Iniciar Sesión
       </a>
     </div>
+
+    {/* Pasar el token como prop a AddProduct */}
+    <AddProduct token={tokenValue} client:only/>
 
     <!-- Pasar el token como prop a ListStore -->
     <ListStore client:load token={tokenValue} />
