@@ -126,7 +126,7 @@ const ListStore = ({ token }) => {
               <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4 rounded-lg" loading="lazy" />
               <h2 className="text-2xl font-semibold text-valorant mb-2">{product.name}</h2>
               <p className="text-lg">Marca: {product.brand}</p>
-              <p className="text-lg">Precio: ${product.price.toFixed(2)}</p>
+              <p className="text-lg">Precio: {product.price.toLocaleString('es-CL', { style: 'currency', currency: 'CLP' })}</p>
               <p className="text-lg">Calificación: {product.rating}</p>
               <p className="text-lg">Stock: {product.countInStock}</p>
               <p className="text-lg">Descripción: {product.description}</p>
