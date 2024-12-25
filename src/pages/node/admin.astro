@@ -1,0 +1,32 @@
+---
+import AddProduct from "../../components/AddProduct";
+import Layout from "../../layouts/Layout.astro";
+import { jwtDecode } from "jwt-decode";
+
+const token = Astro.cookies.get("token");
+const tokenValue = token && token.value ? token.value : null;
+
+// Verificar si el usuario es administrador
+let isAdmin = false;
+
+if (tokenValue) {
+  try {
+    const decodedToken = jwtDecode(tokenValue);
+    isAdmin = decodedToken.isAdmin; // Asegúrate de que `isAdmin` está en tu token
+  } catch (error) {
+    console.error("Error al decodificar el token:", error);
+  }
+}
+---
+
+<Layout>
+  {isAdmin ? (
+    <AddProduct token={tokenValue} client:only />
+  ) : (
+    <div class="text-center py-10">
+      <h1 class="text-3xl font-bold text-red-500">Acceso Denegado</h1>
+      <p class="text-lg mt-4">No tienes permisos para acceder a esta página.</p>
+      <a href="/" class="text-blue-500 underline">Volver a la página principal</a>
+    </div>
+  )}
+</Layout>
