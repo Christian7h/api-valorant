@@ -92,8 +92,9 @@ const ListStore = ({ token }) => {
       console.error("Error eliminando el producto:", error);
     }
   };
+
   const handleUpdate = (productId) => {
-    navigate(`/node/edit-product/${productId}`); // Redirige a la página de edición
+    navigate(`/node/admin/edit-product/${productId}`); // Redirige a la página de edición
   };
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
@@ -103,16 +104,18 @@ const ListStore = ({ token }) => {
   );
 
   return (
-    <div>
-      <form className="mb-2">
-        <div className="">
+    <div className="bg-valorant-dark min-h-screen p-8">
+            <h1 className="text-2xl font-bold mb-6 text-valorant text-center">Lista de Productos</h1>
+
+      <form className="mb-4">
+        <div className="flex flex-col md:flex-row md:space-x-4">
           <input
             type="text"
             name="name"
             placeholder="Nombre del producto"
             value={filters.name}
             onChange={handleFilterChange}
-            className="p-2 bg-valorant-dark text-valorant rounded"
+            className="mb-4 md:mb-0 p-2 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
           />
           <input
             type="text"
@@ -120,23 +123,23 @@ const ListStore = ({ token }) => {
             placeholder="Marca"
             value={filters.brand}
             onChange={handleFilterChange}
-            className="p-2 bg-valorant-dark text-valorant rounded"
+            className="p-2 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
           />
         </div>
       </form>
 
-      <ul className="list-disc list-inside bg-valorant-dark p-4 rounded-md shadow-md">
+      <ul className="list-disc list-inside bg-gray-800 p-4 rounded-md shadow-md space-y-4">
         {productsOnPage.length === 0 ? (
           <p className="text-red-500">No se encontraron productos.</p>
         ) : (
           productsOnPage.map((product) => (
             <li
               key={product._id}
-              className="flex justify-between items-center border-b p-4 last:border-none"
+              className="flex justify-between items-center border-b border-gray-700 p-4 last:border-none"
             >
               <div>
-                <p className="text-lg font-semibold">{product.name}</p>
-                <p className="text-sm text-gray-400">Marca: {product.brand}</p>                
+                <p className="text-lg font-semibold text-white">{product.name}</p>
+                <p className="text-sm text-gray-400">Marca: {product.brand}</p>
                 <p className="text-sm text-gray-400">
                   Precio:{" "}
                   {product.price.toLocaleString("es-CL", {
@@ -149,13 +152,13 @@ const ListStore = ({ token }) => {
                 <div className="space-x-2">
                   <button
                     onClick={() => handleDelete(product._id)}
-                    className="bg-red-500 text-white py-1 px-4 rounded"
+                    className="bg-red-500 text-white py-1 px-4 rounded-lg hover:bg-red-700 transition duration-200"
                   >
                     Eliminar
                   </button>
                   <button
                     onClick={() => handleUpdate(product._id)}
-                    className="bg-blue-500 text-white py-1 px-4 rounded"
+                    className="bg-blue-500 text-white py-1 px-4 rounded-lg hover:bg-blue-700 transition duration-200"
                   >
                     Actualizar
                   </button>

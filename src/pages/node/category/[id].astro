@@ -1,0 +1,16 @@
+---
+// src/pages/node/category/[id].astro
+import Layout from "../../../layouts/Layout.astro";
+import CategoryProducts from "../../../components/CategoryProducts.jsx";
+
+// Obtener el ID de la categoría desde la URL
+const { id } = Astro.params;
+
+// Pasar el ID de la categoría como prop al componente
+---
+<Layout>
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-valorant mb-8">Productos de la Categoría</h1>
+    <CategoryProducts client:load categoryId={id} />
+  </div>
+</Layout>

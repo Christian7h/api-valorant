@@ -2,7 +2,6 @@
 import AddProduct from "../../../components/AddProduct";
 import Layout from "../../../layouts/Layout.astro";
 import { jwtDecode } from "jwt-decode";
-
 import Navbar from "../../../components/Navbar.astro";
 import ProductsList from "../../../components/ProductsList";
 
@@ -26,17 +25,17 @@ if (tokenValue) {
       <body class="bg-valorant-dark text-valorant-light">
       <div id="container" class="flex">
         <!-- Menú Lateral -->
-        <aside class="w-1/6 bg-valorant-dark shadow-md p-6 rounded-md fixed h-full top-0 left-0 hidden lg:block">
-          <h2 class="text-2xl font-bold mb-4">Menú</h2>
+        <aside class="w-1/6 bg-valorant-darker shadow-md p-6 rounded-md fixed h-full top-0 left-0 hidden lg:block">
+          <h2 class="text-2xl font-bold mb-4 text-valorant">Menú</h2>
           <ul class="space-y-4">
             <li>
-              <a href="/node/admin/dashboard" class="block text-lg text-blue-600 hover:text-blue-800">Productos</a>
+              <a href="/node/admin/dashboard" class="block text-lg text-valorant-light hover:text-valorant">Productos</a>
             </li>
             <li>
-              <a href="/node/admin/categorias" class="block text-lg text-blue-600 hover:text-blue-800">Categorias</a>
+              <a href="/node/admin/categorias" class="block text-lg text-valorant-light hover:text-valorant">Categorías</a>
             </li>
             <li>
-              <a href="#delete-product" class="block text-lg text-blue-600 hover:text-blue-800">Ordenes</a>
+              <a href="#delete-product" class="block text-lg text-valorant-light hover:text-valorant">Órdenes</a>
             </li>
           </ul>
         </aside>
@@ -49,7 +48,6 @@ if (tokenValue) {
             </section>
             <!-- Eliminar Producto -->
             <section id="delete-product" class="bg-valorant-dark shadow-md p-6 rounded-md">
-              <h2 class="text-2xl font-semibold mb-4">Lista Productos</h2>
               <ProductsList client:only token={tokenValue} />
             </section>
           </div>
@@ -59,15 +57,13 @@ if (tokenValue) {
       <Navbar/>
     </body>
   ) : (
-    <div class="text-center py-10">
+    <div class="text-center py-10 bg-valorant-dark text-valorant-light">
       <h1 class="text-3xl font-bold text-red-500">Acceso Denegado</h1>
       <p class="text-lg mt-4">No tienes permisos para acceder a esta página.</p>
       <a href="/" class="text-blue-500 underline">Volver a la página principal</a>
     </div>
   )}
 </Layout>
-
-
 
 <style>
   #background {
@@ -103,5 +99,29 @@ if (tokenValue) {
     flex-direction: column;
     justify-content: center;
     padding: 16px;
+  }
+
+  body.bg-valorant-dark {
+    background-color: #0f172a; /* Color de fondo para modo oscuro */
+  }
+
+  .text-valorant-light {
+    color: #e2e8f0; /* Color de texto claro */
+  }
+
+  .bg-valorant-dark {
+    background-color: #1e293b; /* Fondo oscuro */
+  }
+
+  .bg-valorant-darker {
+    background-color: #0f172a; /* Fondo más oscuro */
+  }
+
+  .text-valorant {
+    color: #f43f5e; /* Color de texto para Valorant */
+  }
+
+  .border-valorant-dark {
+    border-color: #334155; /* Borde oscuro */
   }
 </style>

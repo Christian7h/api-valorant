@@ -50,36 +50,49 @@ function AddCategory({ token }) {
   };
 
   return (
-    <div>
-      <h2>{selectedCategory ? "Editar Categoría" : "Añadir Categoría"}</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Nombre:
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            required
-          />
-        </label>
-        <label>
-          Icono:
-          <input
-            type="text"
-            value={formData.icon}
-            onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-          />
-        </label>
-        <label>
-          Color:
-          <input
-            type="color"
-            value={formData.color}
-            onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-          />
-        </label>
-        <button type="submit">{selectedCategory ? "Actualizar" : "Añadir"}</button>
-      </form>
+    <div className="bg-valorant-dark min-h-screen flex flex-col items-center justify-center p-8">
+      <div className="w-full max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+        <h2 className="text-3xl font-bold text-valorant mb-6">{selectedCategory ? "Editar Categoría" : "Añadir Categoría"}</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="name" className="block text-xl text-white">Nombre</label>
+            <input
+              type="text"
+              id="name"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="icon" className="block text-xl text-white">Icono</label>
+            <input
+              type="text"
+              id="icon"
+              value={formData.icon}
+              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+              className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+            />
+          </div>
+          <div>
+            <label htmlFor="color" className="block text-xl text-white">Color</label>
+            <input
+              type="color"
+              id="color"
+              value={formData.color}
+              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+              className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-200"
+          >
+            {selectedCategory ? "Actualizar" : "Añadir"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
