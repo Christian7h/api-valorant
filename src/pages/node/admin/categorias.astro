@@ -1,6 +1,7 @@
 ---
-import AddProduct from "../../components/AddProduct";
-import Layout from "../../layouts/Layout.astro";
+import AddCategory from "../../../components/AddCategory";
+import CategoryList from "../../../components/CategoryList";
+import Layout from "../../../layouts/Layout.astro";
 import { jwtDecode } from "jwt-decode";
 
 const token = Astro.cookies.get("token");
@@ -21,7 +22,16 @@ if (tokenValue) {
 
 <Layout>
   {isAdmin ? (
-    <AddProduct token={tokenValue} client:only />
+    <div class="flex flex-col lg:flex-row">
+      <!-- Formulario para agregar o editar categorías -->
+      <section class="flex-1 p-4">
+        <AddCategory client:only token={tokenValue} />
+      </section>
+      <!-- Lista de categorías -->
+      <section class="flex-1 p-4">
+        <CategoryList client:only token={tokenValue} />
+      </section>
+    </div>
   ) : (
     <div class="text-center py-10">
       <h1 class="text-3xl font-bold text-red-500">Acceso Denegado</h1>

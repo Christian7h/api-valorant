@@ -2,7 +2,7 @@ const Pagination = ({ totalPages, currentPage, onPageChange }) => {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="flex justify-center my-24">
+    <div className="flex justify-center my-8">
       <nav className="inline-flex -space-x-px">
         {pages.map((page) => (
           <button

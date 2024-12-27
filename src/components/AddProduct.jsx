@@ -1,46 +1,70 @@
-import { useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-
+import { useState, useEffect } from 'react';
+import {jwtDecode} from 'jwt-decode';
 const AddProduct = ({ token }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [richDescription, setRichDescription] = useState('');
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState(0);
   const [category, setCategory] = useState('');
-  const [countInStock, setCountInStock] = useState('');
+  const [countInStock, setCountInStock] = useState(0);
+  const [brand, setBrand] = useState('');
   const [image, setImage] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false); // Para verificar si el usuario es admin
+  const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  // Validar si el usuario es admin
-  const checkAdmin = (token) => {
-    try {
-      const decoded = jwtDecode(token); // Decodificamos el token
-      setIsAdmin(decoded.isAdmin); // Establecemos el estado isAdmin
-    } catch (error) {
-      console.error("Error decoding token:", error);
-    }
-  };
-
-  // Verificamos si hay un token y si el usuario es admin al cargar el componente
-  useState(() => {
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          "https://nodejs-eshop-api-course-2c70.onrender.com/api/v1/categories",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        if (!response.ok) {
+          throw new Error(`Error fetching categories: ${response.statusText}`);
+        }
+  
+        const data = await response.json();
+        setCategories(data);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        setError("Error al cargar categorías");
+      }
+    };
+  
+    fetchCategories();
+  }, [token]);
+  useEffect(() => {
     if (token) {
-      checkAdmin(token); // Verificamos si es admin
+      try {
+        const decoded = jwtDecode(token);
+        setIsAdmin(decoded.isAdmin || false);
+      } catch (err) {
+        console.error('Error decoding token:', err);
+        setError('Token inválido');
+      }
     }
   }, [token]);
 
-  // Controlador de la imagen
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);  // Guardamos la imagen seleccionada
+    setImage(e.target.files[0]);
   };
 
-  // Enviar los datos al backend
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isAdmin) {
       setError('No tienes permisos para agregar productos');
+      return;
+    }
+
+    if (!name || !description || !category || countInStock < 0) {
+      setError('Por favor, completa todos los campos obligatorios.');
       return;
     }
 
@@ -51,61 +75,60 @@ const AddProduct = ({ token }) => {
     formData.append('price', price);
     formData.append('category', category);
     formData.append('countInStock', countInStock);
+    formData.append('brand', brand);
     if (image) {
-      formData.append('image', image); // Añadimos la imagen
+      formData.append('image', image);
     }
 
     try {
       const res = await fetch('https://nodejs-eshop-api-course-2c70.onrender.com/api/v1/products', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}` // Asegúrate de pasar el token para verificar que el usuario esté logeado
+          'Authorization': `Bearer ${token}`,
         },
-        body: formData, // Enviamos los datos incluyendo la imagen
+        body: formData,
       });
 
       if (res.ok) {
+        const data = await res.json();
         setSuccess('Producto añadido correctamente');
         setName('');
         setDescription('');
         setRichDescription('');
-        setPrice('');
+        setPrice(0);
         setCategory('');
-        setCountInStock('');
-        setImage(null); // Limpiamos el formulario después de la subida
+        setCountInStock(0);
+        setBrand('');
+        setImage(null);
       } else {
         const data = await res.json();
         setError(data.message || 'Error al agregar el producto');
       }
-    } catch (error) {
-      setError('Error al agregar el producto: ' + error.message);
+    } catch (err) {
+      setError('Error al agregar el producto: ' + err.message);
     }
   };
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Añadir Producto</h1>
-
+      <h1 className="text-2xl font-bold mb-6">Añadir Producto</h1>
       {error && <p className="text-red-500">{error}</p>}
       {success && <p className="text-green-500">{success}</p>}
-
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="mb-4">
-          <label htmlFor="name" className="block text-xl">Nombre del Producto</label>
+          <label htmlFor="name" className="block text-xl">Nombre del Producto *</label>
           <input
             type="text"
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="p-2 w-full border rounded"
+            className="p-2 w-full border rounded text-black border-valorant-dark"
             required
           />
         </div>
-
         <div className="mb-4">
-          <label htmlFor="description" className="block text-xl">Descripción</label>
-          <input
-            type="text"
+          <label htmlFor="description" className="block text-xl">Descripción *</label>
+          <textarea
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -113,7 +136,6 @@ const AddProduct = ({ token }) => {
             required
           />
         </div>
-
         <div className="mb-4">
           <label htmlFor="richDescription" className="block text-xl">Descripción Larga</label>
           <textarea
@@ -121,10 +143,8 @@ const AddProduct = ({ token }) => {
             value={richDescription}
             onChange={(e) => setRichDescription(e.target.value)}
             className="p-2 w-full border rounded"
-            required
           />
         </div>
-
         <div className="mb-4">
           <label htmlFor="price" className="block text-xl">Precio</label>
           <input
@@ -133,24 +153,30 @@ const AddProduct = ({ token }) => {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             className="p-2 w-full border rounded"
-            required
+            min="0"
           />
         </div>
-
         <div className="mb-4">
-          <label htmlFor="category" className="block text-xl">Categoría</label>
-          <input
-            type="text"
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="p-2 w-full border rounded"
-            required
-          />
-        </div>
-
+  <label htmlFor="category" className="block text-xl">
+    Categoría *
+  </label>
+  <select
+    id="category"
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    className="p-2 w-full border rounded"
+    required
+  >
+    <option value="">Seleccione una categoría</option>
+    {categories.map((cat) => (
+      <option key={cat.id} value={cat.id}>
+        {cat.name}
+      </option>
+    ))}
+  </select>
+</div>
         <div className="mb-4">
-          <label htmlFor="countInStock" className="block text-xl">Cantidad en Stock</label>
+          <label htmlFor="countInStock" className="block text-xl">Cantidad en Stock *</label>
           <input
             type="number"
             id="countInStock"
@@ -158,9 +184,20 @@ const AddProduct = ({ token }) => {
             onChange={(e) => setCountInStock(e.target.value)}
             className="p-2 w-full border rounded"
             required
+            min="0"
+            max="254"
           />
         </div>
-
+        <div className="mb-4">
+          <label htmlFor="brand" className="block text-xl">Marca</label>
+          <input
+            type="text"
+            id="brand"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            className="p-2 w-full border rounded"
+          />
+        </div>
         <div className="mb-4">
           <label htmlFor="image" className="block text-xl">Imagen</label>
           <input
@@ -169,10 +206,8 @@ const AddProduct = ({ token }) => {
             accept="image/*"
             onChange={handleImageChange}
             className="p-2 w-full border rounded"
-            required
           />
         </div>
-
         <button type="submit" className="bg-green-500 text-white py-2 px-6 rounded">Añadir Producto</button>
       </form>
     </div>

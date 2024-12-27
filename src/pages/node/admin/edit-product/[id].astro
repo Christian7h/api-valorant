@@ -1,0 +1,27 @@
+---
+// src/pages/node/edit-product/[id].astro
+
+import UpdateProduct from "../../../../components/UpdateProduct";
+import { jwtDecode } from "jwt-decode";
+import Layout from "../../../../layouts/Layout.astro";
+
+// Obtener el token de las cookies
+const token = Astro.cookies.get("token");
+const tokenValue = token && token.value ? token.value : null;
+
+// Verificar si el usuario es administrador
+let isAdmin = false;
+
+if (tokenValue) {
+  try {
+    const decodedToken = jwtDecode(tokenValue);
+    isAdmin = decodedToken.isAdmin; // Asegúrate de que `isAdmin` está en tu token
+  } catch (error) {
+    console.error("Error al decodificar el token:", error);
+  }
+}
+---
+
+<Layout>
+  <UpdateProduct id={Astro.params.id} token={tokenValue} client:only />
+</Layout>
