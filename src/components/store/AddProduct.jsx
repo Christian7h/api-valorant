@@ -1,3 +1,4 @@
+//src/components/store/AddProduct.jsx
 import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 

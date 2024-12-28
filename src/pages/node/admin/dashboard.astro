@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import Navbar from "../../../components/Navbar.astro";
 import ProductsList from "../../../components/store/ProductsList";
 import AsideStore from "../../../components/store/AsideStore.astro";
+import ManageProduct from "../../../components/ManageProduct";
 
 const token = Astro.cookies.get("token");
 const tokenValue = token && token.value ? token.value : null;
@@ -29,19 +30,19 @@ if (tokenValue) {
        <AsideStore />
         <!-- Contenido Principal -->
         <main class="w-full lg:ml-1/4 p-6 space-y-12">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="">
+            <ManageProduct client:only token={tokenValue} />
             <!-- Añadir Producto -->
-            <section id="add-product" class="bg-valorant-dark shadow-md p-6 rounded-md">
+            {/* <section id="add-product" class="bg-valorant-dark shadow-md p-6 rounded-md">
               <AddProduct client:only token={tokenValue} />
             </section>
             <!-- Eliminar Producto -->
             <section id="delete-product" class="bg-valorant-dark shadow-md p-6 rounded-md">
               <ProductsList client:only token={tokenValue} />
-            </section>
+            </section> */}
           </div>
         </main>
       </div>
-
       <Navbar/>
     </body>
   ) : (

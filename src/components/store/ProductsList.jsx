@@ -1,3 +1,4 @@
+//src/components/store/ProductsList.jsx
 import { useEffect, useState } from "react";
 import Pagination from "../Pagination";
 import { jwtDecode } from "jwt-decode";
