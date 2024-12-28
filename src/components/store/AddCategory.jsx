@@ -33,15 +33,21 @@ function AddCategory({ token }) {
         },
         body: JSON.stringify(formData),
       });
-
+      const data = await response.json();
       if (response.ok) {
-        fetchCategories(); // Reload categories
-        setFormData({ name: "", icon: "", color: "" });
-        setSelectedCategory(null);
+        fetchCategories(); // Refresh categories after adding/updating
+        setFormData({ name: "", icon: "", color: "" }); // Reset form
+        setSelectedCategory(null); // Reset selected category
+      } else {
+        console.error("Error:", data.message);
       }
     } catch (error) {
-      console.error("Error submitting category:", error);
+      console.error("Error:", error);
     }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleEdit = (category) => {
@@ -49,18 +55,36 @@ function AddCategory({ token }) {
     setFormData({ name: category.name, icon: category.icon, color: category.color });
   };
 
+  const handleDelete = async (categoryId) => {
+    try {
+      const response = await fetch(`${API_URL}/${categoryId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        fetchCategories(); // Refresh categories after deletion
+      } else {
+        const data = await response.json();
+        console.error("Error:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
-    <div className="bg-valorant-dark min-h-screen flex flex-col items-center justify-center p-8">
-      <div className="w-full max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+    <div className="bg-valorant-dark grid grid-cols-1 md:grid-cols-2 gap-8 p-8 justify-center">
+      <div className="max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
         <h2 className="text-3xl font-bold text-valorant mb-6">{selectedCategory ? "Editar Categoría" : "Añadir Categoría"}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="name" className="block text-xl text-white">Nombre</label>
             <input
               type="text"
-              id="name"
+              name="name"
+              placeholder="Name"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={handleChange}
               className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
               required
             />
@@ -68,10 +92,11 @@ function AddCategory({ token }) {
           <div>
             <label htmlFor="icon" className="block text-xl text-white">Icono</label>
             <input
-              type="text"
-              id="icon"
-              value={formData.icon}
-              onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+            type="text"
+            name="icon"
+            placeholder="Icon"
+            value={formData.icon}
+            onChange={handleChange}
               className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
             />
           </div>
@@ -79,9 +104,10 @@ function AddCategory({ token }) {
             <label htmlFor="color" className="block text-xl text-white">Color</label>
             <input
               type="color"
-              id="color"
+              name="color"
               value={formData.color}
-              onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+              placeholder="Color"
+              onChange={handleChange}
               className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
             />
           </div>
@@ -92,6 +118,20 @@ function AddCategory({ token }) {
             {selectedCategory ? "Actualizar" : "Añadir"}
           </button>
         </form>
+        </div>
+        <div className="max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6 flex flex-col justify-center">
+        <h2 className="text-2xl font-bold text-valorant mb-4">Categorías Existentes</h2>
+        <ul className="space-y-2">
+          {categories.map((category) => (
+            <li key={category.id} className="bg-gray-700 p-2 rounded-lg flex justify-between items-center">
+              <span className="text-white">{category.name} - {category.icon} - <span style={{ color: category.color }}>{category.color}</span></span>
+              <div className="space-x-2">
+                <button onClick={() => handleEdit(category)} className="bg-blue-500 text-white py-1 px-2 rounded-lg hover:bg-blue-700 transition duration-200">Editar</button>
+                <button onClick={() => handleDelete(category.id)} className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-700 transition duration-200">Eliminar</button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

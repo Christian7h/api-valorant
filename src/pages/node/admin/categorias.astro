@@ -26,12 +26,11 @@ if (tokenValue) {
     <div class="flex flex-col lg:flex-row">
       <!-- Formulario para agregar o editar categorías -->
       <AsideStore/>
-      <section class="flex-1 p-4">
+      <section class="flex p-4">
         <AddCategory client:only token={tokenValue} />
       </section>
       <!-- Lista de categorías -->
       <section class="flex-1 p-4">
-        <CategoryList client:only token={tokenValue} />
       </section>
     </div>
   ) : (
