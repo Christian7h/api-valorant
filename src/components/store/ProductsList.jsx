@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Pagination from "./Pagination";
+import Pagination from "../Pagination";
 import { jwtDecode } from "jwt-decode";
 import { navigate } from "astro:transitions/client";
 
