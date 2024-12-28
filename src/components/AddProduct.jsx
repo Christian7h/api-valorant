@@ -157,6 +157,7 @@ const AddProduct = ({ token }) => {
             onChange={(e) => setPrice(e.target.value)}
             className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
             min="0"
+            max="1500000"
           />
         </div>
         <div className="mb-4">

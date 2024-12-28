@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 const CategoryProducts = ({ categoryId }) => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true); // Estado para el loader
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
       console.log("ID de la categoría recibida:", categoryId); // Verificar el ID recibido
+
+      setIsLoading(true); // Mostrar el loader al iniciar la carga
 
       try {
         // Hacer la solicitud a la API
@@ -30,6 +33,8 @@ const CategoryProducts = ({ categoryId }) => {
       } catch (err) {
         console.error(err);
         setError(err.message || "Error al cargar los productos");
+      } finally {
+        setIsLoading(false); // Ocultar el loader al finalizar
       }
     };
 
@@ -38,9 +43,20 @@ const CategoryProducts = ({ categoryId }) => {
 
   return (
     <div className="space-y-8">
-      {error && <p className="text-red-500">{error}</p>}
+      {/* Botón "Volver" */}
+      <a
+        href="/node/store"
+        className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200 mb-4 inline-block"
+      >
+        Volver a Categorías
+      </a>
 
-      {products.length > 0 ? (
+      {/* Loader */}
+      {isLoading ? (
+        <p className="text-white">Cargando productos...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : products.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <div

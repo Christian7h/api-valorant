@@ -17,7 +17,7 @@ console.log('Token recuperado desde las cookies:', tokenValue);  // Verificar el
 
 <Layout>
   <div class="container mx-auto p-8">
-    <h1 class="text-4xl font-bold text-valorant mb-8">Productos</h1>
+    <h1 class="text-4xl font-bold text-valorant mb-8">Ecommerce</h1>
 
     <!-- Mostrar botones según el estado del token -->
     {isTokenValid ? (
@@ -41,6 +41,6 @@ console.log('Token recuperado desde las cookies:', tokenValue);  // Verificar el
     )}
 
     <!-- Pasar el token como prop a ListStore -->
-    <ListStore client:load token={tokenValue} />
+    <ListStore client:load token={tokenValue}  />
   </div>
 </Layout>
