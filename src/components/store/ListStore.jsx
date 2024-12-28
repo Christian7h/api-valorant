@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Pagination from "./Pagination";
+import Pagination from "../Pagination";
 
 const ListStore = ({ token }) => {
   const [products, setProducts] = useState([]);
@@ -122,7 +122,6 @@ const ListStore = ({ token }) => {
           />
         </div>
       </div>
-
       {/* Mostrar Productos */}
       <div>
         <h2 className="text-3xl font-bold text-valorant mb-4">Productos</h2>

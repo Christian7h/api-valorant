@@ -1,10 +1,10 @@
 ---
-import AddProduct from "../../../components/AddProduct";
+import AddProduct from "../../../components/store/AddProduct";
 import Layout from "../../../layouts/Layout.astro";
 import { jwtDecode } from "jwt-decode";
 import Navbar from "../../../components/Navbar.astro";
-import ProductsList from "../../../components/ProductsList";
-import AsideStore from "../../../components/AsideStore.astro";
+import ProductsList from "../../../components/store/ProductsList";
+import AsideStore from "../../../components/store/AsideStore.astro";
 
 const token = Astro.cookies.get("token");
 const tokenValue = token && token.value ? token.value : null;
