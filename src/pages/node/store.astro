@@ -25,7 +25,9 @@ console.log('Token recuperado desde las cookies:', tokenValue);  // Verificar el
         <a href="/node/admin/dashboard" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
           Administrar Productos
         </a>
-        <a href="/logout" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200">
+        <a href="/logout" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200"
+            data-astro-prefetch="tap"
+            >
           Cerrar Sesión
         </a>
       </div>
@@ -35,6 +37,7 @@ console.log('Token recuperado desde las cookies:', tokenValue);  // Verificar el
           Registrarse
         </a>
         <a href="/node/login" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-200">
+          
           Iniciar Sesión
         </a>
       </div>
