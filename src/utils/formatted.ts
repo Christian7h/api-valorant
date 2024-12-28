@@ -7,3 +7,10 @@ export const formatPriceToCLP = (price: number): string => {
   // Formatear el precio en CLP
   return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(priceInCLP);
 };
+
+export const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('es-CL', {
+      style: 'currency',
+      currency: 'CLP',
+  }).format(price);
+};

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import Pagination from "../Pagination";
+import { formatPriceToCLP } from "../../utils/formattedPriceToClp";
+import PayButton from "../../components/webpay/PayButton.tsx";
 
 const ListStore = ({ token }) => {
   const [products, setProducts] = useState([]);
@@ -78,6 +80,8 @@ const ListStore = ({ token }) => {
     currentPage * itemsPerPage
   );
 
+
+
   return (
     <div className="space-y-8">
       {error && <p className="text-red-500">{error}</p>}
@@ -141,8 +145,9 @@ const ListStore = ({ token }) => {
                 {product.description}
               </p>
               <p className="text-lg font-bold mb-2">
-                ${product.price.toFixed(2)}
+              {formatPriceToCLP(product.price)}
               </p>
+              <PayButton amount={product.price} productId={product.id} client:load />
               <button className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200">
                 Añadir al Carrito
               </button>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { formatPriceToCLP } from "../../utils/formattedPriceToClp";
 
 const CategoryProducts = ({ categoryId }) => {
   const [products, setProducts] = useState([]);
@@ -70,7 +71,7 @@ const CategoryProducts = ({ categoryId }) => {
               />
               <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
               <p className="text-gray-400 text-sm mb-4">{product.description}</p>
-              <p className="text-lg font-bold mb-2">${product.price.toFixed(2)}</p>
+              <p className="text-lg font-bold mb-2">{formatPriceToCLP(product.price)}</p>
               <button className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200">
                 Añadir al Carrito
               </button>

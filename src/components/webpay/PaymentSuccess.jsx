@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { formatPriceToCLP } from '../../utils/formatted'; // Importar la función de formateo
+import { formatPriceToCLP } from '../../utils/formattedPriceToClp'; // Importar la función de formateo
 
 const PaymentSuccess = () => {
   const [details, setDetails] = useState(null);
