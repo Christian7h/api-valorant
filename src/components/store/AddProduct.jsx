@@ -5,10 +5,13 @@ const AddProduct = ({ token }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [richDescription, setRichDescription] = useState('');
+  const [brand, setBrand] = useState('');
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
-  const [brand, setBrand] = useState('');
+  const [rating, setRating] = useState('');
+  const [numReviews, setNumReviews] = useState('');
+  const [isFeatured, setIsFeatured] = useState(false);
   const [image, setImage] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState('');
@@ -75,10 +78,13 @@ const AddProduct = ({ token }) => {
     formData.append('name', name);
     formData.append('description', description);
     formData.append('richDescription', richDescription);
+    formData.append('brand', brand);
     formData.append('price', price);
     formData.append('category', category);
     formData.append('countInStock', countInStock);
-    formData.append('brand', brand);
+    formData.append('rating', rating);
+    formData.append('numReviews', numReviews);
+    formData.append('isFeatured', isFeatured);
     if (image) {
       formData.append('image', image);
     }
@@ -103,6 +109,9 @@ const AddProduct = ({ token }) => {
         setCountInStock(0);
         setBrand('');
         setImage(null);
+        setIsFeatured(false);
+        setRating('');
+        setNumReviews('');
       } else {
         const data = await res.json();
         setError(data.message || 'Error al agregar el producto');
@@ -149,6 +158,16 @@ const AddProduct = ({ token }) => {
           />
         </div>
         <div className="mb-4">
+          <label htmlFor="brand" className="block text-xl text-white">Marca</label>
+          <input
+            type="text"
+            id="brand"
+            value={brand}
+            onChange={(e) => setBrand(e.target.value)}
+            className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+          />
+        </div>
+        <div className="mb-4">
           <label htmlFor="price" className="block text-xl text-white">Precio</label>
           <input
             type="number"
@@ -191,15 +210,38 @@ const AddProduct = ({ token }) => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="brand" className="block text-xl text-white">Marca</label>
-          <input
-            type="text"
-            id="brand"
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-            className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
-          />
+              <label htmlFor="rating" className="block text-xl text-white">Valoración</label>
+              <input
+                type="number"
+                id="rating"
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+                className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+                required
+              />
         </div>
+        <div className="mb-4">
+              <label htmlFor="numReviews" className="block text-xl text-white">Número de Reseñas</label>
+              <input
+                type="number"
+                id="numReviews"
+                value={numReviews}
+                onChange={(e) => setNumReviews(e.target.value)}
+                className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+                required
+              />
+            </div>
+        <div className="mb-4">
+              <label htmlFor="isFeatured" className="block text-xl text-white">Destacado</label>
+              <input
+                type="checkbox"
+                id="isFeatured"
+                checked={isFeatured}
+                onChange={(e) => setIsFeatured(e.target.checked)}
+                className="p-2"
+              />
+            </div>
+            
         <div className="mb-4">
           <label htmlFor="image" className="block text-xl text-white">Imagen</label>
           <input
@@ -212,7 +254,7 @@ const AddProduct = ({ token }) => {
         </div>
         <button
           type="submit"
-          className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-200"
+          className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition duration-200"
         >
           Añadir Producto
         </button>
