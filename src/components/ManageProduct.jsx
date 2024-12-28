@@ -8,7 +8,10 @@ const ManageProducts = ({ token }) => {
   const [filters, setFilters] = useState({ name: "", brand: "" });
   const [currentPage, setCurrentPage] = useState(1);
   const [isAdmin, setIsAdmin] = useState(false);
-  const itemsPerPage = 6;
+  const [notification, setNotification] = useState(""); // Para notificaciones
+  const [modalOpen, setModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);  
+  const itemsPerPage = 8;
 
   const [form, setForm] = useState({
     id: null,
@@ -68,6 +71,7 @@ const ManageProducts = ({ token }) => {
     }
   };
 
+  
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
@@ -112,7 +116,7 @@ const ManageProducts = ({ token }) => {
       });
 
       if (res.ok) {
-        alert(`Producto ${form.id ? "actualizado" : "añadido"} con éxito`);
+        setNotification(`Producto ${form.id ? "actualizado" : "añadido"} con éxito.`);
         fetchProducts();
         resetForm();
       } else {
@@ -123,16 +127,19 @@ const ManageProducts = ({ token }) => {
       console.error(err);
     }
   };
-
-  const handleDelete = async (productId) => {
-    if (!isAdmin) {
+  const openDeleteModal = (productId) => {
+    setProductToDelete(productId);
+    setModalOpen(true);
+  };
+  const handleDelete = async () => {
+    if (!isAdmin || !productToDelete) {
       alert("No tienes permisos para eliminar productos.");
       return;
     }
 
     try {
       const res = await fetch(
-        `https://nodejs-eshop-api-course-2c70.onrender.com/api/v1/products/${productId}`,
+        `https://nodejs-eshop-api-course-2c70.onrender.com/api/v1/products/${productToDelete}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${token}` },
@@ -140,14 +147,17 @@ const ManageProducts = ({ token }) => {
       );
 
       if (res.ok) {
-        alert("Producto eliminado con éxito");
-        setProducts(products.filter((p) => p._id !== productId));
+        setNotification("Producto eliminado con éxito");
+        setProducts(products.filter((p) => p._id !== productToDelete));
       } else {
         const data = await res.json();
         alert(`Error eliminando el producto: ${data.message}`);
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setModalOpen(false);
+      setProductToDelete(null);
     }
   };
 
@@ -199,11 +209,17 @@ const ManageProducts = ({ token }) => {
   }
 
   return (
-    <div className="bg-valorant-dark grid grid-cols-1 md:grid-cols-2 gap-8 p-8 justify-center">
-<div className="max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+    <div className="bg-valorant-dark rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4 p-8 justify-center">
+     
+<div className="max-w-2xl bg-gray-800 rounded-lg shadow-md p-6 space-y-6 content-stretch">
   <h1 className="text-2xl font-bold text-valorant mb-6">Gestión de Productos</h1>
 
   <form onSubmit={handleSubmit} className="space-y-4">
+  {notification && (
+        <div className="text-green-500 bg-gray-900 rounded-lg p-4 mb-4">
+          {notification}
+        </div>
+      )}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <label htmlFor="name" className="block text-xl text-white">Nombre del Producto</label>
@@ -224,6 +240,8 @@ const ManageProducts = ({ token }) => {
           value={form.brand}
           onChange={handleFormChange}
           className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+          pattern="^[a-zA-Z\s]+$"
+          title="La marca solo puede contener letras y espacios."
           required
         />
       </div>
@@ -254,8 +272,11 @@ const ManageProducts = ({ token }) => {
           value={form.price}
           onChange={handleFormChange}
           className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+          min="0"
+          max="1500000"
           required
         />
+      {form.price < 0 && <p className="text-red-500">El precio no puede ser negativo.</p>}
       </div>
       <div>
         <label htmlFor="countInStock" className="block text-xl text-white">Cantidad en Stock</label>
@@ -265,8 +286,11 @@ const ManageProducts = ({ token }) => {
           value={form.countInStock}
           onChange={handleFormChange}
           className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+          min="0"
+          max="254"
           required
         />
+        {form.countInStock < 0 && <p className="text-red-500">La cantidad en stock no puede ser negativa.</p>}
       </div>
       <div>
         <label htmlFor="category" className="block text-xl text-white">Categoría</label>
@@ -285,14 +309,19 @@ const ManageProducts = ({ token }) => {
         </select>
       </div>
       <div>
-        <label htmlFor="rating" className="block text-xl text-white">Valoración</label>
+        <label htmlFor="rating" className="block text-xl text-white">Calificación</label>
         <input
           type="number"
           name="rating"
           value={form.rating}
           onChange={handleFormChange}
           className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+          min="0"
+          max="5"
+          step="0.1"
+          required
         />
+        {form.rating < 0 || form.rating > 5 && <p className="text-red-500">La calificación debe estar entre 0 y 5.</p>}
       </div>
       <div>
         <label htmlFor="numReviews" className="block text-xl text-white">Número de Reseñas</label>
@@ -302,6 +331,7 @@ const ManageProducts = ({ token }) => {
           value={form.numReviews}
           onChange={handleFormChange}
           className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+          min="0"
         />
       </div>
       <label className="flex items-center space-x-2">
@@ -334,7 +364,7 @@ const ManageProducts = ({ token }) => {
 </div>
 
   
-      <div className="max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+      <div className="bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
         <h2 className="text-2xl font-bold text-valorant mb-4">Lista de Productos</h2>
         <ul className="space-y-2">
           {productsOnPage.map((product) => (
@@ -351,22 +381,47 @@ const ManageProducts = ({ token }) => {
                   Editar
                 </button>
                 <button
-                  onClick={() => handleDelete(product._id)}
+                  onClick={() => openDeleteModal(product._id)}
                   className="bg-red-500 text-white py-1 px-2 rounded-lg hover:bg-red-700 transition duration-200"
                 >
                   Eliminar
                 </button>
               </div>
             </li>
+            
           ))}
         </ul>
+        
         <Pagination
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={setCurrentPage}
         />
+        
+      </div>
+      {modalOpen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg">
+      <p>¿Estás seguro de que deseas eliminar este producto?</p>
+      <div className="flex space-x-4 mt-4">
+        <button
+          onClick={handleDelete}
+          className="bg-red-600 text-white px-4 py-2 rounded"
+        >
+          Sí, eliminar
+        </button>
+        <button
+          onClick={() => setModalOpen(false)}
+          className="bg-gray-600 text-white px-4 py-2 rounded"
+        >
+          Cancelar
+        </button>
       </div>
     </div>
+  </div>
+)}
+    </div>
+    
   );
   
   };

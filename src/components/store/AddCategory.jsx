@@ -70,7 +70,9 @@ function AddCategory({ token }) {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
+  };  if (!categories.length || !categories.length) {
+    return <div className="text-valorant">Cargando datos...</div>;
+  }
 
   return (
     <div className="bg-valorant-dark grid grid-cols-1 md:grid-cols-2 gap-8 p-8 justify-center">

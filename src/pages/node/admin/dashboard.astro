@@ -29,18 +29,9 @@ if (tokenValue) {
         <!-- Menú Lateral -->
        <AsideStore />
         <!-- Contenido Principal -->
-        <main class="w-full lg:ml-1/4 p-6 space-y-12">
-          <div class="">
+        <main class="w-full lg:ml-1/6 p-6 space-y-12">  
+          
             <ManageProduct client:only token={tokenValue} />
-            <!-- Añadir Producto -->
-            {/* <section id="add-product" class="bg-valorant-dark shadow-md p-6 rounded-md">
-              <AddProduct client:only token={tokenValue} />
-            </section>
-            <!-- Eliminar Producto -->
-            <section id="delete-product" class="bg-valorant-dark shadow-md p-6 rounded-md">
-              <ProductsList client:only token={tokenValue} />
-            </section> */}
-          </div>
         </main>
       </div>
       <Navbar/>
@@ -66,17 +57,21 @@ if (tokenValue) {
   }
 
   aside {
-    height: 100vh;
-    overflow-y: auto;
-  }
-
+  width: 16.67%; /* Aproximadamente 1/6 del ancho total */
+  max-width: 240px; /* Ancho máximo para pantallas grandes */
+  min-width: 80px; /* Ancho mínimo para pantallas pequeñas */
+  height: 100vh;
+  overflow-y: auto;
+}
   #container {
     font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
       Arial, sans-serif;
-    height: 100%;
-  }
+      display: flex;
+  flex-direction: row;
+  height: 100%;  }
 
   main {
+    flex: 1; /* Deja que el contenido principal ocupe el espacio restante */
     height: 100%;
     display: flex;
     justify-content: center;
