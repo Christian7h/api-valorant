@@ -224,6 +224,7 @@ const ManageProducts = ({ token }) => {
       <div>
         <label htmlFor="name" className="block text-xl text-white">Nombre del Producto</label>
         <input
+          placeholder="Nike Air Max 90"
           type="text"
           name="name"
           value={form.name}
@@ -235,6 +236,7 @@ const ManageProducts = ({ token }) => {
       <div>
         <label htmlFor="brand" className="block text-xl text-white">Marca</label>
         <input
+        placeholder="Nike"
           type="text"
           name="brand"
           value={form.brand}
@@ -248,6 +250,7 @@ const ManageProducts = ({ token }) => {
       <div>
         <label htmlFor="description" className="block text-xl text-white">Descripción</label>
         <textarea
+        placeholder="Zapatillas deportivas Nike Air Max 90"
           name="description"
           value={form.description}
           onChange={handleFormChange}
@@ -258,6 +261,7 @@ const ManageProducts = ({ token }) => {
       <div>
         <label htmlFor="richDescription" className="block text-xl text-white">Descripción Larga</label>
         <textarea
+        placeholder="Zapatillas deportivas Nike Air Max 90, ideales para correr y hacer deporte."
           name="richDescription"
           value={form.richDescription}
           onChange={handleFormChange}
@@ -335,28 +339,28 @@ const ManageProducts = ({ token }) => {
         />
       </div>
       <label className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          name="isFeatured"
-          className="h-5 w-5"
-          checked={form.isFeatured}
-          onChange={handleFormChange}
-        />
-        <span className="text-white">Destacado</span>
-      </label>
+          <input
+            type="checkbox"
+            name="isFeatured"
+            className="h-5 w-5 text-red-600 bg-gray-900 border-gray-700 rounded focus:ring-2 focus:ring-red-600"
+            checked={form.isFeatured}
+            onChange={handleFormChange}
+          />
+          <span className="text-white text-lg font-semibold">Destacado</span>
+        </label>
       <div>
         <label htmlFor="image" className="block text-xl text-white">Imagen</label>
         <input
           type="file"
           name="image"
           onChange={handleImageChange}
-          className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+          className="p-2 w-auto bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
         />
       </div>
     </div>
     <button
       type="submit"
-      className="w-full bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-200"
+      className="w-full bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition duration-200"
     >
       {form.id ? "Actualizar Producto" : "Agregar Producto"}
     </button>
@@ -401,7 +405,7 @@ const ManageProducts = ({ token }) => {
       </div>
       {modalOpen && (
   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="bg-valorant-dark p-6 rounded-lg shadow-lg">
       <p>¿Estás seguro de que deseas eliminar este producto?</p>
       <div className="flex space-x-4 mt-4">
         <button

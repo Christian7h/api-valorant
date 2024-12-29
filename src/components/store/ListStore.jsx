@@ -138,7 +138,7 @@ const ListStore = ({ token }) => {
               <img
                 src={product.image || "https://via.placeholder.com/150"}
                 alt={product.name}
-                className="w-full h-40 object-cover rounded-lg mb-4"
+                className="w-full h-52 object-cover rounded-lg mb-4"
               />
               <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
               <p className="text-gray-400 text-sm mb-4">

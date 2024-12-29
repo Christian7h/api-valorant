@@ -75,8 +75,8 @@ function AddCategory({ token }) {
   }
 
   return (
-    <div className="bg-valorant-dark grid grid-cols-1 md:grid-cols-2 gap-8 p-8 justify-center">
-      <div className="max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+    <div className="bg-valorant-dark grid grid-cols-1 md:grid-cols-2 gap-2 p-8 justify-center">
+      <div className="max-w-4xl bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
         <h2 className="text-3xl font-bold text-valorant mb-6">{selectedCategory ? "Editar Categoría" : "Añadir Categoría"}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -84,7 +84,7 @@ function AddCategory({ token }) {
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Electrónica"
               value={formData.name}
               onChange={handleChange}
               className="p-2 w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
@@ -110,18 +110,18 @@ function AddCategory({ token }) {
               value={formData.color}
               placeholder="Color"
               onChange={handleChange}
-              className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+              className="w-full h-10 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition duration-200"
+            className="w-full bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition duration-200"
           >
             {selectedCategory ? "Actualizar" : "Añadir"}
           </button>
         </form>
         </div>
-        <div className="max-w-md bg-gray-800 rounded-lg shadow-md p-6 space-y-6 flex flex-col justify-center">
+        <div className="max-w-xl bg-gray-800 rounded-lg shadow-md p-6 space-y-6 flex flex-col justify-center">
         <h2 className="text-2xl font-bold text-valorant mb-4">Categorías Existentes</h2>
         <ul className="space-y-2">
           {categories.map((category) => (
