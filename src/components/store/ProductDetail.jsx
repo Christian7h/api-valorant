@@ -39,6 +39,8 @@ const ProductDetail = ({ productId }) => {
 
   return (
     <div className="space-y-8 bg-valorant-dark min-h-screen p-8">
+    <h1 class="text-4xl font-bold text-valorant mb-8">Detalle de <span className="text-4xl">{product.name}</span> </h1>
+
       <a
         href="/node/store"
         className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200 mb-4 inline-block"
