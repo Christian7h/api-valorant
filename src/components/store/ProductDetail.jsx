@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { formatPriceToCLP } from "../../utils/formattedPriceToClp";
 
-const ProductDetail = ({ productId }) => {
+const ProductDetail = ({ productId}) => {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +39,6 @@ const ProductDetail = ({ productId }) => {
 
   return (
     <div className="space-y-8 bg-valorant-dark min-h-screen p-8">
-    <h1 class="text-4xl font-bold text-valorant mb-8">Detalle de <span className="text-4xl">{product.name}</span> </h1>
 
       <a
         href="/node/store"

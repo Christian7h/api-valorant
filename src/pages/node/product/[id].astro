@@ -3,11 +3,12 @@ import Layout from "../../../layouts/Layout.astro";
 import ProductDetail from "../../../components/store/ProductDetail.jsx";
 
 // Obtener el ID del producto desde la URL
-const { id } = Astro.params;
+const { id,name } = Astro.params;
 ---
 
 <Layout>
   <div class="container mx-auto p-8 bg-valorant-dark text-valorant-light min-h-screen">
+    <h1 class="text-4xl font-bold text-valorant mb-8">Detalle del Producto</h1>
     <ProductDetail client:load productId={id} />
   </div>
 </Layout>
