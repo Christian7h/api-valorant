@@ -59,14 +59,21 @@ Astro.response.headers.set("Cache-Control", "public, max-age=600, s-maxage=3600,
     <ClientRouter />
   </head>
   <body class="bg-valorant-dark text-valorant-light">
-    <div id="container">
-      <img id="background" src={background.src} alt="" fetchpriority="high" />
-      <main class="">
+    <div id="container" >
+      <!-- Fondo SVG -->
+  
+      <!-- Fondo oscuro solo en el contenedor -->
+      <div class="fixed top-0 left-0 w-full h-full bg-valorant-dark z-10"></div>
+      
+      <!-- Contenido principal -->
+      <main class="relative z-20">
+        <img id="background" src={background.src} alt="Background Image" fetchpriority="high" />
+  
         <slot />
       </main>
     </div>
-
-    <Navbar/>
+  
+    <Navbar />
   </body>
 </html>
 <style>
@@ -104,8 +111,9 @@ Astro.response.headers.set("Cache-Control", "public, max-age=600, s-maxage=3600,
   #container {
     font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
       Arial, sans-serif;
-    height: 100%;
-  }
+      width: 100%;
+      height: 100%;
+    }
 
   main {
     height: 100%;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Pagination from "../Pagination";
 import { formatPriceToCLP } from "../../utils/formattedPriceToClp";
 import PayButton from "../../components/webpay/PayButton.tsx";
-
+import Cardui from "../../components/Cardui";
 const ListStore = ({ token }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -126,6 +126,7 @@ const ListStore = ({ token }) => {
           />
         </div>
       </div>
+      <Cardui/>
       {/* Mostrar Productos */}
       <div>
         <h2 className="text-3xl font-bold text-valorant mb-4">Productos</h2>

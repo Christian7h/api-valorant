@@ -56,16 +56,24 @@ import Navbar from "../components/Navbar.astro";
     <title>Cristian Villalobos - APIs de Valorant y ZZZ</title>
     <ClientRouter />
   </head>
-  <body class="bg-valorant-dark text-valorant-light">
-    <div id="container">
-      <img id="background" src={background.src} alt="" fetchpriority="high" />
-      <main class="">
-        <slot />
-      </main>
-    </div>
+  <body class="text-valorant-light">
+  <div id="container" >
+    <!-- Fondo SVG -->
 
-    <Navbar/>
-  </body>
+    <!-- Fondo oscuro solo en el contenedor -->
+    <div class="fixed top-0 left-0 w-full h-full bg-valorant-dark z-10"></div>
+    
+    <!-- Contenido principal -->
+    <main class="relative z-20">
+      <img id="background" src={background.src} alt="Background Image" fetchpriority="high" />
+
+      <slot />
+    </main>
+  </div>
+
+  <Navbar />
+</body>
+
 </html>
 <style>
   /* ===== Scrollbar CSS ===== */
@@ -102,7 +110,8 @@ import Navbar from "../components/Navbar.astro";
   #container {
     font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
       Arial, sans-serif;
-    height: 100%;
+      width: 100%;
+      height: 100%;
   }
 
   main {
