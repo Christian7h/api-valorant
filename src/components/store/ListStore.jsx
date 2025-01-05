@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
 import Pagination from "../Pagination";
 import { formatPriceToCLP } from "../../utils/formattedPriceToClp";
-import PayButton from "../../components/webpay/PayButton.tsx";
+import PayButton from "../../components/webpay/PayButton";
 import Cardui from "../../components/Cardui";
+
 const ListStore = ({ token }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -75,12 +77,6 @@ const ListStore = ({ token }) => {
     indexOfLastItem
   );
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const productsOnPage = filteredProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-
 
   return (
     <div className="space-y-8">
@@ -132,8 +128,9 @@ const ListStore = ({ token }) => {
         <h2 className="text-3xl font-bold text-valorant mb-4">Productos</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentItems.map((product) => (
-            <div
+            <a
               key={product._id}
+              href={`/node/product/${product._id}`}
               className="bg-gray-800 text-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200"
             >
               <img
@@ -142,17 +139,15 @@ const ListStore = ({ token }) => {
                 className="w-full h-52 object-cover rounded-lg mb-4"
               />
               <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-              <p className="text-gray-400 text-sm mb-4">
-                {product.description}
-              </p>
+              <p className="text-gray-400 text-sm mb-4">{product.description}</p>
               <p className="text-lg font-bold mb-2">
-              {formatPriceToCLP(product.price)}
+                {formatPriceToCLP(product.price)}
               </p>
               <PayButton amount={product.price} productId={product.id} client:load />
               <button className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition duration-200">
                 Añadir al Carrito
               </button>
-            </div>
+            </a>
           ))}
         </div>
       </div>

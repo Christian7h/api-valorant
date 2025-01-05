@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
-
+import { Card, CardBody, CardFooter, Image,Button } from "@nextui-org/react";
+import { formatPriceToCLP } from "../utils/formattedPriceToClp";
 export default function App() {
   // Estado para productos, categorías y errores
   const [products, setProducts] = useState([]);
@@ -38,7 +38,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="gap-2 grid grid-cols-2 sm:grid-cols-4">
+    <div className="gap-2 grid grid-cols-1 sm:grid-cols-3">
       {/* Si hay error, mostrar mensaje */}
       {error && <div className="text-red-500">{error}</div>}
 
@@ -63,8 +63,12 @@ export default function App() {
           </CardBody>
           <CardFooter className="text-small justify-between">
             <b>{item.name}</b>
-            <p className="text-gray-200">{item.price}</p>
+            <p className="text-gray-200">{formatPriceToCLP(item.price)}</p>
           </CardFooter>
+          <Button as="a" href={`/node/product/${item._id}`} color="secondary" variant="flat" 
+                  className="w-2/4 object-center mx-auto mb-4 text-white bg-valorant" >
+             Ver Más 
+          </Button>
         </Card>
       ))}
     </div>
