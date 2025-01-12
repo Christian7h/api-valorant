@@ -12,4 +12,7 @@ export default defineConfig({
   adapter: netlify(),
   output: "server",
   integrations: [tailwind(), react(), db()],
+  experimental: {
+    responsiveImages: true,
+  },
 });

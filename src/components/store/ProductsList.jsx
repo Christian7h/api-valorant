@@ -92,7 +92,7 @@ const ListStore = ({ token }) => {
     } catch (error) {
       console.error("Error eliminando el producto:", error);
     }
-  };
+  };  
 
   const handleUpdate = (productId) => {
     navigate(`/node/admin/edit-product/${productId}`); // Redirige a la página de edición
