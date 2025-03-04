@@ -32,53 +32,66 @@ interface Buddy {
 }
 ---
 
-<div class="container mx-auto p-8">
-  <h1 class="text-4xl font-bold text-valorant mb-8">Valorant Buddies</h1>
+<div class="container mx-auto px-6 py-12">
+  <h1 class="text-5xl font-bold mb-12 text-center bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">
+    <span class=" text-valorant inline-block transform hover:scale-105 transition-transform duration-300">VALORANT BUDDIES</span>
+  </h1>
 
-  <!-- Lista de buddies para la página actual -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {
-      currentBuddies.map((buddy: Buddy) => (
-        <Fragment key={buddy.uuid}>
-          <a
-            href={`/buddy/${buddy.uuid}`}
-            class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300"
-          >
-            <h2 class="text-2xl font-semibold text-valorant hover:underline">
-              {buddy.displayName}
-            </h2>
+  <!-- Buddies grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {currentBuddies.map((buddy: Buddy) => (
+      <a
+        href={`/buddy/${buddy.uuid}`}
+        class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 hover:border-red-400 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-500/20"
+      >
+        <!-- Background accent -->
+        <div class="absolute inset-0 bg-gradient-to-tr from-red-500/5 to-transparent opacity-50"></div>
+        
+        <div class="p-5 relative z-10">
+          <!-- Buddy name -->
+          <h2 class="text-2xl font-bold text-white mb-4 group-hover:text-red-400 transition-colors duration-300">
+            {buddy.displayName}
+          </h2>
 
-            <!-- Imagen optimizada con Lazy loading -->
-            <img
-              src={buddy.displayIcon}
-              alt={buddy.displayName}
-              class="w-full h-48 object-contain mb-4 rounded-lg"
-              loading="lazy"
-            />
+          <!-- Image container with glow effect -->
+          <div class="relative mb-6 flex justify-center">
+            <div class="absolute -inset-1 rounded-lg opacity-0 group-hover:opacity-40 bg-gradient-to-r from-red-500 to-pink-600 blur-md transition-opacity duration-300"></div>
+            <div class="relative bg-gray-800/50 p-4 rounded-lg w-full flex justify-center">
+              <img
+                src={buddy.displayIcon}
+                alt={buddy.displayName}
+                class="h-28 w-auto object-contain filter drop-shadow-lg group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+            </div>
+          </div>
 
-            <p class="text-lg">
-              Level: {buddy.levels.map((level) => level.displayName).join(", ")}
-            </p>
-          </a>
-        </Fragment>
-      ))
-    }
+          <!-- Level info -->
+          <div class="bg-gray-800/60 rounded-lg px-4 py-3">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs uppercase tracking-wider text-gray-400 font-medium">Level:</span>
+              <span class="text-gray-200">
+                {buddy.levels.map((level) => level.displayName).join(", ")}
+              </span>
+            </div>
+          </div>
+
+          <!-- View detail button -->
+          <div class="mt-4 flex justify-end">
+            <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold group-hover:text-red-400 transition-colors duration-300 flex items-center">
+              View Details
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </a>
+    ))}
   </div>
 
-  <!-- Componente de paginación -->
-  <Pagination totalPages={totalPages} />
+  <!-- Pagination component -->
+  <div class="mt-16">
+    <Pagination totalPages={totalPages} />
+  </div>
 </div>
-
-<style>
-  /* Estilo para la imagen */
-  img {
-    object-fit: contain;
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-  }
-
-  /* Efecto hover para la imagen */
-  a:hover img {
-    transform: scale(1.05); /* Zoom sutil en hover */
-  }
-</style>

@@ -8,14 +8,22 @@ const { href, imageSrc, imageAlt, title, description } = Astro.props;
 <!-- Enlaces a otras páginas -->
 <a
   href={href}
-  class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300"
+  class="group relative block bg-[#1c232e] p-4 rounded-lg shadow-lg hover:shadow-red-500/40 transition-all duration-300 transform hover:-translate-y-1"
 >
-  <Image
-    src={imageSrc}
-    alt={imageAlt}
-    sizes="(max-width: 600px) 100vw, 50vw"
-    class="w-full object-cover mb-4 rounded-lg"
-  />
-  <h2 class="text-2xl font-semibold text-valorant hover:underline">{title}</h2>
-  <p>{description}</p>
+  {/* Imagen con efecto de brillo */}
+  <div class="relative mb-4 overflow-hidden rounded-lg">
+    <Image
+      src={imageSrc}
+      alt={imageAlt}
+      sizes="(max-width: 600px) 100vw, 50vw"
+      class="w-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-[#ff4655]/20 to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+  </div>
+
+  {/* Contenido */}
+  <h2 class="text-2xl font-semibold text-[#ff4655] group-hover:underline transition-colors duration-300">
+    {title}
+  </h2>
+  <p class="text-[#d5d6c3] mt-2">{description}</p>
 </a>

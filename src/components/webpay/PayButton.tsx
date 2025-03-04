@@ -46,19 +46,29 @@ const PayButton: React.FC<PayButtonProps> = ({ amount, productId }) => {
   };
 
   return (
-    <div className="text-center">
-      <button
-        onClick={handlePayment}
-        className="bg-[#ff4655] hover:bg-[#0f1923] text-[#0f1923] hover:text-[#d5d6c3] font-bold py-2 px-4 mt-4 border transition duration-200 ease-in-out w-full rounded-xl"
-      >
-        Pagar con WEBPAY
-      </button>
-      <img
-        src={webpayLogo} // Reemplaza con la ruta correcta a la imagen del logo de Webpay
-        alt="Webpay Logo"
-        className="w-full h-auto max-w-xs mx-auto"
-      />
-    </div>
+<div className="text-center">
+  {/* Botón de pago con efectos dinámicos */}
+  <button
+    onClick={handlePayment}
+    className="relative w-full py-3 px-6 font-bold text-lg uppercase 
+               bg-[#ff4655] text-[#0f1923] border-2 border-transparent rounded-xl 
+               transition-all duration-300 ease-in-out 
+               hover:bg-[#0f1923] hover:text-[#ff4655] hover:border-[#ff4655] 
+               shadow-md hover:shadow-red-500/40"
+  >
+    Pagar con WEBPAY
+    {/* Glow effect */}
+    <span className="absolute inset-0 bg-[#ff4655] opacity-20 blur-md rounded-xl"></span>
+  </button>
+
+  {/* Logo de Webpay con estilos responsivos */}
+  <img
+    src={webpayLogo} // Reemplaza con la ruta correcta a la imagen del logo de Webpay
+    alt="Webpay Logo"
+    className="w-full h-auto max-w-xs mx-auto mt-4 opacity-80 hover:opacity-100 transition-opacity duration-300"
+  />
+</div>
+
   );
 };
 

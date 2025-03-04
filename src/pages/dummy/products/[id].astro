@@ -29,17 +29,51 @@ interface Product {
 
 <LayoutWithCache>
   <div class="container mx-auto p-8">
-    <h1 class="text-4xl font-bold text-valorant mb-8">{product.title}</h1>
-    <div class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
-      <img src={product.images[0]} alt={product.title} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
-      <p class="text-lg">{product.description}</p>
-      <p class="text-lg font-bold text-valorant">{formattedPrice}</p>
-      <p class="text-xs font-bold text-gray-400">USD ${product.price}</p>
-      <p class="text-lg">Categoría: {product.category}</p>
-      <p class="text-lg">Marca: {product.brand}</p>
-      <p class="text-lg">Existencias: {product.stock}</p>
-      <p class="text-lg">Clasificación: {product.rating}</p>
+    <!-- Título del producto -->
+    <h1 class="text-4xl font-bold text-[#FF4655] mb-8 uppercase tracking-wide">
+      {product.title}
+    </h1>
+
+    <!-- Tarjeta de producto -->
+    <div class="relative bg-[#0F1923] p-6 rounded-xl border border-gray-800 
+                hover:border-[#FF4655] shadow-lg hover:shadow-red-500/40 transition-all duration-300">
+      
+      <!-- Imagen con efecto de glow -->
+      <div class="relative mb-6">
+        <div class="absolute -inset-1 rounded-lg opacity-0 group-hover:opacity-40 
+                    bg-gradient-to-r from-[#FF4655] to-pink-600 blur-md transition-opacity duration-300"></div>
+        <img 
+          src={product.images[0]} 
+          alt={product.title} 
+          class="w-full h-64 object-contain mb-4 rounded-lg shadow-lg transition-transform duration-300 hover:scale-105" 
+          loading="lazy"
+        />
+      </div>
+
+      <!-- Descripción -->
+      <p class="text-lg text-gray-300 mb-4">{product.description}</p>
+
+      <!-- Información de precios -->
+      <div class="mb-4">
+        <p class="text-2xl font-bold bg-gradient-to-r from-[#FF4655] to-pink-500 bg-clip-text text-transparent">
+          {formattedPrice}
+        </p>
+        <p class="text-sm text-gray-500">USD ${product.price}</p>
+      </div>
+
+      <!-- Información adicional -->
+      <div class="grid grid-cols-2 gap-4 text-gray-300 text-lg">
+        <p><span class="text-[#FF4655]">Categoría:</span> {product.category}</p>
+        <p><span class="text-[#FF4655]">Marca:</span> {product.brand}</p>
+        <p><span class="text-[#FF4655]">Stock:</span> {product.stock}</p>
+        <p><span class="text-[#FF4655]">Rating:</span> ⭐ {product.rating}</p>
+      </div>
+          <!-- Botón de pago -->
+    <div class="mt-6 flex justify-center">
+      <PayButton amount={priceInCLP} productId={product.id} client:load />
     </div>
-    <PayButton amount={priceInCLP} productId={product.id} client:load />
+    </div>
+
+
   </div>
 </LayoutWithCache>

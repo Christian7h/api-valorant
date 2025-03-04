@@ -24,32 +24,60 @@ const agentsOnPage = agents.slice(
     currentPage * itemsPerPage
 );
 ---
-<div class="container mx-auto p-8">
-  <h1 class="text-4xl font-bold text-valorant mb-8">Valorant Agents 🚀</h1>
+<div class="container mx-auto p-6">
+  <h1 class="text-5xl font-bold mb-10 text-white text-center bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">
+    <span class="text-valorant inline-block transform hover:scale-105 transition-transform duration-300">VALORANT AGENTS</span>
+  </h1>
 
-  <!-- Grid de agentes -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {
-      agentsOnPage.map((agent: any) => (
-        <a
-          href={`/valorant/agents/${agent.uuid}`}
-          class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300"
-        >
-          <h2 class="text-2xl font-semibold text-valorant hover:underline">
-            {agent.displayName}
-          </h2>
-          {agent.role && <h3 class="text-xl">{agent.role.displayName}</h3>}
-          <p>{agent.description}</p>
-          <img
-            src={agent.displayIcon}
-            alt={agent.displayName}
-            class="w-12 h-12 mt-2"
-          />
-        </a>
-      ))
-    }
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {agentsOnPage.map((agent) => (
+      <a
+        href={`/valorant/agents/${agent.uuid}`}
+        key={agent.uuid}
+        class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:shadow-red-500/20"
+      >
+        {/* Background color accent based on agent theme */}
+        <div class="absolute inset-0 bg-gradient-to-tr from-red-500/10 to-transparent opacity-50"></div>
+        
+        <div class="p-6 relative z-10">
+          <div class="flex justify-between items-start">
+            <div>
+              <h2 class="text-2xl font-bold text-white mb-1 group-hover:text-red-400 transition-colors duration-300">
+                {agent.displayName}
+              </h2>
+              {agent.role && (
+                <div class="flex items-center mb-3">
+                  <span class="px-3 py-1 text-sm font-medium rounded-full bg-red-500/20 text-red-300">
+                    {agent.role.displayName}
+                  </span>
+                </div>
+              )}
+            </div>
+            
+            <img
+              src={agent.displayIcon}
+              alt={agent.displayName}
+              class="w-16 h-16 object-contain filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+            />
+          </div>
+
+          <p class="text-gray-300 text-sm mt-3 line-clamp-3">{agent.description}</p>
+          
+          <div class="mt-4 flex justify-end">
+            <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold group-hover:text-red-400 transition-colors duration-300 flex items-center">
+              View Agent
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </a>
+    ))}
   </div>
+  <Pagination totalPages={totalPages} />
+
+</div>
 
   <!-- Componente de paginación -->
-  <Pagination totalPages={totalPages} />
 </div>

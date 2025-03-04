@@ -16,32 +16,61 @@ const currentPage = Math.max(
 
 const path = url.pathname;
 ---
-
-<div class="flex justify-between my-24 items-center">
-    <!-- Botón para la página anterior -->
+<div class="flex justify-between items-center my-16">
     <a
-        href={`${path}?page=${Math.max(currentPage - 1, 1)}`}
-        class="bg-[#0f1923] hover:bg-[#ff4655] text-[#d5d6c3] hover:text-white font-bold py-1 px-3 border border-[#d5d6c3] transition duration-200 ease-in-out rounded-lg"
+      href={`${path}?page=${Math.max(currentPage - 1, 1)}`}
+      class:list={[
+        "flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 transition-all duration-300",
+        { "opacity-50 cursor-not-allowed": currentPage === 1,
+          "hover:bg-red-500 hover:border-red-400 hover:shadow-lg hover:shadow-red-500/20": currentPage !== 1 }
+      ]}
+      aria-disabled={currentPage === 1}
     >
-        Anteriores
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-5 w-5 transition-transform duration-300 group-hover:-translate-x-1" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      <span class="font-medium text-gray-200">Anteriores</span>
     </a>
-
-    <!-- Indicador de página actual -->
-    <span class="text-[#ff4655] text-xl font-bold">
-        Página {currentPage} de {totalPages}
-    </span>
-
-    <!-- Botón para la página siguiente -->
+  
+    <div class="flex flex-col items-center">
+      <div class="flex items-center space-x-1">
+        <span class="text-gray-400 text-sm uppercase tracking-wider font-medium">Página</span>
+        <span class="text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent px-1">
+          {currentPage}
+        </span>
+        <span class="text-gray-400 text-sm uppercase tracking-wider font-medium">de</span>
+        <span class="text-2xl font-bold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent px-1">
+          {totalPages}
+        </span>
+      </div>
+      
+     
+    </div>
+  
     <a
-        href={`${path}?page=${Math.min(currentPage + 1, totalPages)}`}
-        class="bg-[#0f1923] hover:bg-[#ff4655] text-[#d5d6c3] hover:text-white font-bold py-1 px-3 border border-[#d5d6c3] transition duration-200 ease-in-out rounded-lg"
+      href={`${path}?page=${Math.min(currentPage + 1, totalPages)}`}
+      class:list={[
+        "flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 transition-all duration-300",
+        { "opacity-50 cursor-not-allowed": currentPage === totalPages,
+          "hover:bg-red-500 hover:border-red-400 hover:shadow-lg hover:shadow-red-500/20": currentPage !== totalPages }
+      ]}
+      aria-disabled={currentPage === totalPages}
     >
-        Siguiente
+      <span class="font-medium text-gray-200">Siguiente</span>
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
     </a>
-</div>
-
-<style>
-    .button {
-        @apply p-2 bg-purple-700 text-white rounded;
-    }
-</style>
+  </div>

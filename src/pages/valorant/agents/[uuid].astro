@@ -11,42 +11,108 @@ export const prerender = false;
 ---
 
 <LayoutWithCache>
-  <div class="container mx-auto p-8">
-    <div
-      class="bg-valorant-pattern bg-cover bg-center min-h-screen p-8 rounded-lg shadow-lg flex flex-col md:flex-row items-center"
-    >
-      <div class="md:w-1/2">
-        <h1 class="text-4xl font-bold text-valorant">
-          {agent.data.displayName}
-        </h1>
-        <p class="text-lg mb-4">{agent.data.description}</p>
-        <h2 class="text-2xl font-semibold mb-4">Habilidades</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {
-            agent.data.abilities.map((ability: any) => (
-              <div
-                class="bg-valorant-dark p-4 rounded-lg shadow-2xl"
-                data-key={ability.slot}
-              >
-                <h3 class="text-xl font-bold">{ability.displayName}</h3>
-                <p>{ability.description}</p>
-                <img
-                  src={ability.displayIcon}
-                  alt={ability.displayName}
-                  class="w-12 h-12 mt-2"
+  <div class="container mx-auto px-4 py-12">
+    <div class="relative bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
+      {/* Background gradient overlay */}
+      <div class="absolute inset-0 bg-gradient-to-br from-red-900/30 to-gray-900/90 z-0"></div>
+      
+      {/* Subtle pattern background */}
+      <div class="absolute inset-0 bg-valorant-pattern bg-cover bg-center opacity-10 z-0"></div>
+      
+      <div class="relative z-10 p-6 lg:p-12 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
+        {/* Agent info */}
+        <div class="w-full lg:w-1/2 order-2 lg:order-1">
+          <div class="space-y-6">
+            {/* Agent name with gradient */}
+            <h1 class="text-5xl sm:text-6xl font-black bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">
+              {agent.data.displayName}
+            </h1>
+            
+            {/* Role badge, if available */}
+            {agent.data.role && (
+              <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-500/20 text-red-300 mb-4">
+                <img 
+                  src={agent.data.role.displayIcon} 
+                  alt={agent.data.role.displayName} 
+                  class="w-4 h-4 mr-2" 
                 />
+                <span class="text-sm font-medium">{agent.data.role.displayName}</span>
               </div>
-            ))
-          }
+            )}
+            
+            {/* Description */}
+            <p class="text-gray-300 text-lg leading-relaxed mb-8">{agent.data.description}</p>
+            
+            {/* Abilities section */}
+            <div class="space-y-6">
+              <h2 class="text-2xl font-bold text-white relative inline-block">
+                Habilidades
+                <span class="absolute bottom-0 left-0 h-1 w-full bg-red-500 rounded-full"></span>
+              </h2>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {agent.data.abilities.map((ability: any) => (
+                  <div 
+                    class="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-xl p-4 hover:shadow-lg hover:shadow-red-500/10 transition-all duration-300 group"
+                    data-key={ability.slot}
+                  >
+                    <div class="flex items-start gap-3">
+                      {/* Ability icon */}
+                      <div class="bg-gray-700/50 p-2 rounded-lg">
+                        <img 
+                          src={ability.displayIcon} 
+                          alt={ability.displayName} 
+                          class="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+                      
+                      {/* Ability info */}
+                      <div class="flex-1">
+                        <h3 class="text-xl font-bold text-white group-hover:text-red-400 transition-colors duration-300">
+                          {ability.displayName}
+                        </h3>
+                        <p class="text-gray-300 text-sm mt-1">{ability.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Agent portrait */}
+        <div class="w-full lg:w-1/2 order-1 lg:order-2 flex justify-center">
+          <div class="relative w-full max-w-md">
+            {/* Character portrait with glow effect */}
+            <div class="absolute -inset-1 bg-gradient-to-r from-red-500 to-pink-600 rounded-full blur-xl opacity-30 animate-pulse"></div>
+            <img 
+              src={agent.data.fullPortrait} 
+              alt={agent.data.displayName} 
+              class="relative w-full h-auto object-contain drop-shadow-2xl z-10"
+            />
+          </div>
         </div>
       </div>
-      <div class="md:w-1/2 flex justify-center">
-        <img
-          src={agent.data.fullPortrait}
-          alt={agent.data.displayName}
-          class="w-full max-w-lg"
-        />
-      </div>
+    </div>
+    
+    {/* Back button */}
+    <div class="mt-8">
+      <a 
+        href="/valorant/agents" 
+        class="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 hover:bg-red-500 hover:border-red-400 transition-all duration-300"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          class="h-5 w-5" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span class="font-medium text-gray-200">Volver a agentes</span>
+      </a>
     </div>
   </div>
 </LayoutWithCache>

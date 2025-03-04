@@ -63,38 +63,68 @@ const PaymentSuccess = () => {
   const formattedPrice = product ? formatPriceToCLP(product.price) : '';
 
   return (
-    <div className='text-[#d5d6c3]'>
-      <h1 className='text-4xl font-bold text-valorant mb-8'>¡Pago Exitoso!</h1>
-      {details ? (
-        <div>
-          <p>Gracias por tu compra. Aquí están los detalles de tu transacción:</p>
-          <p><strong>Monto:</strong> {details.amount}</p>
-          <p><strong>Número de Orden:</strong> {details.buy_order}</p>
-          <p><strong>Fecha de la Transacción:</strong> {new Date(details.transaction_date).toLocaleString()}</p>
-          <p><strong>Código de Autorización:</strong> {details.authorization_code}</p>
-          <p><strong>Número de Tarjeta:</strong> **** **** **** {details.card_detail.card_number}</p>
-        </div>
-      ) : (
-        <p>No se encontraron detalles de la transacción. 7w7</p>
-      )}
-      {product && (
-        <div className='bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300 mt-8'>
-          <h2 className='text-2xl font-semibold text-valorant mb-4'>Detalles del Producto</h2>
-          <img src={product.images[0]} alt={product.title} className='w-full h-48 object-contain mb-4 rounded-lg' loading='lazy' />
-          <p className='text-lg'>{product.description}</p>
-          <p className='text-lg font-bold'>{formattedPrice}</p>
-          <p className='text-lg'>Categoría: {product.category}</p>
-          <p className='text-lg'>Marca: {product.brand}</p>
-          <p className='text-lg'>Existencias: {product.stock}</p>
-          <p className='text-lg'>Clasificación: {product.rating}</p>
-        </div>
-      )}
-      <div>
-        <button className="bg-[#d5d6c3] hover:bg-[#231f20] text-black hover:text-[#d5d6c3] font-bold py-1 px-7 mt-4 border transition duration-200 ease-in-out rounded-lg focus:ring-offset-2">
-          <a href="/" className="text-[#231f20] hover:text-[#d5d6c3]">VOLVER</a>
-        </button>
+<div className="text-[#d5d6c3] p-8">
+  <h1 className="text-4xl font-bold text-[#FF4655] mb-8 uppercase tracking-wide">
+    ¡Pago Exitoso!
+  </h1>
+
+  {/* Detalles de la transacción */}
+  {details ? (
+    <div className="bg-[#0F1923] p-6 rounded-lg border border-gray-800 shadow-lg 
+                    hover:shadow-red-500/40 transition-all duration-300">
+      <p className="text-gray-300 mb-2">Gracias por tu compra. Aquí están los detalles de tu transacción:</p>
+      <p className="text-lg"><strong className="text-[#FF4655]">Monto:</strong> {details.amount}</p>
+      <p className="text-lg"><strong className="text-[#FF4655]">Número de Orden:</strong> {details.buy_order}</p>
+      <p className="text-lg"><strong className="text-[#FF4655]">Fecha de la Transacción:</strong> {new Date(details.transaction_date).toLocaleString()}</p>
+      <p className="text-lg"><strong className="text-[#FF4655]">Código de Autorización:</strong> {details.authorization_code}</p>
+      <p className="text-lg"><strong className="text-[#FF4655]">Número de Tarjeta:</strong> **** **** **** {details.card_detail.card_number}</p>
+    </div>
+  ) : (
+    <p className="text-lg text-gray-400">No se encontraron detalles de la transacción. 7w7</p>
+  )}
+
+  {/* Información del producto comprado */}
+  {product && (
+    <div className="bg-[#0F1923] p-6 rounded-xl border border-gray-800 
+                    hover:border-[#FF4655] shadow-lg hover:shadow-red-500/40 
+                    transition-all duration-300 mt-8">
+      <h2 className="text-2xl font-semibold text-[#FF4655] mb-4">Detalles del Producto</h2>
+
+      <div className="relative mb-4">
+        <div className="absolute -inset-1 rounded-lg opacity-0 hover:opacity-40 
+                        bg-gradient-to-r from-[#FF4655] to-pink-600 blur-md 
+                        transition-opacity duration-300"></div>
+        <img 
+          src={product.images[0]} 
+          alt={product.title} 
+          className="w-full h-48 object-contain rounded-lg shadow-lg transition-transform duration-300 hover:scale-105" 
+          loading="lazy"
+        />
+      </div>
+
+      <p className="text-lg text-gray-300">{product.description}</p>
+      <p className="text-2xl font-bold bg-gradient-to-r from-[#FF4655] to-pink-500 bg-clip-text text-transparent">
+        {formattedPrice}
+      </p>
+
+      <div className="grid grid-cols-2 gap-4 text-gray-400 text-lg mt-4">
+        <p><span className="text-[#FF4655]">Categoría:</span> {product.category}</p>
+        <p><span className="text-[#FF4655]">Marca:</span> {product.brand}</p>
+        <p><span className="text-[#FF4655]">Stock:</span> {product.stock}</p>
+        <p><span className="text-[#FF4655]">Rating:</span> ⭐ {product.rating}</p>
       </div>
     </div>
+  )}
+
+  {/* Botón para volver */}
+  <div className="mt-6 flex justify-center">
+    <a href="/" className="bg-[#FF4655] hover:bg-[#d5d6c3] text-black hover:text-[#231f20] 
+                          font-bold py-2 px-8 rounded-lg transition duration-300 ease-in-out 
+                          border border-transparent hover:border-[#231f20]">
+      VOLVER
+    </a>
+  </div>
+</div>
   );
 };
 

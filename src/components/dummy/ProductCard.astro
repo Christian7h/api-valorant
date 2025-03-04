@@ -15,10 +15,55 @@ const { id, title, description, price, thumbnail } = Astro.props;
 const formattedPrice = formatPriceToCLP(price);
 ---
 
-<a href={`/dummy/products/${id}`} class="bg-valorant-dark p-4 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300">
-  <h2 class="text-2xl font-semibold text-valorant hover:underline">{title}</h2>
-  <img src={thumbnail} alt={title} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
-  <p class="text-lg">{description}</p>
-  <p class="text-lg font-bold text-valorant">{formattedPrice}</p>
-  <p class="text-xs font-bold text-gray-400">USD ${price}</p>
+<a 
+  href={`/dummy/products/${id}`} 
+  class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 hover:border-red-400 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-500/20"
+>
+  <!-- Background accent -->
+  <div class="absolute inset-0 bg-gradient-to-tr from-red-500/5 to-transparent opacity-50"></div>
+  
+  <!-- Content container -->
+  <div class="p-5 relative z-10">
+    <!-- Product title -->
+    <h2 class="text-2xl font-bold text-white mb-3 group-hover:text-red-400 transition-colors duration-300">
+      {title}
+    </h2>
+    
+    <!-- Image container with glow effect -->
+    <div class="relative mb-4">
+      <div class="absolute -inset-1 rounded-lg opacity-0 group-hover:opacity-40 bg-gradient-to-r from-red-500 to-pink-600 blur-md transition-opacity duration-300"></div>
+      <div class="relative bg-gray-800/50 p-3 rounded-lg w-full flex justify-center">
+        <img
+          src={thumbnail}
+          alt={title}
+          class="h-48 w-auto object-contain filter drop-shadow-lg group-hover:scale-105 transition-transform duration-300"
+          loading="lazy"
+        />
+      </div>
+    </div>
+    
+    <!-- Description -->
+    <p class="text-gray-300 mb-4 line-clamp-2">{description}</p>
+    
+    <!-- Price container -->
+    <div class="flex justify-between items-end mt-3">
+      <div>
+        <!-- Formatted price with bigger, more prominent styling -->
+        <p class="text-2xl font-bold bg-gradient-to-r from-red-400 to-pink-500 bg-clip-text text-transparent">
+          {formattedPrice}
+        </p>
+        
+        <!-- Original price in USD -->
+        <p class="text-xs font-medium text-gray-400">USD ${price}</p>
+      </div>
+      
+      <!-- View details button -->
+      <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold group-hover:text-red-400 transition-colors duration-300 flex items-center">
+        View Item
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </span>
+    </div>
+  </div>
 </a>

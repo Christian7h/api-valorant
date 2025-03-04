@@ -6,7 +6,18 @@ interface Props {
 
 const { slug, name } = Astro.props;
 ---
+<a 
+  href={`/dummy/products/category/${slug}`} 
+  class="group relative overflow-hidden rounded-lg bg-[#0F1923] p-3 border border-gray-800 
+         hover:border-[#FF4655] transform transition-all duration-300 hover:-translate-y-1 
+         hover:shadow-lg hover:shadow-red-500/40 text-center"
+>
+  <!-- Efecto de resplandor en hover -->
+  <div class="absolute inset-0 bg-gradient-to-tr from-[#FF4655]/10 to-transparent opacity-50"></div>
 
-<a href={`/dummy/products/category/${slug}`} class="bg-valorant-dark p-2 rounded-lg shadow-lg block hover:shadow-2xl transition-shadow duration-300 text-center">
-  <span class="text-valorant hover:underline">{name}</span>
+  <!-- Contenido -->
+  <span class="text-white text-lg font-bold tracking-wide uppercase group-hover:text-[#FF4655] 
+               transition-colors duration-300">
+    {name}
+  </span>
 </a>

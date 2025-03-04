@@ -82,23 +82,48 @@ interface Character {
       <p class="text-red-500">{error}</p>
     ) : (
       <div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          {characters.map((character: Character) => (
-            <Fragment key={character.id}>
-              <a href={`/rickandmorty/characters/${character.id}`} class="block bg-valorant-dark p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
-                <img src={character.image} alt={character.name} class="w-full h-48 object-contain mb-4 rounded-lg" loading="lazy" />
-                <h2 class="text-2xl font-semibold text-valorant mb-2">{character.name}</h2>
-                <p class={`text-lg status status--${character.status.toLowerCase()}`}>
-                  <span class="status__icon"></span> <span class="text-lg text-gray-500"> {character.status}</span> - {character.species}
-                </p>
-                <p class="text-lg text-gray-500">Género: <span class="font-medium text-valorant-light">{character.gender}</span></p>
-                <p class="text-lg text-gray-500">Origen: <span class="font-medium text-valorant-light">{character.origin.name}</span></p>
-                <p class="text-lg text-gray-500">Ubicación: <span class="font-medium text-valorant-light">{character.location.name}</span></p>
-              </a>
-              
-            </Fragment>
-          ))}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 p-6">
+  {characters.map((character: Character) => (
+    <Fragment key={character.id}>
+      <a 
+        href={`/rickandmorty/characters/${character.id}`} 
+        class="block bg-gradient-to-br from-valorant-900 to-valorant-dark rounded-2xl shadow-xl hover:shadow-3xl transition-shadow duration-300 transform hover:scale-[1.02] hover:-translate-y-2 relative overflow-hidden"
+      >
+        <div class="aspect-square relative">
+          <img 
+            src={character.image} 
+            alt={character.name}
+            class="w-full h-full object-cover border-2 border-white rounded-2xl mb-4 p-4 relative z-10"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
         </div>
+        <div class="p-6 space-y-3">
+          <h2 
+            class="text-2xl font-bold text-valorant bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text"
+          >
+            {character.name}
+          </h2>
+          <div class="flex items-center justify-between text-sm">
+            
+            <p class={`text-lg status status--${character.status.toLowerCase()}`}>
+            <span class="status__icon"></span>
+            <span class="text-gray-500">
+              {character.status} - {character.species}
+            </span>
+          </p>
+          </div>
+          <div class="text-sm text-gray-300">
+            <p>Género: <span class="font-medium text-valorant-light">{character.gender}</span></p>
+            <p>Origen: <span class="font-medium text-valorant-light">{character.origin?.name}</span></p>
+            <p>Ubicación: <span class="font-medium text-valorant-light">{character.location?.name}</span></p>
+          </div>
+        </div>
+      </a>
+      
+    </Fragment>
+  ))}
+</div>
 
         <PaginationR totalPages={totalPages} currentPage={currentPage} />
       </div>
