@@ -249,6 +249,7 @@ const brandsData = await getApiData('/brands');
         historyLabel: "Historia",
         trajectoryLabel: "Trayectoria",
         viewVehicles: "Ver Vehículos",
+        viewDetail: "Ver Detalle",
         aboutTitle: "Acerca de esta API",
         aboutDescription: "Esta API proporciona información detallada sobre marcas de automóviles y vehículos, incluyendo historia, especificaciones y datos técnicos.",
         endpointsListTitle: "Endpoints Disponibles:",
@@ -284,6 +285,7 @@ const brandsData = await getApiData('/brands');
         historyLabel: "History",
         trajectoryLabel: "Trajectory",
         viewVehicles: "View Vehicles",
+        viewDetail: "View Details",
         aboutTitle: "About this API",
         aboutDescription: "This API provides detailed information about automobile brands and vehicles, including history, specifications and technical data.",
         endpointsListTitle: "Available Endpoints:",
@@ -367,6 +369,9 @@ const brandsData = await getApiData('/brands');
       });
       document.querySelectorAll('.view-vehicles-text').forEach(el => {
         el.textContent = lang.viewVehicles;
+      });
+      document.querySelectorAll('.view-detail-text').forEach(el => {
+        el.textContent = lang.viewDetail;
       });
     }
 
@@ -456,18 +461,102 @@ const brandsData = await getApiData('/brands');
       vehicles.forEach(vehicle => {
         const vehicleCard = document.createElement('div');
         vehicleCard.className = 'bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700';
+        
+        // Obtener datos traducidos
+        const vehicleName = vehicle.translations?.[currentLanguage]?.name || vehicle.name || vehicle.model;
+        const vehicleDescription = vehicle.translations?.[currentLanguage]?.description || vehicle.description || 'Sin descripción';
+        const vehicleType = vehicle.translations?.[currentLanguage]?.type || vehicle.type || 'N/A';
+        
+        // Formatear precio
+        const formattedPrice = vehicle.price ? new Intl.NumberFormat('es-CL', { 
+          style: 'currency', 
+          currency: 'USD' 
+        }).format(parseInt(vehicle.price)) : 'Precio no disponible';
+        
         vehicleCard.innerHTML = `
-          <h3 class="text-2xl font-bold text-valorant mb-3">${vehicle.model || vehicle.name}</h3>
-          <div class="space-y-2">
-            <p class="text-white"><strong>Marca:</strong> ${vehicle.brand}</p>
-            <p class="text-white"><strong>Año:</strong> ${vehicle.year}</p>
-            <p class="text-white"><strong>Tipo:</strong> ${vehicle.type || 'N/A'}</p>
-            <p class="text-gray-300 text-sm">${vehicle.description || 'Sin descripción'}</p>
-            <div class="pt-2 border-t border-gray-600">
-              <span class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
-                ID: ${vehicle.id}
-              </span>
+          <div class="flex items-start space-x-4 mb-4">
+            ${vehicle.image ? `
+              <img 
+                src="https://www.crisdeus.site${vehicle.image}" 
+                alt="${vehicleName}"
+                class="w-20 h-20 object-cover rounded-lg border border-gray-600"
+                onerror="this.style.display='none'"
+              >
+            ` : ''}
+            <div class="flex-1">
+              <h3 class="text-2xl font-bold text-valorant mb-2">${vehicleName}</h3>
+              <p class="text-gray-300 text-sm">${vehicleDescription}</p>
             </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <span class="text-gray-400">Marca:</span>
+                <span class="text-white">${vehicle.brand || 'N/A'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Año:</span>
+                <span class="text-white">${vehicle.year || 'N/A'}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Tipo:</span>
+                <span class="text-white">${vehicleType}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Precio:</span>
+                <span class="text-green-400 font-semibold">${formattedPrice}</span>
+              </div>
+            </div>
+            
+            <div class="space-y-2">
+              ${vehicle.specs ? `
+                <div>
+                  <h4 class="text-sm font-semibold text-gray-300 mb-1">Especificaciones:</h4>
+                  <div class="space-y-1 text-sm">
+                    ${vehicle.specs.power ? `<div class="flex justify-between"><span class="text-gray-400">Potencia:</span><span class="text-white">${vehicle.specs.power}</span></div>` : ''}
+                    ${vehicle.specs.acceleration ? `<div class="flex justify-between"><span class="text-gray-400">0-100 km/h:</span><span class="text-white">${vehicle.specs.acceleration}</span></div>` : ''}
+                    ${vehicle.specs.topSpeed ? `<div class="flex justify-between"><span class="text-gray-400">Vel. Máx:</span><span class="text-white">${vehicle.specs.topSpeed}</span></div>` : ''}
+                  </div>
+                </div>
+              ` : ''}
+              
+              ${vehicle.stock !== undefined ? `
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Stock:</span>
+                  <span class="text-white ${vehicle.stock > 0 ? 'text-green-400' : 'text-red-400'}">${vehicle.stock} unidades</span>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+          
+          ${vehicle.images && vehicle.images.length > 1 ? `
+            <div class="mb-4">
+              <h4 class="text-sm font-semibold text-gray-300 mb-2">Galería (${vehicle.images.length} imágenes):</h4>
+              <div class="flex space-x-2 overflow-x-auto pb-2">
+                ${vehicle.images.slice(0, 5).map((img: string) => `
+                  <img 
+                    src="https://www.crisdeus.site${img}" 
+                    alt="${vehicleName}"
+                    class="w-16 h-16 object-cover rounded border border-gray-600 flex-shrink-0"
+                    onerror="this.style.display='none'"
+                  >
+                `).join('')}
+                ${vehicle.images.length > 5 ? `<div class="flex items-center justify-center w-16 h-16 bg-gray-700 rounded border border-gray-600 text-xs text-gray-400">+${vehicle.images.length - 5}</div>` : ''}
+              </div>
+            </div>
+          ` : ''}
+          
+          <div class="pt-4 border-t border-gray-600 flex justify-between items-center">
+            <span class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
+              ID: ${vehicle.id}
+            </span>
+            <a 
+              href="/vehicle/${vehicle.id}"
+              class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-200"
+            >
+              <span class="view-detail-text">${currentLanguage === 'es' ? 'Ver Detalle' : 'View Details'}</span>
+            </a>
           </div>
         `;
         container.appendChild(vehicleCard);

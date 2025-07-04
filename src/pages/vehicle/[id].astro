@@ -1,0 +1,509 @@
+---
+// filepath: c:\Users\crist\Desktop\ASTRO\api-valorant\src\pages\vehicle\[id].astro
+import Layout from "../../layouts/Layout.astro";
+
+// Obtener el ID del vehículo desde la URL
+const { id } = Astro.params;
+
+// Función para obtener el vehículo específico
+async function getVehicle(vehicleId: string) {
+  try {
+    const response = await fetch(`https://www.crisdeus.site/vehicles/${vehicleId}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching vehicle ${vehicleId}:`, error);
+    return null;
+  }
+}
+
+// Obtener los datos del vehículo
+const vehicleData = await getVehicle(id as string);
+const vehicle = vehicleData?.data;
+---
+
+<Layout title={`Vehículo ${vehicle?.translations?.es?.name || vehicle?.name || vehicle?.model || 'Detalle'} - VPS API`}>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Navegación -->
+    <div class="mb-8">
+      <nav class="flex items-center space-x-2 text-sm">
+        <a href="/vps" class="text-valorant hover:text-valorant-dark transition duration-200">
+          ← VPS API
+        </a>
+        <span class="text-gray-400">/</span>
+        <span class="text-gray-300">Vehículo {vehicle?.translations?.es?.name || vehicle?.name || vehicle?.model || id}</span>
+      </nav>
+    </div>
+
+    <!-- Selector de idioma -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-bold text-valorant">
+        <span id="vehicle-title">Detalle del Vehículo</span>
+      </h1>
+      
+      <div class="flex items-center space-x-2">
+        <span class="text-white text-sm" id="language-label">Idioma:</span>
+        <button 
+          id="language-toggle" 
+          class="bg-valorant hover:bg-valorant-dark text-white px-4 py-2 rounded-lg transition duration-200 flex items-center space-x-2"
+        >
+          <span id="current-lang">🇪🇸 ES</span>
+        </button>
+      </div>
+    </div>
+
+    {vehicleData && vehicleData.success ? (
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Información principal del vehículo -->
+        <div class="lg:col-span-2">
+          <div class="bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700">
+            <div class="flex justify-between items-start mb-6">
+              <div>
+                <h2 class="text-3xl font-bold text-valorant mb-2" id="vehicle-name">
+                  {vehicle.translations?.es?.name || vehicle.name || vehicle.model}
+                </h2>
+                <p class="text-xl text-white">{vehicle.brand}</p>
+              </div>
+              <div class="text-right space-y-2">
+                <span class="inline-block bg-blue-600 text-white text-sm px-3 py-1 rounded-full">
+                  {vehicle.year}
+                </span>
+                {vehicle.price && (
+                  <div class="text-green-400 font-bold text-lg">
+                    {new Intl.NumberFormat('es-CL', { 
+                      style: 'currency', 
+                      currency: 'USD' 
+                    }).format(parseInt(vehicle.price))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <!-- Imagen principal -->
+            {vehicle.image && (
+              <div class="mb-6">
+                <img 
+                  src={`https://www.crisdeus.site${vehicle.image}`}
+                  alt={vehicle.translations?.es?.name || vehicle.name || vehicle.model}
+                  class="w-full h-64 md:h-80 object-cover rounded-lg border-2 border-valorant shadow-lg"
+                />
+              </div>
+            )}
+
+            <!-- Galería de imágenes adicionales -->
+            {vehicle.images && vehicle.images.length > 1 && (
+              <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-300 mb-3" id="gallery-title">
+                  Galería de Imágenes ({vehicle.images.length})
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {vehicle.images.slice(0, 8).map((img: string, index: number) => (
+                    <img 
+                      src={`https://www.crisdeus.site${img}`}
+                      alt={`${vehicle.translations?.es?.name || vehicle.name} - Imagen ${index + 1}`}
+                      class="w-full h-24 object-cover rounded border border-gray-600 hover:border-valorant transition duration-200 cursor-pointer"
+                      onclick={`openImageModal('https://www.crisdeus.site${img}')`}
+                    />
+                  ))}
+                </div>
+                {vehicle.images.length > 8 && (
+                  <p class="text-gray-400 text-sm mt-2">
+                    Y {vehicle.images.length - 8} imágenes más...
+                  </p>
+                )}
+              </div>
+            )}
+
+            <!-- Información detallada -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-4">
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-300 mb-2" id="brand-label">Marca</h3>
+                  <p class="text-white text-lg">{vehicle.brand}</p>
+                </div>
+                
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-300 mb-2" id="model-label">Modelo</h3>
+                  <p class="text-white text-lg" id="vehicle-model">
+                    {vehicle.translations?.es?.name || vehicle.name || vehicle.model}
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-300 mb-2" id="year-label">Año</h3>
+                  <p class="text-white text-lg">{vehicle.year}</p>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                {vehicle.price && (
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-300 mb-2" id="price-label">Precio</h3>
+                    <p class="text-green-400 text-2xl font-bold">
+                      {new Intl.NumberFormat('es-CL', { 
+                        style: 'currency', 
+                        currency: 'USD' 
+                      }).format(parseInt(vehicle.price))}
+                    </p>
+                  </div>
+                )}
+                
+                {vehicle.stock !== undefined && (
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-300 mb-2" id="stock-label">Disponibilidad</h3>
+                    <p class={`text-lg font-semibold ${vehicle.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {vehicle.stock > 0 ? `${vehicle.stock} unidades disponibles` : 'Sin stock'}
+                    </p>
+                  </div>
+                )}
+
+                {vehicle.type && (
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-300 mb-2" id="type-label">Tipo</h3>
+                    <p class="text-white text-lg" id="vehicle-type">
+                      {vehicle.translations?.es?.type || vehicle.type}
+                    </p>
+                  </div>
+                )}
+                
+                {vehicle.engine && (
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-300 mb-2" id="engine-label">Motor</h3>
+                    <p class="text-white text-lg">{vehicle.engine}</p>
+                  </div>
+                )}
+                
+                {vehicle.fuelType && (
+                  <div>
+                    <h3 class="text-lg font-semibold text-gray-300 mb-2" id="fuel-label">Combustible</h3>
+                    <p class="text-white text-lg">{vehicle.fuelType}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {vehicle.description && (
+              <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-300 mb-3" id="description-label">Descripción</h3>
+                <p class="text-gray-200 leading-relaxed" id="vehicle-description">
+                  {vehicle.translations?.es?.description || vehicle.description}
+                </p>
+              </div>
+            )}
+
+            <!-- Especificaciones técnicas mejoradas -->
+            {vehicle.specs && (
+              <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-300 mb-4" id="specs-title">Especificaciones Técnicas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {vehicle.specs.power && (
+                    <div class="bg-gray-700 p-4 rounded-lg text-center">
+                      <h4 class="text-sm text-gray-400 mb-2" id="power-label">Potencia</h4>
+                      <span class="text-xl font-bold text-white">{vehicle.specs.power}</span>
+                    </div>
+                  )}
+                  {vehicle.specs.acceleration && (
+                    <div class="bg-gray-700 p-4 rounded-lg text-center">
+                      <h4 class="text-sm text-gray-400 mb-2" id="acceleration-label">0-100 km/h</h4>
+                      <span class="text-xl font-bold text-white">{vehicle.specs.acceleration}</span>
+                    </div>
+                  )}
+                  {vehicle.specs.topSpeed && (
+                    <div class="bg-gray-700 p-4 rounded-lg text-center">
+                      <h4 class="text-sm text-gray-400 mb-2" id="top-speed-label">Velocidad Máxima</h4>
+                      <span class="text-xl font-bold text-white">{vehicle.specs.topSpeed}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Panel lateral con información adicional -->
+        <div class="space-y-6">
+          <!-- Información de la API -->
+          <div class="bg-gray-800 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-white mb-3" id="api-info-title">Información de la API</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-400" id="status-label">Estado:</span>
+                <span class="text-green-400">✓ Exitoso</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400" id="time-label">Tiempo:</span>
+                <span class="text-white">{vehicleData.responseTime}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">Cache:</span>
+                <span class="text-white">{vehicleData.cached ? "Sí" : "No"}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-400">ID:</span>
+                <span class="text-white">{vehicle.id}</span>
+              </div>
+              {vehicle.brandId && (
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Brand ID:</span>
+                  <span class="text-white">{vehicle.brandId}</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <!-- Especificaciones técnicas si están disponibles -->
+          {(vehicle.horsepower || vehicle.transmission || vehicle.doors) && (
+            <div class="bg-gray-800 rounded-lg p-4">
+              <h3 class="text-lg font-semibold text-white mb-3" id="specs-title">Especificaciones</h3>
+              <div class="space-y-2 text-sm">
+                {vehicle.horsepower && (
+                  <div class="flex justify-between">
+                    <span class="text-gray-400" id="hp-label">Potencia:</span>
+                    <span class="text-white">{vehicle.horsepower} HP</span>
+                  </div>
+                )}
+                {vehicle.transmission && (
+                  <div class="flex justify-between">
+                    <span class="text-gray-400" id="transmission-label">Transmisión:</span>
+                    <span class="text-white">{vehicle.transmission}</span>
+                  </div>
+                )}
+                {vehicle.doors && (
+                  <div class="flex justify-between">
+                    <span class="text-gray-400" id="doors-label">Puertas:</span>
+                    <span class="text-white">{vehicle.doors}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <!-- Acciones -->
+          <div class="bg-gray-800 rounded-lg p-4">
+            <h3 class="text-lg font-semibold text-white mb-3" id="actions-title">Acciones</h3>
+            <div class="space-y-2">
+              {vehicle.brandId && (
+                <a 
+                  href={`/brand/${vehicle.brandId}`}
+                  class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg text-center transition duration-200"
+                >
+                  <span id="view-brand-text">Ver Marca</span>
+                </a>
+              )}
+              <a 
+                href="/vps"
+                class="block w-full bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg text-center transition duration-200"
+              >
+                <span id="back-api-text">Volver a API</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <!-- Error al cargar -->
+      <div class="bg-red-900 border border-red-700 rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-red-300 mb-2" id="error-title">Error al cargar el vehículo</h2>
+        <p class="text-red-200 mb-4" id="error-message">
+          No se pudo obtener la información del vehículo con ID: {id}
+        </p>
+        <a 
+          href="/vps"
+          class="inline-block bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition duration-200"
+        >
+          <span id="back-text">Volver a la API</span>
+        </a>
+      </div>
+    )}
+  </div>
+
+  {/* Modal para visualizar imágenes */}
+    <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 items-center justify-center p-4" style="display: none;">
+      <div class="relative max-w-4xl max-h-full">
+        <button 
+          onclick="closeImageModal()"
+          class="absolute top-4 right-4 text-white text-2xl bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center hover:bg-opacity-75 transition duration-200"
+        >
+          ×
+        </button>
+        <img id="modal-image" src="" alt="" class="max-w-full max-h-full object-contain rounded-lg">
+      </div>
+    </div>
+
+    
+  </div>
+
+  <script define:vars={{ vehicle }}>
+    // Traducciones completas
+    const translations = {
+      es: {
+        vehicleTitle: "Detalle del Vehículo",
+        languageLabel: "Idioma:",
+        brandLabel: "Marca",
+        modelLabel: "Modelo", 
+        yearLabel: "Año",
+        typeLabel: "Tipo",
+        priceLabel: "Precio",
+        stockLabel: "Disponibilidad",
+        engineLabel: "Motor",
+        fuelLabel: "Combustible",
+        descriptionLabel: "Descripción",
+        specsTitle: "Especificaciones Técnicas",
+        powerLabel: "Potencia",
+        accelerationLabel: "0-100 km/h",
+        topSpeedLabel: "Velocidad Máxima",
+        galleryTitle: "Galería de Imágenes",
+        apiInfoTitle: "Información de la API",
+        statusLabel: "Estado:",
+        timeLabel: "Tiempo:",
+        actionsTitle: "Acciones",
+        viewBrandText: "Ver Marca",
+        backApiText: "Volver a API",
+        translationsTitle: "Traducciones Disponibles",
+        hpLabel: "Potencia:",
+        transmissionLabel: "Transmisión:",
+        doorsLabel: "Puertas:",
+        errorTitle: "Error al cargar el vehículo",
+        errorMessage: "No se pudo obtener la información del vehículo.",
+        backText: "Volver a la API",
+        currentLang: "🇪🇸 ES"
+      },
+      en: {
+        vehicleTitle: "Vehicle Details",
+        languageLabel: "Language:",
+        brandLabel: "Brand",
+        modelLabel: "Model",
+        yearLabel: "Year", 
+        typeLabel: "Type",
+        priceLabel: "Price",
+        stockLabel: "Availability",
+        engineLabel: "Engine",
+        fuelLabel: "Fuel",
+        descriptionLabel: "Description",
+        specsTitle: "Technical Specifications",
+        powerLabel: "Power",
+        accelerationLabel: "0-100 km/h",
+        topSpeedLabel: "Top Speed",
+        galleryTitle: "Image Gallery",
+        apiInfoTitle: "API Information",
+        statusLabel: "Status:",
+        timeLabel: "Time:",
+        actionsTitle: "Actions",
+        viewBrandText: "View Brand",
+        backApiText: "Back to API",
+        translationsTitle: "Available Translations",
+        hpLabel: "Horsepower:",
+        transmissionLabel: "Transmission:",
+        doorsLabel: "Doors:",
+        errorTitle: "Error loading vehicle",
+        errorMessage: "Could not fetch vehicle information.",
+        backText: "Back to API",
+        currentLang: "🇬🇧 EN"
+      }
+    };
+
+    let currentLanguage = 'es';
+    // vehicleData ya está disponible desde define:vars
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+      updateTexts();
+      updateVehicleContent();
+    }
+
+    function updateTexts() {
+      const lang = translations[currentLanguage];
+      
+      // Actualizar textos estáticos
+      const elements = [
+        'vehicle-title', 'language-label', 'brand-label', 'model-label', 
+        'year-label', 'type-label', 'price-label', 'stock-label', 'engine-label', 
+        'fuel-label', 'description-label', 'specs-title', 'power-label', 
+        'acceleration-label', 'top-speed-label', 'gallery-title', 'api-info-title', 
+        'status-label', 'time-label', 'actions-title', 'view-brand-text', 
+        'back-api-text', 'translations-title', 'hp-label', 'transmission-label', 
+        'doors-label', 'error-title', 'error-message', 'back-text', 'current-lang'
+      ];
+
+      elements.forEach(id => {
+        const element = document.getElementById(id);
+        const key = id.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()).replace('-', '');
+        if (element && lang[key]) {
+          element.textContent = lang[key];
+        }
+      });
+    }
+
+    function updateVehicleContent() {
+      if (!vehicle || !vehicle.translations) return;
+      
+      const translation = vehicle.translations[currentLanguage];
+      if (!translation) return;
+
+      // Actualizar contenido traducible del vehículo
+      const vehicleNameEl = document.getElementById('vehicle-name');
+      const vehicleModelEl = document.getElementById('vehicle-model');
+      const vehicleTypeEl = document.getElementById('vehicle-type');
+      const vehicleDescEl = document.getElementById('vehicle-description');
+
+      if (vehicleNameEl && translation.name) {
+        vehicleNameEl.textContent = translation.name;
+      }
+      if (vehicleModelEl && translation.name) {
+        vehicleModelEl.textContent = translation.name;
+      }
+      if (vehicleTypeEl && translation.type) {
+        vehicleTypeEl.textContent = translation.type;
+      }
+      if (vehicleDescEl && translation.description) {
+        vehicleDescEl.textContent = translation.description;
+      }
+    }
+
+    // Funciones para el modal de imágenes
+    function openImageModal(imageSrc) {
+      const modal = document.getElementById('image-modal');
+      const modalImage = document.getElementById('modal-image');
+      
+      if (modal && modalImage) {
+        modalImage.src = imageSrc;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('image-modal');
+      
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const languageToggle = document.getElementById('language-toggle');
+      if (languageToggle) {
+        languageToggle.addEventListener('click', toggleLanguage);
+      }
+
+      // Cerrar modal con escape
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeImageModal();
+        }
+      });
+
+      // Cerrar modal haciendo clic fuera de la imagen
+      const imageModal = document.getElementById('image-modal');
+      if (imageModal) {
+        imageModal.addEventListener('click', function(e) {
+          if (e.target === imageModal) {
+            closeImageModal();
+          }
+        });
+      }
+    });
+  </script>
+</Layout>

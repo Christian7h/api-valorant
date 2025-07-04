@@ -1,0 +1,350 @@
+---
+// filepath: c:\Users\crist\Desktop\ASTRO\api-valorant\src\pages\brand\[id].astro
+import Layout from "../../layouts/Layout.astro";
+
+// Obtener el ID de la marca desde la URL
+const { id } = Astro.params;
+
+// Función para obtener la marca específica
+async function getBrand(brandId: string) {
+  try {
+    const response = await fetch(`https://www.crisdeus.site/brands/${brandId}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching brand ${brandId}:`, error);
+    return null;
+  }
+}
+
+// Función para obtener vehículos de la marca
+async function getBrandVehicles(brandId: string) {
+  try {
+    const response = await fetch(`https://www.crisdeus.site/brands/${brandId}/vehicles`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching vehicles for brand ${brandId}:`, error);
+    return null;
+  }
+}
+
+// Obtener los datos
+const brandData = await getBrand(id as string);
+const vehiclesData = await getBrandVehicles(id as string);
+const brand = brandData?.data;
+---
+
+<Layout title={`${brand?.name || 'Marca'} - VPS API`}>
+  <div class="container mx-auto px-4 py-8">
+    <!-- Navegación -->
+    <div class="mb-8">
+      <nav class="flex items-center space-x-2 text-sm">
+        <a href="/vps" class="text-valorant hover:text-valorant-dark transition duration-200">
+          ← VPS API
+        </a>
+        <span class="text-gray-400">/</span>
+        <span class="text-gray-300">Marca {brand?.name || id}</span>
+      </nav>
+    </div>
+
+    <!-- Selector de idioma -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-bold text-valorant">
+        <span id="brand-title">Detalle de la Marca</span>
+      </h1>
+      
+      <div class="flex items-center space-x-2">
+        <span class="text-white text-sm" id="language-label">Idioma:</span>
+        <button 
+          id="language-toggle" 
+          class="bg-valorant hover:bg-valorant-dark text-white px-4 py-2 rounded-lg transition duration-200 flex items-center space-x-2"
+        >
+          <span id="current-lang">🇪🇸 ES</span>
+        </button>
+      </div>
+    </div>
+
+    {brandData && brandData.success ? (
+      <div class="space-y-8">
+        <!-- Información de la marca -->
+        <div class="bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700">
+          <div class="flex justify-between items-start mb-6">
+            <div>
+              <h2 class="text-3xl font-bold text-valorant mb-2">{brand.name}</h2>
+              <p class="text-xl text-white brand-description" data-es={brand.translations.es.description} data-en={brand.translations.en.description}>
+                {brand.translations.es.description}
+              </p>
+            </div>
+            <div class="text-right">
+              <span class="inline-block bg-blue-600 text-white text-sm px-3 py-1 rounded-full">
+                <span id="founded-label">Fundada:</span> {brand.foundation}
+              </span>
+            </div>
+          </div>
+
+          <!-- Información detallada -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-xl font-semibold text-gray-300 mb-3" id="history-label">Historia</h3>
+              <p class="text-gray-200 leading-relaxed brand-history" data-es={brand.translations.es.history} data-en={brand.translations.en.history}>
+                {brand.translations.es.history}
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-semibold text-gray-300 mb-3" id="trajectory-label">Trayectoria</h3>
+              <p class="text-gray-200 leading-relaxed brand-trajectory" data-es={brand.translations.es.trajectory} data-en={brand.translations.en.trajectory}>
+                {brand.translations.es.trajectory}
+              </p>
+            </div>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="mt-6 pt-6 border-t border-gray-600">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="bg-gray-800 p-4 rounded-lg">
+                <h4 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-1" id="brand-id-label">ID de Marca</h4>
+                <p class="text-white text-lg">{brand.id}</p>
+              </div>
+              <div class="bg-gray-800 p-4 rounded-lg">
+                <h4 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-1" id="founded-year-label">Año de Fundación</h4>
+                <p class="text-white text-lg">{brand.foundation}</p>
+              </div>
+              <div class="bg-gray-800 p-4 rounded-lg">
+                <h4 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-1" id="vehicles-count-label">Vehículos</h4>
+                <p class="text-white text-lg">{vehiclesData?.count || 0}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehículos de la marca -->
+        {vehiclesData && vehiclesData.success && vehiclesData.data?.length > 0 ? (
+          <div>
+            <h2 class="text-2xl font-bold text-white mb-6" id="vehicles-title">
+              Vehículos de {brand.name}
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {vehiclesData.data.map((vehicle: any) => (
+                <div class="bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700">
+                  <h3 class="text-xl font-bold text-valorant mb-3">{vehicle.model}</h3>
+                  <div class="space-y-2">
+                    <p class="text-white"><strong id="year-label">Año:</strong> {vehicle.year}</p>
+                    {vehicle.type && (
+                      <p class="text-white"><strong id="type-label">Tipo:</strong> {vehicle.type}</p>
+                    )}
+                    {vehicle.description && (
+                      <p class="text-gray-300 text-sm">{vehicle.description}</p>
+                    )}
+                    <div class="pt-3 flex justify-between items-center">
+                      <span class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
+                        ID: {vehicle.id}
+                      </span>
+                      <a 
+                        href={`/vehicle/${vehicle.id}`}
+                        class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded transition duration-200"
+                      >
+                        <span id="view-detail-text">Ver Detalle</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div class="bg-gray-800 rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-white mb-2" id="no-vehicles-title">Sin Vehículos</h2>
+            <p class="text-gray-300" id="no-vehicles-message">
+              No se encontraron vehículos para esta marca en la base de datos.
+            </p>
+          </div>
+        )}
+
+        <!-- Información de la API -->
+        <div class="bg-gray-800 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-white mb-4" id="api-info-title">Información de la API</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 class="text-sm font-semibold text-gray-300 mb-2" id="brand-api-label">Datos de Marca</h4>
+              <div class="space-y-1 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-400" id="status-label">Estado:</span>
+                  <span class="text-green-400">✓ Exitoso</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400" id="time-label">Tiempo:</span>
+                  <span class="text-white">{brandData.responseTime}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-400">Cache:</span>
+                  <span class="text-white">{brandData.cached ? "Sí" : "No"}</span>
+                </div>
+              </div>
+            </div>
+            {vehiclesData && (
+              <div>
+                <h4 class="text-sm font-semibold text-gray-300 mb-2" id="vehicles-api-label">Datos de Vehículos</h4>
+                <div class="space-y-1 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-400" id="vehicles-status-label">Estado:</span>
+                    <span class="text-green-400">✓ Exitoso</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400" id="vehicles-time-label">Tiempo:</span>
+                    <span class="text-white">{vehiclesData.responseTime}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-400" id="vehicles-count-api-label">Total:</span>
+                    <span class="text-white">{vehiclesData.count}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <div class="mt-4 pt-4 border-t border-gray-600">
+            <a 
+              href="/vps"
+              class="inline-block bg-valorant hover:bg-valorant-dark text-white py-2 px-4 rounded-lg transition duration-200"
+            >
+              <span id="back-api-text">← Volver a la API</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <!-- Error al cargar -->
+      <div class="bg-red-900 border border-red-700 rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-red-300 mb-2" id="error-title">Error al cargar la marca</h2>
+        <p class="text-red-200 mb-4" id="error-message">
+          No se pudo obtener la información de la marca con ID: {id}
+        </p>
+        <a 
+          href="/vps"
+          class="inline-block bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition duration-200"
+        >
+          <span id="back-text">Volver a la API</span>
+        </a>
+      </div>
+    )}
+  </div>
+
+  <script>
+    // Traducciones
+    const translations = {
+      es: {
+        brandTitle: "Detalle de la Marca",
+        languageLabel: "Idioma:",
+        foundedLabel: "Fundada:",
+        historyLabel: "Historia",
+        trajectoryLabel: "Trayectoria",
+        brandIdLabel: "ID de Marca",
+        foundedYearLabel: "Año de Fundación",
+        vehiclesCountLabel: "Vehículos",
+        vehiclesTitle: "Vehículos de",
+        yearLabel: "Año:",
+        typeLabel: "Tipo:",
+        viewDetailText: "Ver Detalle",
+        noVehiclesTitle: "Sin Vehículos",
+        noVehiclesMessage: "No se encontraron vehículos para esta marca en la base de datos.",
+        apiInfoTitle: "Información de la API",
+        brandApiLabel: "Datos de Marca",
+        statusLabel: "Estado:",
+        timeLabel: "Tiempo:",
+        vehiclesApiLabel: "Datos de Vehículos",
+        vehiclesStatusLabel: "Estado:",
+        vehiclesTimeLabel: "Tiempo:",
+        vehiclesCountApiLabel: "Total:",
+        backApiText: "← Volver a la API",
+        errorTitle: "Error al cargar la marca",
+        errorMessage: "No se pudo obtener la información de la marca.",
+        backText: "Volver a la API",
+        currentLang: "🇪🇸 ES"
+      },
+      en: {
+        brandTitle: "Brand Details",
+        languageLabel: "Language:",
+        foundedLabel: "Founded:",
+        historyLabel: "History",
+        trajectoryLabel: "Trajectory",
+        brandIdLabel: "Brand ID",
+        foundedYearLabel: "Founded Year",
+        vehiclesCountLabel: "Vehicles",
+        vehiclesTitle: "Vehicles from",
+        yearLabel: "Year:",
+        typeLabel: "Type:",
+        viewDetailText: "View Details",
+        noVehiclesTitle: "No Vehicles",
+        noVehiclesMessage: "No vehicles found for this brand in the database.",
+        apiInfoTitle: "API Information",
+        brandApiLabel: "Brand Data",
+        statusLabel: "Status:",
+        timeLabel: "Time:",
+        vehiclesApiLabel: "Vehicles Data",
+        vehiclesStatusLabel: "Status:",
+        vehiclesTimeLabel: "Time:",
+        vehiclesCountApiLabel: "Total:",
+        backApiText: "← Back to API",
+        errorTitle: "Error loading brand",
+        errorMessage: "Could not fetch brand information.",
+        backText: "Back to API",
+        currentLang: "🇬🇧 EN"
+      }
+    };
+
+    let currentLanguage = 'es';
+
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+      updateTexts();
+      updateBrandData();
+    }
+
+    function updateTexts() {
+      const lang = translations[currentLanguage as keyof typeof translations];
+      
+      // Actualizar textos con verificación null
+      const elements = [
+        'brand-title', 'language-label', 'founded-label', 'history-label',
+        'trajectory-label', 'brand-id-label', 'founded-year-label', 'vehicles-count-label',
+        'year-label', 'type-label', 'view-detail-text', 'no-vehicles-title',
+        'no-vehicles-message', 'api-info-title', 'brand-api-label', 'status-label',
+        'time-label', 'vehicles-api-label', 'vehicles-status-label', 'vehicles-time-label',
+        'vehicles-count-api-label', 'back-api-text', 'error-title', 'error-message',
+        'back-text', 'current-lang'
+      ];
+
+      elements.forEach(id => {
+        const element = document.getElementById(id);
+        const key = id.replace(/-/g, '') as keyof typeof lang;
+        if (element && lang[key]) {
+          element.textContent = lang[key];
+        }
+      });
+    }
+
+    function updateBrandData() {
+      // Actualizar contenido de las marcas con traducciones
+      document.querySelectorAll('.brand-description').forEach(el => {
+        const content = el.getAttribute(`data-${currentLanguage}`);
+        if (content) el.textContent = content;
+      });
+      document.querySelectorAll('.brand-history').forEach(el => {
+        const content = el.getAttribute(`data-${currentLanguage}`);
+        if (content) el.textContent = content;
+      });
+      document.querySelectorAll('.brand-trajectory').forEach(el => {
+        const content = el.getAttribute(`data-${currentLanguage}`);
+        if (content) el.textContent = content;
+      });
+    }
+
+    // Event listener para el botón de idioma
+    const languageToggle = document.getElementById('language-toggle');
+    if (languageToggle) {
+      languageToggle.addEventListener('click', toggleLanguage);
+    }
+  </script>
+</Layout>
