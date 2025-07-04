@@ -2,20 +2,20 @@
 // filepath: c:\Users\crist\Desktop\ASTRO\api-valorant\src\pages\vps.astro
 import Layout from "../layouts/Layout.astro";
 
-// Función para obtener las marcas desde la API
-async function getBrands() {
+// Función para obtener datos de diferentes endpoints
+async function getApiData(endpoint) {
   try {
-    const response = await fetch('https://www.crisdeus.site/brands');
+    const response = await fetch(`https://www.crisdeus.site${endpoint}`);
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching brands:', error);
+    console.error(`Error fetching ${endpoint}:`, error);
     return null;
   }
 }
 
-// Obtener los datos de las marcas
-const brandsData = await getBrands();
+// Obtener los datos iniciales de las marcas
+const brandsData = await getApiData('/brands');
 ---
 
 <Layout title="VPS NodeJS API">
@@ -34,155 +34,275 @@ const brandsData = await getBrands();
         </button>
       </div>
     </div>
-    
-    {brandsData ? (
-      <div class="mb-6">
-        <div class="bg-gray-800 rounded-lg p-4 mb-6">
-          <h2 class="text-xl font-semibold text-white mb-2" id="api-info-title">Información de la API</h2>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <span class="text-gray-400" id="status-label">Estado:</span>
-              <span class={brandsData.success ? "text-green-400 ml-2" : "text-red-400 ml-2"}>
-                {brandsData.success ? "✓ Exitoso" : "✗ Error"}
-              </span>
-            </div>
-            <div>
-              <span class="text-gray-400" id="total-label">Total:</span>
-              <span class="text-white ml-2">{brandsData.count} <span id="brands-text">marcas</span></span>
-            </div>
-            <div>
-              <span class="text-gray-400" id="time-label">Tiempo:</span>
-              <span class="text-white ml-2">{brandsData.responseTime}</span>
-            </div>
-            <div>
-              <span class="text-gray-400">Cache:</span>
-              <span class="text-white ml-2">{brandsData.cached ? "Sí" : "No"}</span>
-            </div>
-          </div>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="brands-container">
-          {brandsData.data?.map((brand) => (
-            <div key={brand.id} class="bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700" data-brand-id={brand.id}>
-              <h3 class="text-2xl font-bold text-valorant mb-3">{brand.name}</h3>
-              
-              <div class="space-y-3">
-                <div>
-                  <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide description-label">Descripción</h4>
-                  <p class="text-white brand-description" data-es={brand.translations.es.description} data-en={brand.translations.en.description}>
-                    {brand.translations.es.description}
-                  </p>
-                </div>
+    <!-- Navegación de endpoints -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-white mb-4" id="endpoints-title">Endpoints Disponibles</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <button 
+          id="brands-btn" 
+          class="endpoint-btn bg-valorant hover:bg-valorant-dark text-white px-4 py-3 rounded-lg transition duration-200 active-endpoint"
+          data-endpoint="/brands"
+        >
+          <span id="brands-btn-text">📋 Todas las Marcas</span>
+        </button>
+        <button 
+          id="vehicles-btn" 
+          class="endpoint-btn bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition duration-200"
+          data-endpoint="/vehicles"
+        >
+          <span id="vehicles-btn-text">🚗 Todos los Vehículos</span>
+        </button>
+        <button 
+          id="brand-search-btn" 
+          class="endpoint-btn bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition duration-200"
+          data-endpoint="brand-search"
+        >
+          <span id="brand-search-text">🔍 Buscar Marca</span>
+        </button>
+        <button 
+          id="vehicle-search-btn" 
+          class="endpoint-btn bg-gray-700 hover:bg-gray-600 text-white px-4 py-3 rounded-lg transition duration-200"
+          data-endpoint="vehicle-search"
+        >
+          <span id="vehicle-search-text">🔍 Buscar Vehículo</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sección de búsqueda (oculta por defecto) -->
+    <div id="search-section" class="mb-6 bg-gray-800 rounded-lg p-4 hidden">
+      <h3 class="text-xl font-semibold text-white mb-4" id="search-title">Buscar</h3>
+      <div class="flex space-x-4">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Ingresa ID..." 
+          class="flex-1 p-3 bg-gray-900 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-red-600"
+        >
+        <button 
+          id="search-execute" 
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition duration-200"
+        >
+          <span id="search-btn-text">Buscar</span>
+        </button>
+      </div>
+    </div>
+    
+    
+    <!-- Información de la API -->
+    <div id="api-info" class="bg-gray-800 rounded-lg p-4 mb-6">
+      <h2 class="text-xl font-semibold text-white mb-2" id="api-info-title">Información de la API</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        <div>
+          <span class="text-gray-400" id="status-label">Estado:</span>
+          <span id="api-status" class={brandsData?.success ? "text-green-400 ml-2" : "text-red-400 ml-2"}>
+            {brandsData?.success ? "✓ Exitoso" : "✗ Error"}
+          </span>
+        </div>
+        <div>
+          <span class="text-gray-400" id="total-label">Total:</span>
+          <span class="text-white ml-2"><span id="api-count">{brandsData?.count || 0}</span> <span id="items-text">elementos</span></span>
+        </div>
+        <div>
+          <span class="text-gray-400" id="time-label">Tiempo:</span>
+          <span class="text-white ml-2" id="api-time">{brandsData?.responseTime || "-"}</span>
+        </div>
+        <div>
+          <span class="text-gray-400">Cache:</span>
+          <span class="text-white ml-2" id="api-cache">{brandsData?.cached ? "Sí" : "No"}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor principal de datos -->
+    <div id="main-content">
+      <!-- Contenido de marcas (por defecto) -->
+      <div id="brands-content">
+        {brandsData && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {brandsData.data?.map((brand: any) => (
+              <div class="bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700 brand-card" data-brand-id={brand.id}>
+                <h3 class="text-2xl font-bold text-valorant mb-3">{brand.name}</h3>
                 
-                <div>
-                  <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide foundation-label">Fundación</h4>
-                  <p class="text-white">{brand.foundation}</p>
-                </div>
-                
-                <div>
-                  <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide history-label">Historia</h4>
-                  <p class="text-gray-300 text-sm leading-relaxed brand-history" data-es={brand.translations.es.history} data-en={brand.translations.en.history}>
-                    {brand.translations.es.history}
-                  </p>
-                </div>
-                
-                <div>
-                  <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide trajectory-label">Trayectoria</h4>
-                  <p class="text-gray-300 text-sm leading-relaxed brand-trajectory" data-es={brand.translations.es.trajectory} data-en={brand.translations.en.trajectory}>
-                    {brand.translations.es.trajectory}
-                  </p>
-                </div>
-                
-                <div class="pt-2 border-t border-gray-600">
-                  <span class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
-                    ID: {brand.id}
-                  </span>
+                <div class="space-y-3">
+                  <div>
+                    <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide description-label">Descripción</h4>
+                    <p class="text-white brand-description" data-es={brand.translations.es.description} data-en={brand.translations.en.description}>
+                      {brand.translations.es.description}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide foundation-label">Fundación</h4>
+                    <p class="text-white">{brand.foundation}</p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide history-label">Historia</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed brand-history" data-es={brand.translations.es.history} data-en={brand.translations.en.history}>
+                      {brand.translations.es.history}
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide trajectory-label">Trayectoria</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed brand-trajectory" data-es={brand.translations.es.trajectory} data-en={brand.translations.en.trajectory}>
+                      {brand.translations.es.trajectory}
+                    </p>
+                  </div>
+                  
+                  <div class="pt-2 border-t border-gray-600 flex justify-between items-center">
+                    <span class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
+                      ID: {brand.id}
+                    </span>
+                    <button 
+                      class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded view-vehicles-btn"
+                      data-brand-id={brand.id}
+                    >
+                      <span class="view-vehicles-text">Ver Vehículos</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        )}
+      </div>
+
+      <!-- Contenedor dinámico para otros datos -->
+      <div id="dynamic-content" class="hidden">
+        <div id="content-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- El contenido se cargará dinámicamente aquí -->
         </div>
       </div>
-    ) : (
-      <div class="bg-red-900 border border-red-700 rounded-lg p-6">
-        <h2 class="text-xl font-semibold text-red-300 mb-2" id="error-title">Error al cargar los datos</h2>
-        <p class="text-red-200" id="error-message">No se pudieron obtener los datos de la API. Verifica la conexión y vuelve a intentar.</p>
-      </div>
-    )}
+    </div>
 
+    <!-- Sección de información técnica -->
     <div class="mt-8 bg-gray-800 rounded-lg p-6">
       <h2 class="text-2xl font-bold text-white mb-4" id="about-title">Acerca de esta API</h2>
       <p class="text-gray-300 mb-4" id="about-description">
-        Esta API proporciona información detallada sobre marcas de automóviles, 
-        incluyendo su historia, trayectoria y datos de fundación.
+        Esta API proporciona información detallada sobre marcas de automóviles y vehículos, 
+        incluyendo historia, especificaciones y datos técnicos.
       </p>
-      <div class="space-y-2">
-        <p class="text-sm">
-          <span class="text-gray-400">Endpoint:</span>
-          <code class="bg-gray-700 px-2 py-1 rounded text-white ml-2">
-            https://www.crisdeus.site/brands
-          </code>
-        </p>
-        <p class="text-sm">
-          <span class="text-gray-400" id="method-label">Método:</span>
-          <span class="text-green-400 ml-2">GET</span>
-        </p>
-        <p class="text-sm">
-          <span class="text-gray-400" id="response-label">Respuesta:</span>
-          <span class="text-white ml-2" id="response-text">JSON con marcas automotrices</span>
-        </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold text-white mb-2" id="endpoints-list-title">Endpoints Disponibles:</h3>
+          <div class="space-y-2 text-sm">
+            <div class="bg-gray-700 p-2 rounded">
+              <code class="text-green-400">GET /brands</code>
+              <span class="text-gray-300 ml-2" id="brands-desc">- Todas las marcas</span>
+            </div>
+            <div class="bg-gray-700 p-2 rounded">
+              <code class="text-green-400">GET /brands/:id</code>
+              <span class="text-gray-300 ml-2" id="brand-id-desc">- Marca específica</span>
+            </div>
+            <div class="bg-gray-700 p-2 rounded">
+              <code class="text-green-400">GET /vehicles</code>
+              <span class="text-gray-300 ml-2" id="vehicles-desc">- Todos los vehículos</span>
+            </div>
+            <div class="bg-gray-700 p-2 rounded">
+              <code class="text-green-400">GET /vehicles/:id</code>
+              <span class="text-gray-300 ml-2" id="vehicle-id-desc">- Vehículo específico</span>
+            </div>
+            <div class="bg-gray-700 p-2 rounded">
+              <code class="text-green-400">GET /brands/:brandId/vehicles</code>
+              <span class="text-gray-300 ml-2" id="brand-vehicles-desc">- Vehículos por marca</span>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-white mb-2" id="cache-info-title">Información de Caché:</h3>
+          <div class="space-y-2 text-sm text-gray-300">
+            <p>• <span id="brands-cache">Marcas: 3 minutos</span></p>
+            <p>• <span id="vehicles-cache">Vehículos: 3 minutos</span></p>
+            <p>• <span id="specific-cache">Elementos específicos: 5 minutos</span></p>
+            <p>• <span id="brand-vehicles-cache">Vehículos por marca: 4 minutos</span></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Traducciones
+    // Traducciones expandidas
     const translations = {
       es: {
         title: "Marcas de Automóviles",
         languageLabel: "Idioma:",
+        endpointsTitle: "Endpoints Disponibles",
+        brandsBtn: "📋 Todas las Marcas",
+        vehiclesBtn: "🚗 Todos los Vehículos",
+        brandSearch: "🔍 Buscar Marca",
+        vehicleSearch: "🔍 Buscar Vehículo",
+        searchTitle: "Buscar",
+        searchBtn: "Buscar",
         apiInfoTitle: "Información de la API",
         statusLabel: "Estado:",
         totalLabel: "Total:",
         timeLabel: "Tiempo:",
-        brandsText: "marcas",
+        itemsText: "elementos",
         descriptionLabel: "Descripción",
         foundationLabel: "Fundación",
         historyLabel: "Historia",
         trajectoryLabel: "Trayectoria",
-        errorTitle: "Error al cargar los datos",
-        errorMessage: "No se pudieron obtener los datos de la API. Verifica la conexión y vuelve a intentar.",
+        viewVehicles: "Ver Vehículos",
         aboutTitle: "Acerca de esta API",
-        aboutDescription: "Esta API proporciona información detallada sobre marcas de automóviles, incluyendo su historia, trayectoria y datos de fundación.",
-        methodLabel: "Método:",
-        responseLabel: "Respuesta:",
-        responseText: "JSON con marcas automotrices",
+        aboutDescription: "Esta API proporciona información detallada sobre marcas de automóviles y vehículos, incluyendo historia, especificaciones y datos técnicos.",
+        endpointsListTitle: "Endpoints Disponibles:",
+        brandsDesc: "- Todas las marcas",
+        brandIdDesc: "- Marca específica",
+        vehiclesDesc: "- Todos los vehículos",
+        vehicleIdDesc: "- Vehículo específico",
+        brandVehiclesDesc: "- Vehículos por marca",
+        cacheInfoTitle: "Información de Caché:",
+        brandsCache: "Marcas: 3 minutos",
+        vehiclesCache: "Vehículos: 3 minutos",
+        specificCache: "Elementos específicos: 5 minutos",
+        brandVehiclesCache: "Vehículos por marca: 4 minutos",
         currentLang: "🇪🇸 ES"
       },
       en: {
         title: "Automobile Brands",
         languageLabel: "Language:",
+        endpointsTitle: "Available Endpoints",
+        brandsBtn: "📋 All Brands",
+        vehiclesBtn: "🚗 All Vehicles",
+        brandSearch: "🔍 Search Brand",
+        vehicleSearch: "🔍 Search Vehicle",
+        searchTitle: "Search",
+        searchBtn: "Search",
         apiInfoTitle: "API Information",
         statusLabel: "Status:",
         totalLabel: "Total:",
         timeLabel: "Time:",
-        brandsText: "brands",
+        itemsText: "items",
         descriptionLabel: "Description",
         foundationLabel: "Foundation",
         historyLabel: "History",
         trajectoryLabel: "Trajectory",
-        errorTitle: "Error loading data",
-        errorMessage: "Could not fetch data from the API. Check your connection and try again.",
+        viewVehicles: "View Vehicles",
         aboutTitle: "About this API",
-        aboutDescription: "This API provides detailed information about automobile brands, including their history, trajectory and foundation data.",
-        methodLabel: "Method:",
-        responseLabel: "Response:",
-        responseText: "JSON with automotive brands",
+        aboutDescription: "This API provides detailed information about automobile brands and vehicles, including history, specifications and technical data.",
+        endpointsListTitle: "Available Endpoints:",
+        brandsDesc: "- All brands",
+        brandIdDesc: "- Specific brand",
+        vehiclesDesc: "- All vehicles",
+        vehicleIdDesc: "- Specific vehicle",
+        brandVehiclesDesc: "- Vehicles by brand",
+        cacheInfoTitle: "Cache Information:",
+        brandsCache: "Brands: 3 minutes",
+        vehiclesCache: "Vehicles: 3 minutes",
+        specificCache: "Specific items: 5 minutes",
+        brandVehiclesCache: "Vehicles by brand: 4 minutes",
         currentLang: "🇬🇧 EN"
       }
     };
 
     let currentLanguage = 'es';
+    let currentEndpoint = '/brands';
 
     function toggleLanguage() {
       currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
@@ -191,17 +311,46 @@ const brandsData = await getBrands();
     }
 
     function updateTexts() {
-      const lang = translations[currentLanguage];
+      const lang = translations[currentLanguage as keyof typeof translations];
       
-      // Actualizar textos estáticos
-      document.getElementById('title-text').textContent = lang.title;
-      document.getElementById('language-label').textContent = lang.languageLabel;
-      document.getElementById('current-lang').textContent = lang.currentLang;
-      document.getElementById('api-info-title').textContent = lang.apiInfoTitle;
-      document.getElementById('status-label').textContent = lang.statusLabel;
-      document.getElementById('total-label').textContent = lang.totalLabel;
-      document.getElementById('time-label').textContent = lang.timeLabel;
-      document.getElementById('brands-text').textContent = lang.brandsText;
+      // Actualizar textos estáticos con verificación null
+      const elements = [
+        { id: 'title-text', prop: 'title' },
+        { id: 'language-label', prop: 'languageLabel' },
+        { id: 'current-lang', prop: 'currentLang' },
+        { id: 'endpoints-title', prop: 'endpointsTitle' },
+        { id: 'brands-btn-text', prop: 'brandsBtn' },
+        { id: 'vehicles-btn-text', prop: 'vehiclesBtn' },
+        { id: 'brand-search-text', prop: 'brandSearch' },
+        { id: 'vehicle-search-text', prop: 'vehicleSearch' },
+        { id: 'search-title', prop: 'searchTitle' },
+        { id: 'search-btn-text', prop: 'searchBtn' },
+        { id: 'api-info-title', prop: 'apiInfoTitle' },
+        { id: 'status-label', prop: 'statusLabel' },
+        { id: 'total-label', prop: 'totalLabel' },
+        { id: 'time-label', prop: 'timeLabel' },
+        { id: 'items-text', prop: 'itemsText' },
+        { id: 'about-title', prop: 'aboutTitle' },
+        { id: 'about-description', prop: 'aboutDescription' },
+        { id: 'endpoints-list-title', prop: 'endpointsListTitle' },
+        { id: 'brands-desc', prop: 'brandsDesc' },
+        { id: 'brand-id-desc', prop: 'brandIdDesc' },
+        { id: 'vehicles-desc', prop: 'vehiclesDesc' },
+        { id: 'vehicle-id-desc', prop: 'vehicleIdDesc' },
+        { id: 'brand-vehicles-desc', prop: 'brandVehiclesDesc' },
+        { id: 'cache-info-title', prop: 'cacheInfoTitle' },
+        { id: 'brands-cache', prop: 'brandsCache' },
+        { id: 'vehicles-cache', prop: 'vehiclesCache' },
+        { id: 'specific-cache', prop: 'specificCache' },
+        { id: 'brand-vehicles-cache', prop: 'brandVehiclesCache' }
+      ];
+
+      elements.forEach(({ id, prop }) => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.textContent = lang[prop as keyof typeof lang];
+        }
+      });
       
       // Actualizar labels de las tarjetas
       document.querySelectorAll('.description-label').forEach(el => {
@@ -216,35 +365,225 @@ const brandsData = await getBrands();
       document.querySelectorAll('.trajectory-label').forEach(el => {
         el.textContent = lang.trajectoryLabel;
       });
-
-      // Actualizar sección de error si existe
-      const errorTitle = document.getElementById('error-title');
-      const errorMessage = document.getElementById('error-message');
-      if (errorTitle) errorTitle.textContent = lang.errorTitle;
-      if (errorMessage) errorMessage.textContent = lang.errorMessage;
-
-      // Actualizar sección "Acerca de"
-      document.getElementById('about-title').textContent = lang.aboutTitle;
-      document.getElementById('about-description').textContent = lang.aboutDescription;
-      document.getElementById('method-label').textContent = lang.methodLabel;
-      document.getElementById('response-label').textContent = lang.responseLabel;
-      document.getElementById('response-text').textContent = lang.responseText;
+      document.querySelectorAll('.view-vehicles-text').forEach(el => {
+        el.textContent = lang.viewVehicles;
+      });
     }
 
     function updateBrandData() {
       // Actualizar contenido de las marcas
       document.querySelectorAll('.brand-description').forEach(el => {
-        el.textContent = el.getAttribute(`data-${currentLanguage}`);
+        const content = el.getAttribute(`data-${currentLanguage}`);
+        if (content) el.textContent = content;
       });
       document.querySelectorAll('.brand-history').forEach(el => {
-        el.textContent = el.getAttribute(`data-${currentLanguage}`);
+        const content = el.getAttribute(`data-${currentLanguage}`);
+        if (content) el.textContent = content;
       });
       document.querySelectorAll('.brand-trajectory').forEach(el => {
-        el.textContent = el.getAttribute(`data-${currentLanguage}`);
+        const content = el.getAttribute(`data-${currentLanguage}`);
+        if (content) el.textContent = content;
       });
     }
 
-    // Agregar evento al botón
-    document.getElementById('language-toggle').addEventListener('click', toggleLanguage);
+    function updateApiInfo(data: any) {
+      const statusElement = document.getElementById('api-status');
+      const countElement = document.getElementById('api-count');
+      const timeElement = document.getElementById('api-time');
+      const cacheElement = document.getElementById('api-cache');
+
+      if (statusElement) {
+        statusElement.textContent = data.success ? '✓ Exitoso' : '✗ Error';
+        statusElement.className = data.success ? 'text-green-400 ml-2' : 'text-red-400 ml-2';
+      }
+      if (countElement) countElement.textContent = data.count || 0;
+      if (timeElement) timeElement.textContent = data.responseTime || '-';
+      if (cacheElement) cacheElement.textContent = data.cached ? 'Sí' : 'No';
+    }
+
+    async function loadEndpoint(endpoint: string) {
+      try {
+        const response = await fetch(`https://www.crisdeus.site${endpoint}`);
+        const data = await response.json();
+        
+        updateApiInfo(data);
+        
+        if (endpoint === '/brands') {
+          showBrandsContent();
+        } else {
+          showDynamicContent(data, endpoint);
+        }
+        
+        return data;
+      } catch (error) {
+        console.error('Error loading endpoint:', error);
+        return null;
+      }
+    }
+
+    function showBrandsContent() {
+      const brandsContent = document.getElementById('brands-content');
+      const dynamicContent = document.getElementById('dynamic-content');
+      const searchSection = document.getElementById('search-section');
+      
+      if (brandsContent) brandsContent.classList.remove('hidden');
+      if (dynamicContent) dynamicContent.classList.add('hidden');
+      if (searchSection) searchSection.classList.add('hidden');
+    }
+
+    function showDynamicContent(data: any, endpoint: string) {
+      const brandsContent = document.getElementById('brands-content');
+      const dynamicContent = document.getElementById('dynamic-content');
+      
+      if (brandsContent) brandsContent.classList.add('hidden');
+      if (dynamicContent) dynamicContent.classList.remove('hidden');
+      
+      const contentGrid = document.getElementById('content-grid');
+      if (contentGrid) {
+        contentGrid.innerHTML = '';
+        
+        if (data && data.data) {
+          if (endpoint === '/vehicles') {
+            renderVehicles(data.data, contentGrid);
+          } else {
+            renderGenericData(data.data, contentGrid);
+          }
+        }
+      }
+    }
+
+    function renderVehicles(vehicles: any[], container: HTMLElement) {
+      vehicles.forEach(vehicle => {
+        const vehicleCard = document.createElement('div');
+        vehicleCard.className = 'bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700';
+        vehicleCard.innerHTML = `
+          <h3 class="text-2xl font-bold text-valorant mb-3">${vehicle.model || vehicle.name}</h3>
+          <div class="space-y-2">
+            <p class="text-white"><strong>Marca:</strong> ${vehicle.brand}</p>
+            <p class="text-white"><strong>Año:</strong> ${vehicle.year}</p>
+            <p class="text-white"><strong>Tipo:</strong> ${vehicle.type || 'N/A'}</p>
+            <p class="text-gray-300 text-sm">${vehicle.description || 'Sin descripción'}</p>
+            <div class="pt-2 border-t border-gray-600">
+              <span class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
+                ID: ${vehicle.id}
+              </span>
+            </div>
+          </div>
+        `;
+        container.appendChild(vehicleCard);
+      });
+    }
+
+    function renderGenericData(items: any[], container: HTMLElement) {
+      items.forEach(item => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'bg-valorant-dark p-6 rounded-lg shadow-lg border border-gray-700';
+        itemCard.innerHTML = `
+          <h3 class="text-2xl font-bold text-valorant mb-3">${item.name || item.model || 'Item'}</h3>
+          <div class="space-y-2">
+            ${Object.entries(item).map(([key, value]) => {
+              if (key !== 'id' && key !== 'name' && key !== 'model' && typeof value !== 'object') {
+                return `<p class="text-white"><strong>${key}:</strong> ${value}</p>`;
+              }
+              return '';
+            }).join('')}
+            <div class="pt-2 border-t border-gray-600">
+              <span class="inline-block bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
+                ID: ${item.id}
+              </span>
+            </div>
+          </div>
+        `;
+        container.appendChild(itemCard);
+      });
+    }
+
+    // Event listeners
+    const languageToggle = document.getElementById('language-toggle');
+    if (languageToggle) {
+      languageToggle.addEventListener('click', toggleLanguage);
+    }
+
+    // Endpoint buttons
+    document.querySelectorAll('.endpoint-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        // Remove active class from all buttons
+        document.querySelectorAll('.endpoint-btn').forEach(b => {
+          b.classList.remove('active-endpoint', 'bg-valorant');
+          b.classList.add('bg-gray-700');
+        });
+        
+        // Add active class to clicked button
+        btn.classList.add('active-endpoint', 'bg-valorant');
+        btn.classList.remove('bg-gray-700');
+        
+        const endpoint = (btn as HTMLElement).dataset.endpoint;
+        
+        if (endpoint === 'brand-search' || endpoint === 'vehicle-search') {
+          const searchSection = document.getElementById('search-section');
+          if (searchSection) {
+            searchSection.classList.remove('hidden');
+            searchSection.dataset.searchType = endpoint;
+          }
+        } else {
+          const searchSection = document.getElementById('search-section');
+          if (searchSection) searchSection.classList.add('hidden');
+          if (endpoint) await loadEndpoint(endpoint);
+        }
+      });
+    });
+
+    // Search functionality
+    const searchExecute = document.getElementById('search-execute');
+    if (searchExecute) {
+      searchExecute.addEventListener('click', async () => {
+        const searchInput = document.getElementById('search-input') as HTMLInputElement;
+        const searchSection = document.getElementById('search-section');
+        
+        if (!searchInput || !searchSection) return;
+        
+        const searchValue = searchInput.value.trim();
+        const searchType = searchSection.dataset.searchType;
+        
+        if (!searchValue) return;
+        
+        let endpoint;
+        if (searchType === 'brand-search') {
+          endpoint = `/brands/${searchValue}`;
+        } else if (searchType === 'vehicle-search') {
+          endpoint = `/vehicles/${searchValue}`;
+        }
+        
+        if (endpoint) await loadEndpoint(endpoint);
+      });
+    }
+
+    // View vehicles for specific brand
+    document.addEventListener('click', async (e) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('view-vehicles-btn')) {
+        const brandId = target.dataset.brandId;
+        if (brandId) {
+          await loadEndpoint(`/brands/${brandId}/vehicles`);
+          
+          // Update active button
+          document.querySelectorAll('.endpoint-btn').forEach(b => {
+            b.classList.remove('active-endpoint', 'bg-valorant');
+            b.classList.add('bg-gray-700');
+          });
+        }
+      }
+    });
+
+    // Enter key for search
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          const searchExecuteBtn = document.getElementById('search-execute');
+          if (searchExecuteBtn) searchExecuteBtn.click();
+        }
+      });
+    }
   </script>
 </Layout>
